@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useRootContext from '../hooks/useRootContext';
 import EmptySvg from '../assets/images/empty.svg';
 
@@ -18,9 +18,7 @@ export default function Editor() {
   function handleSave(title: string, description: string) {
     window.electron.ipcRenderer.once('open-root-dir-selector', (arg) => {
       //@ts-ignore
-      if (arg.success) {
-        alert('File saved successfully!');
-      }
+      setFileContent({ title: title, content: description });
     });
 
     const args = [rootDir, selectedNote, title, description];
@@ -48,6 +46,14 @@ export default function Editor() {
     }
   }, [selectedNote]);
 
+  const haveUnsavedChanges = useMemo(() => {
+    if (fileContent.title !== title || fileContent.content !== description) {
+      return true;
+    }
+
+    return false;
+  }, [fileContent, title, description]);
+
   return (
     <div className="w-full">
       {selectedNote && fileContent && (
@@ -65,9 +71,10 @@ export default function Editor() {
             <div className="ml-auto flex flex-row items-center gap-2">
               <button
                 onClick={() => handleSave(title, description)}
-                className="text-xs bg-gray-100 hover:bg-gray-200 py-2 px-5 rounded"
+                className="flex items-center text-xs bg-gray-100 hover:bg-gray-200 py-2 px-5 rounded"
               >
                 <p>Save</p>
+                <p>{haveUnsavedChanges ? '*' : ''}</p>
               </button>
 
               <button
