@@ -15,7 +15,6 @@ export function RootContextProvider({ children }: PropsWithChildren) {
   const [selectedNoteIndex, setSelectedNoteIndex] = useState(-1);
 
   useEffect(() => {
-
     window.electron.ipcRenderer.on('load-directory', (arg) => {
       //@ts-ignore
       setNotes(JSON.parse(arg) || []);

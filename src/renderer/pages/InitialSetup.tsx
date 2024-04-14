@@ -49,7 +49,7 @@ export default function InitialSetup() {
 function FirstCard() {
   return (
     <div className="flex text-sm flex-col items-center gap-2">
-      <img src={SimpleUiSvg} alt="Simple UI" className="w-96 h-96" />
+      <img src={SimpleUiSvg} alt="Simple UI" className="w-72 h-72" />
       <p className="font-bold">Simple and Intiutive UI</p>
       <p>Clutter free and minimal UI for peace of mind</p>
     </div>
@@ -59,7 +59,7 @@ function FirstCard() {
 function SecondCard() {
   return (
     <div className="flex text-sm flex-col items-center gap-2">
-      <img src={PrivacySvg} alt="Simple UI" className="w-96 h-96" />
+      <img src={PrivacySvg} alt="Simple UI" className="w-72 h-72" />
       <p className="font-bold">Privacy Focused</p>
       <p>We save your files locally, no cloud sync no bullshit!</p>
     </div>
@@ -81,7 +81,7 @@ function ThirdCard() {
 
   return (
     <div className="flex text-sm flex-col items-center gap-2">
-      <img src={FileSvg} alt="Simple UI" className="w-96 h-96" />
+      <img src={FileSvg} alt="Simple UI" className="w-72 h-72" />
       <p className="font-bold">Select your folder</p>
       <p className="text-center">
         Select the folder where you want to save all of your notes. <br />
@@ -97,9 +97,7 @@ function ThirdCard() {
         </button>
 
         {rootDir && (
-          <button
-            className="mt-5 text-xs bg-gray-100 hover:bg-gray-200 py-2 px-5 rounded"
-          >
+          <button className="mt-5 text-xs bg-gray-100 hover:bg-gray-200 py-2 px-5 rounded">
             Continue...
           </button>
         )}
