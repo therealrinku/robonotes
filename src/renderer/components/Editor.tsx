@@ -12,14 +12,14 @@ export default function Editor({ onSave }: Props) {
   return (
     <div className="w-full text-sm">
       <div className="flex flex-row items-center gap-2 p-3 self-end mx-auto">
-        <div className="text-xs py-2 px-3 rounded bg-gray-100 flex flex-row items-center gap-5">
+        {/* <div className="text-xs py-2 px-3 rounded bg-gray-100 flex flex-row items-center gap-5">
           <button className="hover:text-green-800">
             <FiBold />
           </button>
           <button className="hover:text-green-800">
             <FiItalic />
           </button>
-        </div>
+        </div> */}
 
         <div className="ml-auto flex flex-col gap-2">
           <button

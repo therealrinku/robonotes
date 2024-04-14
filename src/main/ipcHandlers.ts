@@ -2,7 +2,7 @@ import { dialog, ipcMain } from 'electron';
 import { readdirSync, writeFileSync } from 'fs';
 
 export function registerIpcHandlers(mainWindow: any) {
-  ipcMain.on('open-new-file-dialog', async (event, arg) => {
+  ipcMain.on('open-new-file-dialog', async (event, _arg) => {
     const { filePaths } = await dialog.showOpenDialog(mainWindow, {
       properties: ['openDirectory'],
     });
@@ -16,23 +16,37 @@ export function registerIpcHandlers(mainWindow: any) {
       content: args[2],
     };
 
-    writeFileSync(`${args[0]}/${args[1]}.json`, JSON.stringify(fileJson));
+    writeFileSync(`${args[0]}/${args[1]}.robu`, JSON.stringify(fileJson));
     event.reply('open-new-file-dialog', { success: true });
   });
 
-  ipcMain.on('load-directory', async (event, args) => {
+  ipcMain.on('load-directory', async (event, dir) => {
     //@ts-ignore
     const allFiles = [];
 
-    const files = readdirSync(args[0]);
+    const files = readdirSync(dir);
     files.forEach((file) => {
-      if (file.endsWith('.json')) {
-        allFiles.push(file);
+      if (file.endsWith('.robu')) {
+        allFiles.push(file.replace('.robu', ''));
       }
     });
 
     //@ts-ignore
     event.reply('load-directory', JSON.stringify(allFiles));
-    console.log('hyaaa');
+  });
+
+  ipcMain.on('create-note', async (event, ...dir) => {
+    //@ts-ignore
+    const folderPath = dir[0];
+    const fileName = dir[1];
+
+    const fileJson = {
+      title: fileName,
+      content: '',
+    };
+
+    writeFileSync(`${folderPath}/${fileName}.robu`, JSON.stringify(fileJson));
+
+    event.reply('create-note', 'success');
   });
 }
