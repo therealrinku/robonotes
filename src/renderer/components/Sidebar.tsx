@@ -46,7 +46,8 @@ export default function Sidebar() {
 
   return (
     <div className="relative bg-gray-200 w-72 min-h-screen flex flex-col items-center gap-5 py-5">
-      <div className="absolute bottom-3 text-xs w-full px-3">
+      <div className="absolute bottom-3 text-xs w-full px-3 flex flex-col gap-2">
+        <p className="truncate max-w-[85%]">{rootDir}</p>
         <button
           onClick={handleSelectFolder}
           className="h-full flex items-center  gap-2 p-2 w-full text-xs bg-gray-100 hover:outline-dashed outline-1  w-full rounded"
