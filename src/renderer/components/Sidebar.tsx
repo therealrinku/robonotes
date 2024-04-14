@@ -1,17 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
-import {
-  FiFilePlus,
-  FiFileText,
-  FiSearch,
-  FiSettings,
-  FiTag,
-} from 'react-icons/fi';
+import { useMemo, useState } from 'react';
+import { FiFilePlus, FiFileText, FiFolderPlus, FiSearch } from 'react-icons/fi';
 import useRootContext from '../hooks/useRootContext';
 
 export default function Sidebar() {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { rootDir, notes, setNotes, setSelectedNoteIndex } = useRootContext();
+  const { rootDir, setRootDir, notes, setNotes, setSelectedNoteIndex } =
+    useRootContext();
 
   function handleCreateNewNote() {
     let newNoteTitle =
@@ -25,6 +20,17 @@ export default function Sidebar() {
 
     //@ts-ignore
     setNotes((prev) => [...prev, newNoteTitle]);
+    setSelectedNoteIndex(notes.length);
+  }
+
+  function handleSelectFolder() {
+    window.electron.ipcRenderer.once('open-root-dir-selector', (arg) => {
+      const path = String(arg);
+      window.localStorage.setItem('rootDir', path);
+      setRootDir(String(arg));
+    });
+
+    window.electron.ipcRenderer.sendMessage('open-root-dir-selector');
   }
 
   const filteredNotes = useMemo(() => {
@@ -36,14 +42,17 @@ export default function Sidebar() {
       //@ts-ignore
       return fileName.toLowerCase().includes(searchQuery.toLowerCase());
     });
-  }, [searchQuery]);
+  }, [searchQuery, notes]);
 
   return (
-    <div className="bg-gray-200 w-72 min-h-screen flex flex-col items-center gap-5 py-5">
-      <div className="absolute bottom-2 text-xs flex items-center gap-5">
-        <p>robunot v0.0.0</p>
-        <button>
-          <FiSettings />
+    <div className="relative bg-gray-200 w-72 min-h-screen flex flex-col items-center gap-5 py-5">
+      <div className="absolute bottom-3 text-xs w-full px-3">
+        <button
+          onClick={handleSelectFolder}
+          className="h-full flex items-center  gap-2 p-2 w-full text-xs bg-gray-100 hover:outline-dashed outline-1  w-full rounded"
+        >
+          <FiFolderPlus />
+          <p>Change root directory</p>
         </button>
       </div>
 

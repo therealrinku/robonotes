@@ -15,13 +15,14 @@ export function RootContextProvider({ children }: PropsWithChildren) {
   const [selectedNoteIndex, setSelectedNoteIndex] = useState(-1);
 
   useEffect(() => {
-    setRootDir(localStorage.getItem('rootDir') || '');
 
     window.electron.ipcRenderer.on('load-directory', (arg) => {
       //@ts-ignore
       setNotes(JSON.parse(arg) || []);
     });
     window.electron.ipcRenderer.sendMessage('load-directory', rootDir);
+
+    setRootDir(localStorage.getItem('rootDir') || '');
   }, [rootDir]);
 
   return (

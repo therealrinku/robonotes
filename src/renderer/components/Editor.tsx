@@ -79,11 +79,11 @@ export default function Editor() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-2 mr-2">
+          <div className="flex flex-col mr-2">
             <input
               type="text"
               placeholder="Title..."
-              className="p-3 outline-none"
+              className="p-3 outline-none font-bold text-lg"
               autoFocus={true}
               defaultValue={'2023 - Memo'}
               value={title}

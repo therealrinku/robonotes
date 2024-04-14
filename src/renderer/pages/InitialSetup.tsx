@@ -71,7 +71,6 @@ function ThirdCard() {
 
   function handleSelectFolder() {
     window.electron.ipcRenderer.once('open-root-dir-selector', (arg) => {
-      console.log(arg,"Arg")
       const path = String(arg);
       window.localStorage.setItem('rootDir', path);
       setRootDir(String(arg));
