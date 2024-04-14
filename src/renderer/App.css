@@ -5,3 +5,7 @@
 body {
   /* dark mode bg color  below */
 }
+
+textarea {
+  resize: none;
+}
