@@ -13,14 +13,14 @@ export default function Sidebar() {
         />
       </div>
 
-      <div className="w-full flex flex-col gap-2 border-gray-500 border-t pt-5 overflow-y-auto max-h-[85vh] px-3">
+      <div className="w-full flex flex-col gap-2 border-white border-t pt-5 overflow-y-auto max-h-[85vh] px-3">
         {new Array(5).fill({}).map((_item, index) => {
           return (
             <button
               key={index}
               className="h-full p-2 w-full text-xs bg-gray-100 hover:outline-dashed outline-1  w-full rounded"
             >
-              <div className="flex flex-row items-center gap-2">
+              <div className="flex flex-row items-center gap-1">
                 <FiFileText />
                 <p>2023 - Memo</p>
               </div>
