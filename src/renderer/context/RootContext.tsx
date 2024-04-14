@@ -5,26 +5,38 @@ export const RootContext = createContext({
   rootDir: '',
   setNotes: Function,
   setRootDir: Function,
+  selectedNoteIndex: -1,
+  setSelectedNoteIndex: (index: number) => {},
 });
 
 export function RootContextProvider({ children }: PropsWithChildren) {
-  const [rootDir, setRootDir] = useState(localStorage.getItem('rootDir') || '');
+  const [rootDir, setRootDir] = useState('');
   const [notes, setNotes] = useState([]);
+  const [selectedNoteIndex, setSelectedNoteIndex] = useState(-1);
 
   useEffect(() => {
-    window.electron.ipcRenderer.once('load-directory', (arg) => {
+    setRootDir(localStorage.getItem('rootDir') || '');
+
+    window.electron.ipcRenderer.on('load-directory', (arg) => {
       //@ts-ignore
       setNotes(JSON.parse(arg) || []);
     });
-
-    // static folder for now
-    // this directory will come from localstorage later
     window.electron.ipcRenderer.sendMessage('load-directory', rootDir);
-  }, []);
+  }, [rootDir]);
 
   return (
-    //@ts-expect-error
-    <RootContext.Provider value={{ rootDir, setRootDir, notes, setNotes }}>
+    <RootContext.Provider
+      value={{
+        rootDir,
+        //@ts-expect-error
+        setRootDir,
+        notes,
+        //@ts-expect-error
+        setNotes,
+        selectedNoteIndex,
+        setSelectedNoteIndex,
+      }}
+    >
       {children}
     </RootContext.Provider>
   );

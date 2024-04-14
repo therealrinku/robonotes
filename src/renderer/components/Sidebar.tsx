@@ -11,7 +11,7 @@ import useRootContext from '../hooks/useRootContext';
 export default function Sidebar() {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { rootDir, notes, setNotes } = useRootContext();
+  const { rootDir, notes, setNotes, setSelectedNoteIndex } = useRootContext();
 
   function handleCreateNewNote() {
     let newNoteTitle =
@@ -75,6 +75,7 @@ export default function Sidebar() {
             return (
               <button
                 key={index}
+                onClick={() => setSelectedNoteIndex(index)}
                 className="h-full p-2 w-full text-xs bg-gray-100 hover:outline-dashed outline-1  w-full rounded"
               >
                 <div className="flex flex-row items-center gap-1">
