@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FiCheck, FiEdit2, FiEdit3, FiFilePlus, FiX } from 'react-icons/fi';
+import ModalWrapper from './ModalWrapper';
 
 interface Props {
   onClose: () => void;
@@ -11,11 +12,10 @@ export default function RenameModal({ onClose, initialText, onRename }: Props) {
   const [text, setText] = useState(initialText || '');
 
   return (
-    <div
-      className="fixed top-0 left-0 w-screen h-screen flex flex-col items-center justify-center"
-      style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
-    >
-      <div className="relative flex flex-row items-center gap-2 bg-white w-72 p-5 py-12 rounded">
+    <ModalWrapper onClose={onClose}>
+      <p className="font-bold text-xs">Rename</p>
+
+      <div className="mt-5 flex flex-row items-center gap-2">
         <input
           placeholder="Rename.."
           className="bg-gray-100 px-2 rounded w-full text-xs py-2 outline-none w-[75%]"
@@ -30,11 +30,7 @@ export default function RenameModal({ onClose, initialText, onRename }: Props) {
         >
           Save
         </button>
-
-        <button className="absolute top-2 right-3" onClick={onClose}>
-          <FiX />
-        </button>
       </div>
-    </div>
+    </ModalWrapper>
   );
 }
