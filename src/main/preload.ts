@@ -2,7 +2,14 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'open-root-dir-selector' | 'save-file' | 'load-directory' | 'create-note' | 'read-note';
+export type Channels =
+  | 'open-root-dir-selector'
+  | 'save-file'
+  | 'load-directory'
+  | 'create-note'
+  | 'read-note'
+  | 'delete-note'
+  | 'rename-note';
 
 const electronHandler = {
   ipcRenderer: {

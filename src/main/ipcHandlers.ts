@@ -1,5 +1,11 @@
 import { dialog, ipcMain } from 'electron';
-import { readFileSync, readdirSync, writeFileSync } from 'fs';
+import {
+  readFileSync,
+  readdirSync,
+  renameSync,
+  unlinkSync,
+  writeFileSync,
+} from 'fs';
 
 export function registerIpcHandlers(mainWindow: any) {
   ipcMain.on('open-root-dir-selector', async (event, _arg) => {
@@ -20,6 +26,16 @@ export function registerIpcHandlers(mainWindow: any) {
     const content = readFileSync(`${rootDir}/${fileName}.robu`, 'utf-8');
 
     event.reply('read-note', JSON.parse(content));
+  });
+
+  ipcMain.on('rename-note', async (event, ...args) => {
+    renameSync(`${args[0]}/${args[1]}.robu`, `${args[0]}/${args[2]}.robu`);
+    event.reply('rename-note', { success: true });
+  });
+
+  ipcMain.on('delete-note', async (event, ...args) => {
+    unlinkSync(`${args[0]}/${args[1]}.robu`);
+    event.reply('delete-note', { success: true });
   });
 
   ipcMain.on('save-file', async (event, args) => {
