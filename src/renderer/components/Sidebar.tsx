@@ -1,5 +1,11 @@
-import { useEffect, useState } from 'react';
-import { FiFilePlus, FiFileText, FiSearch, FiTag } from 'react-icons/fi';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  FiFilePlus,
+  FiFileText,
+  FiSearch,
+  FiSettings,
+  FiTag,
+} from 'react-icons/fi';
 
 interface Props {
   handleNewFile: () => void;
@@ -7,6 +13,7 @@ interface Props {
 
 export default function Sidebar({ handleNewFile }: Props) {
   const [files, setFiles] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const dir = '/home/r1nku/Downloads/test-folder';
 
@@ -36,20 +43,38 @@ export default function Sidebar({ handleNewFile }: Props) {
     setFiles((prev) => [...prev, newNoteTitle]);
   }
 
+  const filteredNotes = useMemo(() => {
+    if (!Array.isArray(files) || files.length == 0) {
+      return [];
+    }
+
+    return files.filter((fileName) => {
+      //@ts-ignore
+      return fileName.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+  }, [searchQuery]);
+
   return (
     <div className="bg-gray-200 w-72 min-h-screen flex flex-col items-center gap-5 py-5">
-      <p className="absolute bottom-2 text-xs align-start">robunot v0.0.0</p>
+      <div className="absolute bottom-2 text-xs flex items-center gap-5">
+        <p>robunot v0.0.0</p>
+        <button>
+          <FiSettings />
+        </button>
+      </div>
 
       <div className="px-3 flex flex-row items-center gap-3">
         <div className="relative w-full">
-          <FiSearch className="absolute left-2 top-2" color="gray" />
+          <FiSearch className="absolute left-2 top-2" color="gray" size={13} />
           <input
             placeholder="Search..."
-            className="bg-gray-100 pl-8 pr-2 rounded w-full text-xs py-2 outline-none"
+            className="bg-gray-100 pl-7 pr-2 rounded w-full text-xs py-1 outline-none"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
-        <div className="flex flex-row items-center gap-5 bg-gray-100 px-3 rounded">
+        <div>
           <button onClick={handleCreateNewNote} className="py-2">
             <FiFilePlus />
           </button>
@@ -61,8 +86,8 @@ export default function Sidebar({ handleNewFile }: Props) {
       </div>
 
       <div className="w-full pb-5 flex flex-col gap-2 border-white border-t pt-5 overflow-y-auto max-h-[85vh] px-3">
-        {Array.isArray(files) && files.length > 0 ? (
-          files.map((fileName: string, index) => {
+        {filteredNotes.length > 0 ? (
+          filteredNotes.map((fileName: string, index) => {
             return (
               <button
                 key={index}
@@ -82,7 +107,7 @@ export default function Sidebar({ handleNewFile }: Props) {
               </button>
             );
           })
-        ) : (
+        ) : files.length === 0 ? (
           <div className="text-xs text-center h-[70vh] flex flex-col items-center justify-center">
             <p>No notes found.</p>
             <button className="mt-5 text-xs bg-gray-100 py-2 px-5 rounded">
@@ -94,6 +119,10 @@ export default function Sidebar({ handleNewFile }: Props) {
             >
               Create new note
             </button>
+          </div>
+        ) : (
+          <div className="text-xs text-center h-[70vh] flex flex-col items-center justify-center">
+            <p>No notes found.</p>
           </div>
         )}
       </div>
