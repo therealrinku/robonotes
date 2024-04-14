@@ -1,12 +1,11 @@
 {
-  "name": "electron-react-boilerplate",
+  "name": "robunot",
   "version": "4.6.0",
-  "description": "A foundation for scalable desktop apps",
+  "description": "not just another note taking app",
   "license": "MIT",
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://github.com/electron-react-boilerplate"
+    "name": "Rinku Chaudhari",
+    "url": "https://github.com/therealrinku"
   },
   "main": "./dist/main/main.js",
   "scripts": {
