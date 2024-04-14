@@ -136,7 +136,10 @@ export default function Sidebar() {
       </div>
 
       {showPreferencesModal && (
-        <PreferencesModal onClose={() => setShowPreferencesModal(false)} />
+        <PreferencesModal
+          handleChangeDir={handleSelectFolder}
+          onClose={() => setShowPreferencesModal(false)}
+        />
       )}
     </Fragment>
   );
