@@ -1,6 +1,11 @@
-import { FiFileText, FiSearch, FiTag } from 'react-icons/fi';
+import { useState } from 'react';
+import { FiFilePlus, FiFileText, FiSearch, FiTag } from 'react-icons/fi';
 
-export default function Sidebar() {
+interface Props {
+  handleNewFile: () => void;
+}
+
+export default function Sidebar({ handleNewFile }: Props) {
   return (
     <div className="bg-gray-200 w-72 min-h-screen flex flex-col items-center gap-5 py-5">
       <p className="font-bold">robunot</p>
@@ -14,7 +19,15 @@ export default function Sidebar() {
       </div>
 
       <div className="w-full flex flex-col gap-2 border-white border-t pt-5 overflow-y-auto max-h-[85vh] px-3">
-        {new Array(5).fill({}).map((_item, index) => {
+        <button
+          onClick={handleNewFile}
+          className="flex flex-row gap-2 items-center self-start text-xs py-2"
+        >
+          <FiFilePlus />
+          <p>New</p>
+        </button>
+
+        {/* {new Array(5).fill({}).map((_item, index) => {
           return (
             <button
               key={index}
@@ -33,7 +46,7 @@ export default function Sidebar() {
               </div>
             </button>
           );
-        })}
+        })} */}
       </div>
     </div>
   );
