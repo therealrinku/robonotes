@@ -2,7 +2,6 @@ import SimpleUiSvg from '../assets/images/simple-ui.svg';
 import PrivacySvg from '../assets/images/privacy.svg';
 import FileSvg from '../assets/images/file.svg';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export default function InitialSetup() {
   const [step, setStep] = useState(1);
@@ -68,15 +67,17 @@ function SecondCard() {
 }
 
 function ThirdCard() {
-  const [filesPath, setFilesPath] = useState('');
-  const navigate = useNavigate();
+  const [rootDir, setRootDir] = useState('');
 
   function handleSelectFolder() {
-    window.electron.ipcRenderer.once('open-new-file-dialog', (arg) => {
-      setFilesPath(String(arg));
+    window.electron.ipcRenderer.once('open-root-dir-selector', (arg) => {
+      console.log(arg,"Arg")
+      const path = String(arg);
+      window.localStorage.setItem('rootDir', path);
+      setRootDir(String(arg));
     });
 
-    window.electron.ipcRenderer.sendMessage('open-new-file-dialog');
+    window.electron.ipcRenderer.sendMessage('open-root-dir-selector');
   }
 
   return (
@@ -93,12 +94,11 @@ function ThirdCard() {
           onClick={handleSelectFolder}
           className="mt-5 text-xs bg-gray-100 hover:bg-gray-200 py-2 px-5 rounded"
         >
-          {filesPath ? 'Change Folder' : 'Select Folder'}
+          {rootDir ? 'Change Folder' : 'Select Folder'}
         </button>
 
-        {filesPath && (
+        {rootDir && (
           <button
-            onClick={() => navigate('Home')}
             className="mt-5 text-xs bg-gray-100 hover:bg-gray-200 py-2 px-5 rounded"
           >
             Continue...
@@ -106,7 +106,7 @@ function ThirdCard() {
         )}
       </div>
 
-      {filesPath && <p className="text-xs">Selected Folder: {filesPath}</p>}
+      {rootDir && <p className="text-xs">Selected Folder: {rootDir}</p>}
     </div>
   );
 }

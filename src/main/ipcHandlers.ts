@@ -2,12 +2,16 @@ import { dialog, ipcMain } from 'electron';
 import { readdirSync, writeFileSync } from 'fs';
 
 export function registerIpcHandlers(mainWindow: any) {
-  ipcMain.on('open-new-file-dialog', async (event, _arg) => {
-    const { filePaths } = await dialog.showOpenDialog(mainWindow, {
+  ipcMain.on('open-root-dir-selector', async (event, _arg) => {
+    const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
       properties: ['openDirectory'],
     });
 
-    event.reply('open-new-file-dialog', filePaths[0]);
+    if (canceled || !filePaths[0]) {
+      return;
+    }
+
+    event.reply('open-root-dir-selector', filePaths[0]);
   });
 
   ipcMain.on('save-file', async (event, args) => {
@@ -17,7 +21,7 @@ export function registerIpcHandlers(mainWindow: any) {
     };
 
     writeFileSync(`${args[0]}/${args[1]}.robu`, JSON.stringify(fileJson));
-    event.reply('open-new-file-dialog', { success: true });
+    event.reply('open-root-dir-selector', { success: true });
   });
 
   ipcMain.on('load-directory', async (event, dir) => {

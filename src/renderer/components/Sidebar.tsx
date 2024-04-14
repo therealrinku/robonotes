@@ -6,49 +6,33 @@ import {
   FiSettings,
   FiTag,
 } from 'react-icons/fi';
+import useRootContext from '../hooks/useRootContext';
 
-interface Props {
-  handleNewFile: () => void;
-}
-
-export default function Sidebar({ handleNewFile }: Props) {
-  const [files, setFiles] = useState([]);
+export default function Sidebar() {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const dir = '/home/r1nku/Downloads/test-folder';
-
-  useEffect(() => {
-    window.electron.ipcRenderer.once('load-directory', (arg) => {
-      //@ts-ignore
-      setFiles(JSON.parse(arg) || []);
-    });
-
-    window.electron.ipcRenderer.once('create-note', (arg) => {
-      //@ts-ignore
-      console.log('file created successfully');
-    });
-
-    // static folder for now
-    // this directory will come from localstorage later
-    window.electron.ipcRenderer.sendMessage('load-directory', dir);
-  }, []);
+  const { rootDir, notes, setNotes } = useRootContext();
 
   function handleCreateNewNote() {
     let newNoteTitle =
-      files.length === 0 ? 'Untitled Note' : `Untitled Note (${files.length})`;
+      notes.length === 0 ? 'Untitled Note' : `Untitled Note (${notes.length})`;
 
-    window.electron.ipcRenderer.sendMessage('create-note', dir, newNoteTitle);
+    window.electron.ipcRenderer.sendMessage(
+      'create-note',
+      rootDir,
+      newNoteTitle,
+    );
 
     //@ts-ignore
-    setFiles((prev) => [...prev, newNoteTitle]);
+    setNotes((prev) => [...prev, newNoteTitle]);
   }
 
   const filteredNotes = useMemo(() => {
-    if (!Array.isArray(files) || files.length == 0) {
+    if (!Array.isArray(notes) || notes.length == 0) {
       return [];
     }
 
-    return files.filter((fileName) => {
+    return notes.filter((fileName) => {
       //@ts-ignore
       return fileName.toLowerCase().includes(searchQuery.toLowerCase());
     });
@@ -107,7 +91,7 @@ export default function Sidebar({ handleNewFile }: Props) {
               </button>
             );
           })
-        ) : files.length === 0 ? (
+        ) : notes.length === 0 ? (
           <div className="text-xs text-center h-[70vh] flex flex-col items-center justify-center">
             <p>No notes found.</p>
             <button className="mt-5 text-xs bg-gray-100 py-2 px-5 rounded">
