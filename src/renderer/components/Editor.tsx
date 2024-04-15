@@ -87,7 +87,7 @@ export default function Editor() {
             </div>
           </div>
 
-          <div className="flex flex-col mr-2">
+          <div className="flex flex-col">
             <input
               type="text"
               placeholder="Title..."
@@ -99,7 +99,7 @@ export default function Editor() {
             />
 
             <textarea
-              className="w-full h-[80vh] p-3 outline-none"
+              className="w-full h-[80vh] px-3 outline-none"
               placeholder="My important note..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
