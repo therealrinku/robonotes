@@ -54,6 +54,25 @@ export default function Editor() {
     return false;
   }, [fileContent, title, description]);
 
+  // auto save feature
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    if (haveUnsavedChanges) {
+      //@ts-ignore
+      clearTimeout(timeout);
+
+      timeout = setTimeout(() => {
+        console.log('---autosaving---');
+        handleSave(title, description);
+      }, 1200);
+    }
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [title, description]);
+
   return (
     <div className="w-full">
       {selectedNote && fileContent && (
@@ -99,9 +118,11 @@ export default function Editor() {
             />
 
             <textarea
-              className="w-full h-[80vh] px-3 outline-none"
+              className="w-full h-[84vh] px-3 outline-none"
               placeholder="My important note..."
               value={description}
+              autoCorrect="off"
+              spellCheck="false"
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
