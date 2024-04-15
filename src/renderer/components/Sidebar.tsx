@@ -1,13 +1,13 @@
 import { Fragment, useMemo, useState } from 'react';
 import {
-  FiEdit2,
-  FiFilePlus,
-  FiFileText,
-  FiSearch,
-  FiSettings,
-  FiTag,
-  FiTrash2,
-} from 'react-icons/fi';
+  GoFile,
+  GoGear,
+  GoPencil,
+  GoPlusCircle,
+  GoSearch,
+  GoTag,
+  GoTrash,
+} from 'react-icons/go';
 import useRootContext from '../hooks/useRootContext';
 import PreferencesModal from './PreferencesModal';
 import TagsModal from './TagsModal';
@@ -68,13 +68,13 @@ export default function Sidebar() {
         <div className="absolute bottom-3 text-xs w-full px-3 flex flex-row items-center justify-center gap-2">
           <p className="truncate max-w-[85%]">robunot v.0.0.0</p>
           <button onClick={() => setShowPreferencesModal(true)}>
-            <FiSettings />
+            <GoGear />
           </button>
         </div>
 
         <div className="px-3 flex flex-row items-center gap-3">
           <div className="relative w-full">
-            <FiSearch
+            <GoSearch
               className="absolute left-2 top-2"
               color="gray"
               size={13}
@@ -89,11 +89,11 @@ export default function Sidebar() {
 
           <div className="flex flex-row items-center gap-3">
             <button onClick={handleCreateNewNote} className="py-2">
-              <FiFilePlus />
+              <GoPlusCircle />
             </button>
 
             <button onClick={() => setShowTagsModal(true)} className="py-2">
-              <FiTag />
+              <GoTag />
             </button>
           </div>
         </div>
@@ -199,7 +199,7 @@ function NoteItem({ fileName, index }: NoteItemProps) {
         className={`${selectedNoteIndex === index && 'outline-dashed'} relative h-full p-2 w-full text-xs bg-gray-100 hover:outline-dashed outline-1  w-full rounded`}
       >
         <div className="flex flex-row items-center gap-1">
-          <FiFileText />
+          <GoFile />
           <p className="truncate max-w-[85%]">{fileName}</p>
         </div>
 
@@ -212,7 +212,7 @@ function NoteItem({ fileName, index }: NoteItemProps) {
               }}
               className="h-full px-2"
             >
-              <FiEdit2 size={14} />
+              <GoPencil size={14} />
             </button>
             <button
               onClick={(e) => {
@@ -221,7 +221,7 @@ function NoteItem({ fileName, index }: NoteItemProps) {
               }}
               className="h-full px-2"
             >
-              <FiTrash2 size={14} color="red" />
+              <GoTrash size={14} color="red" />
             </button>
           </div>
         )}
