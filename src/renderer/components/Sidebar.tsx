@@ -190,7 +190,7 @@ function NoteItem({ fileName, index }: NoteItemProps) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={() => setSelectedNoteIndex(index)}
-        className={`${selectedNoteIndex === index && 'outline-dashed'} relative h-full p-2 w-full text-xs bg-gray-100 hover:outline-dashed outline-1  w-full rounded`}
+        className={`${selectedNoteIndex === index && 'outline-dashed outline-green-500'} relative h-full p-2 w-full text-xs bg-gray-100 hover:outline-dashed outline-1  w-full rounded`}
       >
         <div className="flex flex-row items-center gap-1">
           <GoFile />
