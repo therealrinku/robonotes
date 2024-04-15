@@ -1,11 +1,19 @@
 import { Fragment, useMemo, useState } from 'react';
-import { FiFilePlus, FiFileText, FiSearch, FiSettings } from 'react-icons/fi';
+import {
+  FiFilePlus,
+  FiFileText,
+  FiSearch,
+  FiSettings,
+  FiTag,
+} from 'react-icons/fi';
 import useRootContext from '../hooks/useRootContext';
 import PreferencesModal from './PreferencesModal';
+import TagsModal from './TagsModal';
 
 export default function Sidebar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showPreferencesModal, setShowPreferencesModal] = useState(false);
+  const [showTagsModal, setShowTagsModal] = useState(false);
 
   const {
     rootDir,
@@ -77,14 +85,14 @@ export default function Sidebar() {
             />
           </div>
 
-          <div>
+          <div className="flex flex-row items-center gap-3">
             <button onClick={handleCreateNewNote} className="py-2">
               <FiFilePlus />
             </button>
 
-            {/* <button onClick={handleNewFile} className="py-2">
-            <FiTag />
-          </button> */}
+            <button onClick={() => setShowTagsModal(true)} className="py-2">
+              <FiTag />
+            </button>
           </div>
         </div>
 
@@ -128,7 +136,7 @@ export default function Sidebar() {
               </button>
             </div>
           ) : (
-            <div className="text-xs text-center h-[70vh] flex flex-col items-center justify-center">
+            <div className="text-xs text-center">
               <p>No notes found.</p>
             </div>
           )}
@@ -141,6 +149,8 @@ export default function Sidebar() {
           onClose={() => setShowPreferencesModal(false)}
         />
       )}
+
+      {showTagsModal && <TagsModal onClose={() => setShowTagsModal(false)} />}
     </Fragment>
   );
 }
