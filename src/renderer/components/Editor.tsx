@@ -99,7 +99,7 @@ export default function Editor() {
 
               <button
                 onClick={() => setSelectedNoteIndex(-1)}
-                className="text-xs bg-red-300 hover:bg-red-200 py-2 px-5 rounded"
+                className="text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded"
               >
                 <p>Close</p>
               </button>
