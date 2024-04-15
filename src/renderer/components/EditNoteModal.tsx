@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { FiCheck, FiEdit2, FiEdit3, FiFilePlus, FiX } from 'react-icons/fi';
 import ModalWrapper from './ModalWrapper';
 
 interface Props {
@@ -8,7 +7,7 @@ interface Props {
   onRename: Function;
 }
 
-export default function RenameModal({ onClose, initialText, onRename }: Props) {
+export default function EditNoteModal({ onClose, initialText, onRename }: Props) {
   const [text, setText] = useState(initialText || '');
 
   return (

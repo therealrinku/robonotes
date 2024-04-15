@@ -11,7 +11,7 @@ import {
 import useRootContext from '../hooks/useRootContext';
 import PreferencesModal from './PreferencesModal';
 import TagsModal from './TagsModal';
-import RenameModal from './RenameModal';
+import EditNoteModal from './EditNoteModal';
 
 interface NoteItemProps {
   fileName: string;
@@ -145,8 +145,14 @@ function NoteItem({ fileName, index }: NoteItemProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [showRenameModal, setShowRenameModal] = useState(false);
 
-  const { rootDir, notes, selectedNoteIndex, setSelectedNoteIndex, setNotes } =
-    useRootContext();
+  const {
+    tags,
+    rootDir,
+    notes,
+    selectedNoteIndex,
+    setSelectedNoteIndex,
+    setNotes,
+  } = useRootContext();
 
   function handleRename(newName: string) {
     //@ts-ignore
@@ -184,6 +190,11 @@ function NoteItem({ fileName, index }: NoteItemProps) {
     setSelectedNoteIndex(-1);
   }
 
+  const thisNoteTags = Object.entries(tags).filter(
+    //@ts-ignore
+    (tag) => tag[1][fileName] === true,
+  );
+
   return (
     <Fragment>
       <button
@@ -201,7 +212,7 @@ function NoteItem({ fileName, index }: NoteItemProps) {
           </p>
           &middot;
           <p className="flex items-center gap-1">
-            <GoTag /> 10
+            <GoTag /> {thisNoteTags.length}
           </p>
         </div>
 
@@ -230,7 +241,7 @@ function NoteItem({ fileName, index }: NoteItemProps) {
       </button>
 
       {showRenameModal && (
-        <RenameModal
+        <EditNoteModal
           onClose={() => setShowRenameModal(false)}
           initialText={fileName}
           onRename={handleRename}
