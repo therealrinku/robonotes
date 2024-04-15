@@ -2,7 +2,7 @@ import { PropsWithChildren, createContext, useEffect, useState } from 'react';
 
 export const RootContext = createContext({
   notes: [],
-  tags: [],
+  tags: {},
   rootDir: '',
   setNotes: Function,
   setRootDir: Function,
@@ -14,7 +14,7 @@ export const RootContext = createContext({
 export function RootContextProvider({ children }: PropsWithChildren) {
   const [rootDir, setRootDir] = useState('');
   const [notes, setNotes] = useState([]);
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState({}); // struct => { "tagName" : { "noteName": true } }
   const [selectedNoteIndex, setSelectedNoteIndex] = useState(-1);
 
   useEffect(() => {

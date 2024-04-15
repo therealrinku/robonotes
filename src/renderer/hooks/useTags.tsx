@@ -3,9 +3,13 @@ import { RootContext } from '../context/RootContext';
 
 export default function useTags() {
   const { tags, setTags, rootDir } = useContext(RootContext);
-
+  
   function addTag(newTagName: string) {
-    const updatedTags = [...tags, newTagName];
+    const newTag = {
+      [newTagName]: {},
+    };
+
+    const updatedTags = { ...tags, ...newTag };
 
     window.electron.ipcRenderer.sendMessage(
       'update-tags',
@@ -18,7 +22,7 @@ export default function useTags() {
   }
 
   function removeTag(tagName: string) {
-    const updatedTags = tags.filter((tag) => tag !== tagName);
+    const updatedTags = { ...tags };
 
     //@ts-expect-error
     delete updatedTags[tagName];

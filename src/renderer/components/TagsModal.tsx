@@ -10,11 +10,12 @@ interface Props {
 export default function TagsModal({ onClose }: Props) {
   const { tags, addTag } = useTags();
 
+  const tagNames = Object.keys(tags);
+
   const [text, setText] = useState('');
 
   function handleAddTag() {
-    //@ts-expect-error
-    if (tags.includes(text)) {
+    if (tagNames.includes(text)) {
       alert('Tag already exists!');
       return;
     }
@@ -26,7 +27,7 @@ export default function TagsModal({ onClose }: Props) {
   return (
     <ModalWrapper onClose={onClose}>
       <div className="flex flex-row flex-wrap self-start gap-2 ml-5 max-h-[150px] overflow-y-auto">
-        {tags.map((tagName) => {
+        {tagNames.map((tagName) => {
           return <Tag tagName={tagName} key={tagName} />;
         })}
       </div>
