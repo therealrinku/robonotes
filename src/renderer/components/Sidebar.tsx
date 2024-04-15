@@ -64,7 +64,7 @@ export default function Sidebar() {
 
   return (
     <Fragment>
-      <div className="relative bg-gray-200 w-80 min-h-screen flex flex-col items-center gap-5 py-5">
+      <div className="relative bg-gray-200 w-64 min-h-screen flex flex-col items-center gap-5 py-5">
         <div className="absolute bottom-3 text-xs w-full px-3 flex flex-row items-center justify-center gap-2">
           <p className="truncate max-w-[85%]">robunot v.0.0.0</p>
           <button onClick={() => setShowPreferencesModal(true)}>
@@ -194,7 +194,11 @@ function NoteItem({ fileName, index }: NoteItemProps) {
       >
         <div className="flex flex-row items-center gap-1">
           <GoFile />
-          <p className="truncate max-w-[85%]">{fileName}</p>
+          <p
+            className={`truncate ${isHovered ? 'max-w-[70%]' : 'max-w-[85%]'}`}
+          >
+            {fileName}
+          </p>
         </div>
 
         {isHovered && (
