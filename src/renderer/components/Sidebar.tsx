@@ -281,6 +281,7 @@ function NoteItem({ fileName, index }: NoteItemProps) {
           onClose={() => setShowRenameModal(false)}
           initialText={fileName}
           onRename={handleRename}
+          fileName={fileName}
         />
       )}
     </Fragment>
