@@ -1,15 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import useRootContext from '../hooks/useRootContext';
 import EmptySvg from '../assets/images/empty.svg';
-import { FiDelete, FiTrash } from 'react-icons/fi';
-import RenameModal from './RenameModal';
 
 export default function Editor() {
-  const { selectedNoteIndex, rootDir, notes, setNotes, setSelectedNoteIndex } =
+  const { selectedNoteIndex, rootDir, notes, setSelectedNoteIndex } =
     useRootContext();
   const selectedNote = notes[selectedNoteIndex];
-
-  const [showRenameModal, setShowRenameModal] = useState(false);
 
   const [fileContent, setFileContent] = useState({
     title: '',
@@ -58,46 +54,6 @@ export default function Editor() {
     return false;
   }, [fileContent, title, description]);
 
-  function handleRename(newName: string) {
-    //@ts-ignore
-    if (notes.includes(newName)) {
-      alert('Note with same name already exists!');
-      return;
-    }
-
-    window.electron.ipcRenderer.sendMessage(
-      'rename-note',
-      rootDir,
-      selectedNote,
-      newName,
-    );
-
-    const updatedNotes = [...notes];
-    //@ts-ignore
-    updatedNotes[selectedNoteIndex] = newName;
-    //@ts-ignore
-    setNotes(updatedNotes);
-    setShowRenameModal(false);
-  }
-
-  function handleDelete() {
-    const confirmed = confirm('Are you sure to delete this note ? ');
-
-    if (!confirmed) {
-      return;
-    }
-
-    window.electron.ipcRenderer.sendMessage(
-      'delete-note',
-      rootDir,
-      selectedNote,
-    );
-
-    //@ts-ignore
-    setNotes((prev) => prev.filter((item) => item !== selectedNote));
-    setSelectedNoteIndex(-1);
-  }
-
   return (
     <div className="w-full">
       {selectedNote && fileContent && (
@@ -123,24 +79,10 @@ export default function Editor() {
               </button>
 
               <button
-                onClick={() => setShowRenameModal(true)}
-                className="flex items-center text-xs bg-gray-100 hover:bg-gray-200 py-2 px-5 rounded"
-              >
-                <p>Rename</p>
-              </button>
-
-              <button
                 onClick={() => setSelectedNoteIndex(-1)}
                 className="text-xs bg-red-300 hover:bg-red-200 py-2 px-5 rounded"
               >
                 <p>Close</p>
-              </button>
-
-              <button
-                onClick={handleDelete}
-                className="text-xs bg-red-300 hover:bg-red-200 py-2 px-5 rounded"
-              >
-                <FiTrash size={16} />
               </button>
             </div>
           </div>
@@ -171,14 +113,6 @@ export default function Editor() {
           <img src={EmptySvg} className="h-32 w-32" />
           <p className="text-xs">No note opened yet.</p>
         </div>
-      )}
-
-      {showRenameModal && (
-        <RenameModal
-          onClose={() => setShowRenameModal(false)}
-          initialText={selectedNote}
-          onRename={handleRename}
-        />
       )}
     </div>
   );

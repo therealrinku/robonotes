@@ -1,28 +1,30 @@
 import { Fragment, useMemo, useState } from 'react';
 import {
+  FiEdit2,
   FiFilePlus,
   FiFileText,
   FiSearch,
   FiSettings,
   FiTag,
+  FiTrash2,
 } from 'react-icons/fi';
 import useRootContext from '../hooks/useRootContext';
 import PreferencesModal from './PreferencesModal';
 import TagsModal from './TagsModal';
+import RenameModal from './RenameModal';
+
+interface NoteItemProps {
+  fileName: string;
+  index: number;
+}
 
 export default function Sidebar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showPreferencesModal, setShowPreferencesModal] = useState(false);
   const [showTagsModal, setShowTagsModal] = useState(false);
 
-  const {
-    rootDir,
-    setRootDir,
-    notes,
-    setNotes,
-    selectedNoteIndex,
-    setSelectedNoteIndex,
-  } = useRootContext();
+  const { rootDir, setRootDir, notes, setNotes, setSelectedNoteIndex } =
+    useRootContext();
 
   function handleCreateNewNote() {
     let newNoteTitle =
@@ -100,23 +102,7 @@ export default function Sidebar() {
           {filteredNotes.length > 0 ? (
             filteredNotes.map((fileName: string, index) => {
               return (
-                <button
-                  key={index}
-                  onClick={() => setSelectedNoteIndex(index)}
-                  className={`${selectedNoteIndex === index && 'outline-dashed'} h-full p-2 w-full text-xs bg-gray-100 hover:outline-dashed outline-1  w-full rounded`}
-                >
-                  <div className="flex flex-row items-center gap-1">
-                    <FiFileText />
-                    <p className="truncate max-w-[85%]">{fileName}</p>
-                  </div>
-
-                  {/* <div className="mt-2 flex flex-row items-center gap-2">
-                  <div className="flex flex-row items-center gap-1">
-                    <FiTag />
-                    <p>Holimoli</p>
-                  </div>
-                </div> */}
-                </button>
+                <NoteItem key={fileName} fileName={fileName} index={index} />
               );
             })
           ) : notes.length === 0 ? (
@@ -151,6 +137,110 @@ export default function Sidebar() {
       )}
 
       {showTagsModal && <TagsModal onClose={() => setShowTagsModal(false)} />}
+    </Fragment>
+  );
+}
+
+function NoteItem({ fileName, index }: NoteItemProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [showRenameModal, setShowRenameModal] = useState(false);
+
+  const { rootDir, notes, selectedNoteIndex, setSelectedNoteIndex, setNotes } =
+    useRootContext();
+
+  const selectedNote = notes[selectedNoteIndex];
+
+  function handleRename(newName: string) {
+    //@ts-ignore
+    if (notes.includes(newName)) {
+      alert('Note with same name already exists!');
+      return;
+    }
+
+    window.electron.ipcRenderer.sendMessage(
+      'rename-note',
+      rootDir,
+      selectedNote,
+      newName,
+    );
+
+    const updatedNotes = [...notes];
+    //@ts-ignore
+    updatedNotes[selectedNoteIndex] = newName;
+    //@ts-ignore
+    setNotes(updatedNotes);
+    setShowRenameModal(false);
+  }
+
+  function handleDelete() {
+    const confirmed = confirm('Are you sure to delete this note ? ');
+
+    if (!confirmed) {
+      return;
+    }
+
+    window.electron.ipcRenderer.sendMessage(
+      'delete-note',
+      rootDir,
+      selectedNote,
+    );
+
+    //@ts-ignore
+    setNotes((prev) => prev.filter((item) => item !== selectedNote));
+    setSelectedNoteIndex(-1);
+  }
+
+  return (
+    <Fragment>
+      <button
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={() => setSelectedNoteIndex(index)}
+        className={`${selectedNoteIndex === index && 'outline-dashed'} relative h-full p-2 w-full text-xs bg-gray-100 hover:outline-dashed outline-1  w-full rounded`}
+      >
+        <div className="flex flex-row items-center gap-1">
+          <FiFileText />
+          <p className="truncate max-w-[85%]">{fileName}</p>
+        </div>
+
+        {isHovered && (
+          <div className="absolute top-0 right-0 h-full flex flex-row items-center">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowRenameModal(true);
+              }}
+              className="h-full px-2"
+            >
+              <FiEdit2 size={14} />
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete();
+              }}
+              className="h-full px-2"
+            >
+              <FiTrash2 size={14} color="red" />
+            </button>
+          </div>
+        )}
+
+        {/* <div className="mt-2 flex flex-row items-center gap-2">
+  <div className="flex flex-row items-center gap-1">
+    <FiTag />
+    <p>Holimoli</p>
+  </div>
+</div> */}
+      </button>
+
+      {showRenameModal && (
+        <RenameModal
+          onClose={() => setShowRenameModal(false)}
+          initialText={selectedNote}
+          onRename={handleRename}
+        />
+      )}
     </Fragment>
   );
 }
