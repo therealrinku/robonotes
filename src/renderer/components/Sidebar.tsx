@@ -64,7 +64,7 @@ export default function Sidebar() {
 
   return (
     <Fragment>
-      <div className="relative bg-gray-200 min-w-64 min-h-screen flex flex-col items-center gap-5 py-5">
+      <div className="relative bg-gray-100 min-w-64 max-w-64 min-h-screen flex flex-col items-center gap-5 py-5">
         <div className="absolute bottom-3 text-xs w-full px-3 flex flex-row items-center justify-center gap-2">
           <p className="truncate max-w-[85%]">robunot v.0.0.0</p>
           <button onClick={() => setShowPreferencesModal(true)}>
@@ -81,7 +81,7 @@ export default function Sidebar() {
             />
             <input
               placeholder="Search..."
-              className="bg-gray-100 pl-7 pr-2 rounded w-full text-xs py-1 outline-none"
+              className="bg-gray-200 pl-7 pr-2 rounded w-full text-xs py-1 outline-none"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -110,13 +110,13 @@ export default function Sidebar() {
               <p>No notes found.</p>
               <button
                 onClick={handleSelectFolder}
-                className="mt-5 text-xs bg-gray-100 py-2 px-5 rounded"
+                className="mt-5 text-xs bg-gray-200 py-2 px-5 rounded"
               >
                 Change directory
               </button>
               <button
                 onClick={handleCreateNewNote}
-                className="mt-5 text-xs bg-gray-100 py-2 px-5 rounded"
+                className="mt-5 text-xs bg-gray-200 py-2 px-5 rounded"
               >
                 Create new note
               </button>
@@ -190,7 +190,7 @@ function NoteItem({ fileName, index }: NoteItemProps) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={() => setSelectedNoteIndex(index)}
-        className={`${selectedNoteIndex === index && 'outline-dashed outline-green-500'} relative h-full p-2 w-full text-xs bg-gray-100 hover:outline-dashed outline-1  w-full rounded`}
+        className={`${selectedNoteIndex === index && 'outline-dashed outline-green-500'} relative h-full p-2 w-full text-xs bg-gray-200 hover:outline-dashed outline-1  w-full rounded`}
       >
         <div className="flex flex-row items-center gap-1">
           <GoFile />
@@ -198,6 +198,10 @@ function NoteItem({ fileName, index }: NoteItemProps) {
             className={`truncate ${isHovered ? 'max-w-[70%]' : 'max-w-[85%]'}`}
           >
             {fileName}
+          </p>
+          &middot;
+          <p className="flex items-center gap-1">
+            <GoTag /> 10
           </p>
         </div>
 
@@ -223,13 +227,6 @@ function NoteItem({ fileName, index }: NoteItemProps) {
             </button>
           </div>
         )}
-
-        {/* <div className="mt-2 flex flex-row items-center gap-2">
-  <div className="flex flex-row items-center gap-1">
-    <FiTag />
-    <p>Holimoli</p>
-  </div>
-</div> */}
       </button>
 
       {showRenameModal && (

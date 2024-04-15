@@ -20,7 +20,7 @@ export default function PreferencesModal({ onClose, handleChangeDir }: Props) {
         </p>
         <button
           onClick={handleChangeDir}
-          className="flex items-center text-xs bg-gray-100 hover:bg-gray-200 py-2 px-5 rounded"
+          className="flex items-center text-xs bg-gray-200 hover:bg-gray-200 py-2 px-5 rounded"
         >
           <p>Change Directory</p>
         </button>

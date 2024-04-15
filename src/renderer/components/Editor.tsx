@@ -91,7 +91,7 @@ export default function Editor() {
               <button
                 disabled={!haveUnsavedChanges}
                 onClick={() => handleSave(title, description)}
-                className="flex items-center text-xs bg-gray-100 hover:bg-gray-200 py-2 px-5 rounded"
+                className="flex items-center text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded"
               >
                 <p>Save</p>
                 <p>{haveUnsavedChanges ? '*' : ''}</p>

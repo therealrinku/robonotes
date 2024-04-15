@@ -30,7 +30,7 @@ export default function InitialSetup() {
         {/* {step > 1 && (
           <button
             onClick={() => setStep((prev) => prev - 1)}
-            className="mt-5 text-xs bg-gray-100 hover:bg-gray-200 py-2 px-5 rounded"
+            className="mt-5 text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded"
           >
             Prev
           </button>
@@ -39,7 +39,7 @@ export default function InitialSetup() {
         {step < 4 && (
           <button
             onClick={() => setStep((prev) => prev + 1)}
-            className="mt-5 text-xs bg-gray-100 hover:bg-gray-200 py-2 px-5 rounded"
+            className="mt-5 text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded"
           >
             Next
           </button>
@@ -107,13 +107,13 @@ function FourthCard() {
       <div className="flex flex-row items-center gap-2">
         <button
           onClick={handleSelectFolder}
-          className="mt-5 text-xs bg-gray-100 hover:bg-gray-200 py-2 px-5 rounded"
+          className="mt-5 text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded"
         >
           {rootDir ? 'Change Folder' : 'Select Folder'}
         </button>
 
         {rootDir && (
-          <button className="mt-5 text-xs bg-gray-100 hover:bg-gray-200 py-2 px-5 rounded">
+          <button className="mt-5 text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded">
             Continue...
           </button>
         )}
