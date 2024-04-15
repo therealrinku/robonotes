@@ -127,7 +127,7 @@ export default function Editor() {
               onChange={(e) => setTitle(e.target.value)}
             />
 
-            <div className="flex flex-row items-center gap-2 mb-5 pl-2">
+            <div className="flex flex-row items-center gap-2 pb-5 pl-2">
               {thisNoteTags.map((tag) => {
                 return (
                   <div
@@ -141,7 +141,7 @@ export default function Editor() {
             </div>
 
             <textarea
-              className="w-full h-[84vh] px-3 outline-none"
+              className="w-full h-[78vh] px-3 outline-none"
               placeholder="My important note..."
               value={description}
               autoCorrect="off"
