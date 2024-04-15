@@ -206,7 +206,7 @@ function NoteItem({ fileName, index }: NoteItemProps) {
 
     const updatedNotes = [...notes];
     //@ts-ignore
-    updatedNotes[selectedNoteIndex] = newName;
+    updatedNotes[index] = newName;
     //@ts-ignore
     setNotes(updatedNotes);
     setShowRenameModal(false);
