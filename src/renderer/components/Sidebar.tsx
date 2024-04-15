@@ -148,8 +148,6 @@ function NoteItem({ fileName, index }: NoteItemProps) {
   const { rootDir, notes, selectedNoteIndex, setSelectedNoteIndex, setNotes } =
     useRootContext();
 
-  const selectedNote = notes[selectedNoteIndex];
-
   function handleRename(newName: string) {
     //@ts-ignore
     if (notes.includes(newName)) {
@@ -160,7 +158,7 @@ function NoteItem({ fileName, index }: NoteItemProps) {
     window.electron.ipcRenderer.sendMessage(
       'rename-note',
       rootDir,
-      selectedNote,
+      fileName,
       newName,
     );
 
@@ -179,11 +177,7 @@ function NoteItem({ fileName, index }: NoteItemProps) {
       return;
     }
 
-    window.electron.ipcRenderer.sendMessage(
-      'delete-note',
-      rootDir,
-      selectedNote,
-    );
+    window.electron.ipcRenderer.sendMessage('delete-note', rootDir, fileName);
 
     //@ts-ignore
     setNotes((prev) => prev.filter((item) => item !== selectedNote));
@@ -237,7 +231,7 @@ function NoteItem({ fileName, index }: NoteItemProps) {
       {showRenameModal && (
         <RenameModal
           onClose={() => setShowRenameModal(false)}
-          initialText={selectedNote}
+          initialText={fileName}
           onRename={handleRename}
         />
       )}
