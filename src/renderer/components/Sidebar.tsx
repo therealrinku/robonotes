@@ -255,10 +255,13 @@ function NoteItem({ fileName, index }: NoteItemProps) {
           >
             {fileName}
           </p>
-          &middot;
-          <p className="flex items-center gap-1">
-            <GoTag /> {thisNoteTags.length}
-          </p>
+
+          {thisNoteTags.length > 0 && (
+            <p className="flex items-center gap-1">
+              &middot;
+              <GoTag /> {thisNoteTags.length}
+            </p>
+          )}
         </div>
 
         {isHovered && (

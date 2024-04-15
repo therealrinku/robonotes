@@ -1,11 +1,21 @@
 import { useEffect, useMemo, useState } from 'react';
 import useRootContext from '../hooks/useRootContext';
 import EmptySvg from '../assets/images/empty.svg';
+import useTags from '../hooks/useTags';
 
 export default function Editor() {
   const { selectedNoteIndex, rootDir, notes, setSelectedNoteIndex } =
     useRootContext();
+  const { tags } = useTags();
+
   const selectedNote = notes[selectedNoteIndex];
+
+  const thisNoteTags = Object.entries(tags)
+    .filter(
+      //@ts-ignore
+      (tag) => tag[1][selectedNote] === true,
+    )
+    .map((tg) => tg[0]);
 
   const [fileContent, setFileContent] = useState({
     title: '',
@@ -116,6 +126,19 @@ export default function Editor() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
+
+            <div className="flex flex-row items-center gap-2 mb-5 pl-2">
+              {thisNoteTags.map((tag) => {
+                return (
+                  <div
+                    key={tag}
+                    className="flex justify-center text-xs bg-gray-200 p-1 px-5 rounded-full disabled:opacity-70"
+                  >
+                    {tag}
+                  </div>
+                );
+              })}
+            </div>
 
             <textarea
               className="w-full h-[84vh] px-3 outline-none"

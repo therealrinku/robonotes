@@ -72,7 +72,7 @@ function Tag({ tagName }: { tagName: string }) {
       {isHovered && (
         <button
           onClick={handleDeleteTag}
-          className="absolute top-0 h-full right-2 bg-gray-100"
+          className="absolute top-0 h-full right-2 bg-gray-200"
         >
           <GoTrash />
         </button>
