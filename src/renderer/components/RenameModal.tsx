@@ -13,8 +13,6 @@ export default function RenameModal({ onClose, initialText, onRename }: Props) {
 
   return (
     <ModalWrapper onClose={onClose}>
-      <p className="font-bold text-xs">Rename</p>
-
       <div className="mt-5 flex flex-row items-center gap-2">
         <input
           placeholder="Rename.."

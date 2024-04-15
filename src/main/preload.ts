@@ -10,7 +10,8 @@ export type Channels =
   | 'read-note'
   | 'delete-note'
   | 'rename-note'
-  | 'update-tags';
+  | 'update-tags'
+  | 'load-tags'
 
 const electronHandler = {
   ipcRenderer: {

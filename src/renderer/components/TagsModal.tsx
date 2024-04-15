@@ -10,12 +10,11 @@ interface Props {
 export default function TagsModal({ onClose }: Props) {
   const { tags, addTag } = useTags();
 
-  const tagNames = Object.keys(tags);
-
   const [text, setText] = useState('');
 
   function handleAddTag() {
-    if (tagNames.includes(text)) {
+    //@ts-expect-error
+    if (tags.includes(text)) {
       alert('Tag already exists!');
       return;
     }
@@ -26,17 +25,15 @@ export default function TagsModal({ onClose }: Props) {
 
   return (
     <ModalWrapper onClose={onClose}>
-      <p className="text-sm font-bold">Tags</p>
-
-      <div className="flex flex-row flex-wrap ml-4 gap-2 mt-5 max-h-[150px] overflow-y-auto">
-        {tagNames.map((tagName) => {
+      <div className="flex flex-row flex-wrap self-start gap-2 ml-5 max-h-[150px] overflow-y-auto">
+        {tags.map((tagName) => {
           return <Tag tagName={tagName} key={tagName} />;
         })}
       </div>
 
       <div className="mt-5 flex flex-row items-center gap-2">
         <input
-          placeholder="New Tag.. (3-20 charcters)"
+          placeholder="Add New Tag.. (3-20 length)"
           className="bg-gray-100 px-2 rounded w-full text-xs py-2 outline-none w-[75%]"
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -47,7 +44,7 @@ export default function TagsModal({ onClose }: Props) {
           disabled={!text.trim() || text.length < 3 || text.length > 20}
           className="text-xs bg-gray-100 hover:bg-gray-200 py-2 px-5 rounded disabled:opacity-70"
         >
-          AddTag
+          Add
         </button>
       </div>
     </ModalWrapper>

@@ -8,6 +8,14 @@ import {
 } from 'fs';
 
 export function registerIpcHandlers(mainWindow: any) {
+  ipcMain.on('load-tags', async (event, ...args) => {
+    const rootDir = args[0];
+    const fileName = `tags.json`;
+
+    const tags = readFileSync(`${rootDir}/${fileName}`, 'utf-8');
+    event.reply('load-tags', tags);
+  });
+
   ipcMain.on('update-tags', async (event, ...args) => {
     const rootDir = args[0];
     const fileName = `tags.json`;
