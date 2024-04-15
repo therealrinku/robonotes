@@ -1,6 +1,7 @@
 import SimpleUiSvg from '../assets/images/simple-ui.svg';
 import PrivacySvg from '../assets/images/privacy.svg';
 import FileSvg from '../assets/images/file.svg';
+import HashtagSvg from '../assets/images/hashtags.svg';
 import { useState } from 'react';
 
 export default function InitialSetup() {
@@ -14,6 +15,8 @@ export default function InitialSetup() {
         return <SecondCard />;
       case 3:
         return <ThirdCard />;
+      case 4:
+        return <FourthCard />;
       default:
         return null;
     }
@@ -33,7 +36,7 @@ export default function InitialSetup() {
           </button>
         )} */}
 
-        {step < 3 && (
+        {step < 4 && (
           <button
             onClick={() => setStep((prev) => prev + 1)}
             className="mt-5 text-xs bg-gray-100 hover:bg-gray-200 py-2 px-5 rounded"
@@ -67,6 +70,19 @@ function SecondCard() {
 }
 
 function ThirdCard() {
+  return (
+    <div className="flex text-sm flex-col items-center gap-2">
+      <img src={HashtagSvg} alt="Simple UI" className="w-72 h-72" />
+      <p className="font-bold">Hashtags based</p>
+      <p className="text-center">
+        No crazy nested folder structure, <br />
+        just a bunch of hashtags for categorizing notes.
+      </p>
+    </div>
+  );
+}
+
+function FourthCard() {
   const [rootDir, setRootDir] = useState('');
 
   function handleSelectFolder() {
