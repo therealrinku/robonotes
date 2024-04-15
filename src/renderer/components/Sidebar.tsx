@@ -13,6 +13,7 @@ import useRootContext from '../hooks/useRootContext';
 import PreferencesModal from './PreferencesModal';
 import TagsModal from './TagsModal';
 import EditNoteModal from './EditNoteModal';
+import useTags from '../hooks/useTags';
 
 interface NoteItemProps {
   fileName: string;
@@ -190,12 +191,23 @@ function NoteItem({ fileName, index }: NoteItemProps) {
     setNotes,
   } = useRootContext();
 
+  const { moveTagToRenamedNote, removeNoteFromAssociatedTags } = useTags();
+
+  const thisNoteTags = Object.entries(tags).filter(
+    //@ts-ignore
+    (tag) => tag[1][fileName] === true,
+  );
+
   function handleRename(newName: string) {
     //@ts-ignore
     if (notes.includes(newName)) {
       alert('Note with same name already exists!');
       return;
     }
+
+    // first remove tag from last note name
+    // then add that tag to new note name
+    moveTagToRenamedNote(fileName, newName);
 
     window.electron.ipcRenderer.sendMessage(
       'rename-note',
@@ -221,15 +233,12 @@ function NoteItem({ fileName, index }: NoteItemProps) {
 
     window.electron.ipcRenderer.sendMessage('delete-note', rootDir, fileName);
 
+    removeNoteFromAssociatedTags(fileName);
+
     //@ts-ignore
     setNotes((prev) => prev.filter((item) => item !== fileName));
     setSelectedNoteIndex(-1);
   }
-
-  const thisNoteTags = Object.entries(tags).filter(
-    //@ts-ignore
-    (tag) => tag[1][fileName] === true,
-  );
 
   return (
     <Fragment>

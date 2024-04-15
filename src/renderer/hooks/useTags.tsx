@@ -4,6 +4,56 @@ import { RootContext } from '../context/RootContext';
 export default function useTags() {
   const { tags, setTags, rootDir } = useContext(RootContext);
 
+  function removeNoteFromAssociatedTags(noteName: string) {
+    const updatedTags = { ...tags };
+
+    for (let tagKey in updatedTags) {
+      //@ts-expect-error
+      const noteNames = updatedTags[tagKey];
+      for (let nn in noteNames) {
+        if (nn === noteName) {
+          //@ts-expect-error
+          delete updatedTags[tagKey][nn];
+        }
+      }
+    }
+
+    window.electron.ipcRenderer.sendMessage(
+      'update-tags',
+      rootDir,
+      updatedTags,
+    );
+
+    //@ts-expect-error
+    setTags(updatedTags);
+  }
+
+  function moveTagToRenamedNote(lastNoteName: string, newNoteName: string) {
+    const updatedTags = { ...tags };
+
+    for (let tagKey in updatedTags) {
+      //@ts-expect-error
+      const noteNames = updatedTags[tagKey];
+      for (let noteName in noteNames) {
+        if (noteName === lastNoteName) {
+          //@ts-expect-error
+          delete updatedTags[tagKey][noteName];
+          //@ts-expect-error
+          updatedTags[tagKey][newNoteName] = true;
+        }
+      }
+    }
+
+    window.electron.ipcRenderer.sendMessage(
+      'update-tags',
+      rootDir,
+      updatedTags,
+    );
+
+    //@ts-expect-error
+    setTags(updatedTags);
+  }
+
   function removeTagFromNote(noteName: string, tagName: string) {
     const updatedTags = { ...tags };
 
@@ -69,5 +119,13 @@ export default function useTags() {
     setTags(updatedTags);
   }
 
-  return { tags, addTag, removeTag, addTagToNote, removeTagFromNote };
+  return {
+    tags,
+    addTag,
+    removeTag,
+    addTagToNote,
+    removeTagFromNote,
+    moveTagToRenamedNote,
+    removeNoteFromAssociatedTags,
+  };
 }
