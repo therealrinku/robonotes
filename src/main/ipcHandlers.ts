@@ -8,6 +8,14 @@ import {
 } from 'fs';
 
 export function registerIpcHandlers(mainWindow: any) {
+  ipcMain.on('update-tags', async (event, ...args) => {
+    const rootDir = args[0];
+    const fileName = `tags.json`;
+
+    writeFileSync(`${rootDir}/${fileName}`, JSON.stringify(args[1]));
+    event.reply('update-tags', { success: true });
+  });
+
   ipcMain.on('open-root-dir-selector', async (event, _arg) => {
     const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
       properties: ['openDirectory'],
