@@ -2,6 +2,7 @@ import { Fragment, useMemo, useState } from 'react';
 import {
   GoFile,
   GoGear,
+  GoItalic,
   GoPencil,
   GoPlusCircle,
   GoSearch,
@@ -23,7 +24,9 @@ export default function Sidebar() {
   const [showPreferencesModal, setShowPreferencesModal] = useState(false);
   const [showTagsModal, setShowTagsModal] = useState(false);
 
-  const { rootDir, setRootDir, notes, setNotes, setSelectedNoteIndex } =
+  const [searchBy, setSearchBy] = useState('name');
+
+  const { rootDir, setRootDir, notes, setNotes, tags, setSelectedNoteIndex } =
     useRootContext();
 
   function handleCreateNewNote() {
@@ -57,10 +60,27 @@ export default function Sidebar() {
     }
 
     return notes.filter((fileName) => {
-      //@ts-ignore
-      return fileName.toLowerCase().includes(searchQuery.toLowerCase());
+      const allSearchTags = searchQuery
+        .split(',')
+        .map((item) => item.trim())
+        .filter((item) => item.length > 0);
+
+      if (searchBy === 'name') {
+        //@ts-ignore
+
+        return fileName.toLowerCase().includes(searchQuery.toLowerCase());
+      } else if (allSearchTags.length > 0 && searchBy === 'tag') {
+        const thisNoteTags = Object.entries(tags).filter(
+          //@ts-ignore
+          (tag) => tag[1][fileName] === true,
+        );
+
+        return thisNoteTags.some((tag) => allSearchTags.includes(tag[0]));
+      } else {
+        return true;
+      }
     });
-  }, [searchQuery, notes]);
+  }, [searchQuery, notes, searchBy]);
 
   return (
     <Fragment>
@@ -80,11 +100,27 @@ export default function Sidebar() {
               size={13}
             />
             <input
-              placeholder="Search..."
-              className="bg-gray-200 pl-7 pr-2 rounded w-full text-xs py-1 outline-none"
+              placeholder={
+                searchBy === 'name' ? 'Search by note name...' : 'tag1, tag2'
+              }
+              className="bg-gray-200 px-7 rounded w-full text-xs py-1 outline-none"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
+
+            {searchBy === 'name' ? (
+              <GoTag
+                onClick={() => setSearchBy('tag')}
+                className="absolute top-2 right-2"
+                size={13}
+              />
+            ) : (
+              <GoItalic
+                onClick={() => setSearchBy('name')}
+                className="absolute top-2 right-2"
+                size={13}
+              />
+            )}
           </div>
 
           <div className="flex flex-row items-center gap-3">
