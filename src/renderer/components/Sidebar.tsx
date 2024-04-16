@@ -2,6 +2,7 @@ import { Fragment, useMemo, useState } from 'react';
 import {
   GoFile,
   GoGear,
+  GoItalic,
   GoPencil,
   GoPlusCircle,
   GoSearch,
@@ -92,7 +93,7 @@ export default function Sidebar() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
 
-            {/* {searchBy === 'name' ? (
+            {searchBy === 'name' ? (
               <GoTag
                 onClick={() => setSearchBy('tag')}
                 className="absolute top-2 right-2"
@@ -104,7 +105,7 @@ export default function Sidebar() {
                 className="absolute top-2 right-2"
                 size={13}
               />
-            )} */}
+            )}
           </div>
 
           {/* <div className="flex flex-row items-center gap-3">
