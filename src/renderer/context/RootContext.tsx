@@ -1,21 +1,44 @@
-import { PropsWithChildren, createContext, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  PropsWithChildren,
+  SetStateAction,
+  createContext,
+  useEffect,
+  useState,
+} from 'react';
 
-export const RootContext = createContext({
+interface TagsModal {
+  [key: string]: {
+    [key: string]: boolean;
+  };
+}
+interface RootContextProps {
+  notes: string[];
+  tags: TagsModal;
+  rootDir: string;
+  setNotes: Dispatch<SetStateAction<string[]>>;
+  setRootDir: Dispatch<SetStateAction<string>>;
+  selectedNoteIndex: number;
+  setSelectedNoteIndex: Dispatch<SetStateAction<number>>;
+  setTags: Dispatch<SetStateAction<TagsModal>>;
+}
+
+export const RootContext = createContext<RootContextProps>({
   notes: [],
   tags: {},
   rootDir: '',
-  setNotes: Function,
-  setRootDir: Function,
+  setNotes: () => {},
+  setRootDir: () => {},
   selectedNoteIndex: -1,
-  setSelectedNoteIndex: (index: number) => {},
-  setTags: Function,
+  setSelectedNoteIndex: () => {},
+  setTags: () => {},
 });
 
 export function RootContextProvider({ children }: PropsWithChildren) {
-  const [rootDir, setRootDir] = useState('');
-  const [notes, setNotes] = useState([]);
-  const [tags, setTags] = useState({}); // struct => { "tagName" : { "noteName": true } }
-  const [selectedNoteIndex, setSelectedNoteIndex] = useState(-1);
+  const [rootDir, setRootDir] = useState<string>('');
+  const [notes, setNotes] = useState<Array<string>>([]);
+  const [tags, setTags] = useState<TagsModal>({});
+  const [selectedNoteIndex, setSelectedNoteIndex] = useState<number>(-1);
 
   useEffect(() => {
     window.electron.ipcRenderer.on('load-directory', (arg) => {
@@ -37,15 +60,12 @@ export function RootContextProvider({ children }: PropsWithChildren) {
     <RootContext.Provider
       value={{
         rootDir,
-        //@ts-expect-error
         setRootDir,
         notes,
-        //@ts-expect-error
         setNotes,
         selectedNoteIndex,
         setSelectedNoteIndex,
         tags,
-        //@ts-expect-error
         setTags,
       }}
     >

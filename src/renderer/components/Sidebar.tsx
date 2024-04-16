@@ -9,11 +9,12 @@ import {
   GoTag,
   GoTrash,
 } from 'react-icons/go';
-import useRootContext from '../hooks/useRootContext';
 import PreferencesModal from './PreferencesModal';
 import TagsModal from './TagsModal';
 import EditNoteModal from './EditNoteModal';
 import useTags from '../hooks/useTags';
+import useNotes from '../hooks/useNotes';
+import useDir from '../hooks/useDir';
 
 interface NoteItemProps {
   fileName: string;
@@ -27,33 +28,9 @@ export default function Sidebar() {
 
   const [searchBy, setSearchBy] = useState('name');
 
-  const { rootDir, setRootDir, notes, setNotes, tags, setSelectedNoteIndex } =
-    useRootContext();
-
-  function handleCreateNewNote() {
-    let newNoteTitle =
-      notes.length === 0 ? 'Untitled Note' : `Untitled Note (${notes.length})`;
-
-    window.electron.ipcRenderer.sendMessage(
-      'create-note',
-      rootDir,
-      newNoteTitle,
-    );
-
-    //@ts-ignore
-    setNotes((prev) => [...prev, newNoteTitle]);
-    setSelectedNoteIndex(notes.length);
-  }
-
-  function handleSelectFolder() {
-    window.electron.ipcRenderer.once('open-root-dir-selector', (arg) => {
-      const path = String(arg);
-      window.localStorage.setItem('rootDir', path);
-      setRootDir(String(arg));
-    });
-
-    window.electron.ipcRenderer.sendMessage('open-root-dir-selector');
-  }
+  const { tags } = useTags();
+  const { notes, handleCreateNewNote } = useNotes();
+  const { handleChangeDir } = useDir();
 
   const filteredNotes = useMemo(() => {
     if (!Array.isArray(notes) || notes.length == 0) {
@@ -146,7 +123,7 @@ export default function Sidebar() {
             <div className="text-xs text-center h-[70vh] flex flex-col items-center justify-center">
               <p>No notes found.</p>
               <button
-                onClick={handleSelectFolder}
+                onClick={handleChangeDir}
                 className="mt-5 text-xs bg-gray-200 py-2 px-5 rounded"
               >
                 Change directory
@@ -168,7 +145,7 @@ export default function Sidebar() {
 
       {showPreferencesModal && (
         <PreferencesModal
-          handleChangeDir={handleSelectFolder}
+          handleChangeDir={handleChangeDir}
           onClose={() => setShowPreferencesModal(false)}
         />
       )}
@@ -182,62 +159,25 @@ function NoteItem({ fileName, index }: NoteItemProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [showRenameModal, setShowRenameModal] = useState(false);
 
+  const { tags } = useTags();
   const {
-    tags,
-    rootDir,
-    notes,
-    selectedNoteIndex,
-    setSelectedNoteIndex,
-    setNotes,
-  } = useRootContext();
-
-  const { moveTagToRenamedNote, removeNoteFromAssociatedTags } = useTags();
+    handleOpenNote,
+    handleRenameNote,
+    handleDeleteNote,
+    selectedNoteName,
+  } = useNotes();
 
   const thisNoteTags = Object.entries(tags).filter(
-    //@ts-ignore
     (tag) => tag[1][fileName] === true,
   );
 
   function handleRename(newName: string) {
-    //@ts-ignore
-    if (notes.includes(newName)) {
-      alert('Note with same name already exists!');
-      return;
-    }
-
-    // first remove tag from last note name
-    // then add that tag to new note name
-    moveTagToRenamedNote(fileName, newName);
-
-    window.electron.ipcRenderer.sendMessage(
-      'rename-note',
-      rootDir,
-      fileName,
-      newName,
-    );
-
-    const updatedNotes = [...notes];
-    //@ts-ignore
-    updatedNotes[index] = newName;
-    //@ts-ignore
-    setNotes(updatedNotes);
+    handleRenameNote(index, fileName, newName);
     setShowRenameModal(false);
   }
 
   function handleDelete() {
-    const confirmed = confirm('Are you sure to delete this note ? ');
-
-    if (!confirmed) {
-      return;
-    }
-
-    window.electron.ipcRenderer.sendMessage('delete-note', rootDir, fileName);
-
-    removeNoteFromAssociatedTags(fileName);
-
-    //@ts-ignore
-    setNotes((prev) => prev.filter((item) => item !== fileName));
-    setSelectedNoteIndex(-1);
+    handleDeleteNote(fileName);
   }
 
   return (
@@ -245,8 +185,8 @@ function NoteItem({ fileName, index }: NoteItemProps) {
       <button
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onClick={() => setSelectedNoteIndex(index)}
-        className={`${selectedNoteIndex === index && 'outline-dashed outline-green-500'} relative h-full p-2 w-full text-xs bg-gray-200 hover:outline-dashed outline-1  w-full rounded`}
+        onClick={() => handleOpenNote(index)}
+        className={`${selectedNoteName === fileName && 'outline-dashed outline-green-500'} relative h-full p-2 w-full text-xs bg-gray-200 hover:outline-dashed outline-1  w-full rounded`}
       >
         <div className="flex flex-row items-center gap-1">
           <GoFile />

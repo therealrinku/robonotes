@@ -1,6 +1,6 @@
 import { GoFileDirectory } from 'react-icons/go';
-import useRootContext from '../hooks/useRootContext';
 import ModalWrapper from './ModalWrapper';
+import useDir from '../hooks/useDir';
 
 interface Props {
   onClose: () => void;
@@ -8,7 +8,7 @@ interface Props {
 }
 
 export default function PreferencesModal({ onClose, handleChangeDir }: Props) {
-  const { rootDir } = useRootContext();
+  const { rootDir } = useDir();
 
   return (
     <ModalWrapper onClose={onClose}>

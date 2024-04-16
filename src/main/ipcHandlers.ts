@@ -7,7 +7,11 @@ import {
   writeFileSync,
 } from 'fs';
 
-export function registerIpcHandlers(mainWindow: any) {
+export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
+  if (!mainWindow) {
+    return;
+  }
+
   ipcMain.on('load-tags', async (event, ...args) => {
     const rootDir = args[0];
     const fileName = `tags.json`;

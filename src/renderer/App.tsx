@@ -3,7 +3,7 @@ import InitialSetup from './pages/InitialSetup';
 import Home from './pages/Home';
 import './App.css';
 import { RootContextProvider } from './context/RootContext';
-import useRootContext from './hooks/useRootContext';
+import useDir from './hooks/useDir';
 
 export default function App() {
   return (
@@ -18,7 +18,7 @@ export default function App() {
 }
 
 function SetupApp() {
-  const { rootDir } = useRootContext();
+  const { rootDir } = useDir();
 
   if (rootDir) {
     return <Home />;

@@ -1,19 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
-import useRootContext from '../hooks/useRootContext';
 import EmptySvg from '../assets/images/empty.svg';
 import useTags from '../hooks/useTags';
+import useNotes from '../hooks/useNotes';
+import useDir from '../hooks/useDir';
 
 export default function Editor() {
-  const { selectedNoteIndex, rootDir, notes, setSelectedNoteIndex } =
-    useRootContext();
+  const { selectedNoteName, handleCloseNote, handleSaveNote } = useNotes();
+  const { rootDir } = useDir();
   const { tags } = useTags();
-
-  const selectedNote = notes[selectedNoteIndex];
 
   const thisNoteTags = Object.entries(tags)
     .filter(
       //@ts-ignore
-      (tag) => tag[1][selectedNote] === true,
+      (tag) => tag[1][selectedNoteName] === true,
     )
     .map((tg) => tg[0]);
 
@@ -26,17 +25,12 @@ export default function Editor() {
   const [description, setDescription] = useState('');
 
   function handleSave(title: string, description: string) {
-    window.electron.ipcRenderer.once('open-root-dir-selector', (arg) => {
-      //@ts-ignore
-      setFileContent({ title: title, content: description });
-    });
-
-    const args = [rootDir, selectedNote, title, description];
-    window.electron.ipcRenderer.sendMessage('save-file', args);
+    setFileContent({ title: title, content: description });
+    handleSaveNote(title, description);
   }
 
   useEffect(() => {
-    if (selectedNote) {
+    if (selectedNoteName) {
       window.electron.ipcRenderer.on('read-note', (arg) => {
         //@ts-ignore
         setFileContent(arg);
@@ -51,10 +45,10 @@ export default function Editor() {
       window.electron.ipcRenderer.sendMessage(
         'read-note',
         rootDir,
-        selectedNote,
+        selectedNoteName,
       );
     }
-  }, [selectedNote]);
+  }, [selectedNoteName]);
 
   const haveUnsavedChanges = useMemo(() => {
     if (fileContent.title !== title || fileContent.content !== description) {
@@ -85,7 +79,7 @@ export default function Editor() {
 
   return (
     <div className="w-full">
-      {selectedNote && fileContent && (
+      {selectedNoteName && fileContent && (
         <div className="w-full text-sm">
           <div className="flex flex-row items-center gap-2 p-3 self-end mx-auto">
             {/* <div className="text-xs py-2 px-3 rounded bg-gray-100 flex flex-row items-center gap-5">
@@ -108,7 +102,7 @@ export default function Editor() {
               </button>
 
               <button
-                onClick={() => setSelectedNoteIndex(-1)}
+                onClick={handleCloseNote}
                 className="text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded"
               >
                 <p>Close</p>
@@ -152,7 +146,7 @@ export default function Editor() {
         </div>
       )}
 
-      {!selectedNote && (
+      {!selectedNoteName && (
         <div className="w-full h-screen flex flex-col items-center justify-center gap-2">
           <img src={EmptySvg} className="h-32 w-32" />
           <p className="text-xs">No note opened yet.</p>
