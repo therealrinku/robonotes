@@ -2,7 +2,6 @@ import { Fragment, useMemo, useState } from 'react';
 import {
   GoFile,
   GoGear,
-  GoItalic,
   GoPencil,
   GoPlusCircle,
   GoSearch,
@@ -63,17 +62,24 @@ export default function Sidebar() {
   return (
     <Fragment>
       <div className="relative bg-gray-100 min-w-64 max-w-64 min-h-screen flex flex-col items-center gap-5 py-5">
-        <div className="absolute bottom-3 text-xs w-full px-3 flex flex-row items-center justify-center gap-2">
-          <p className="truncate max-w-[85%]">robunot v.0.0.0</p>
+        <div className="absolute bottom-3 text-xs w-full px-3 flex flex-row items-center justify-end gap-5">
+          <button onClick={handleCreateNewNote}>
+            <GoPlusCircle size={15} />
+          </button>
+
+          <button onClick={() => setShowTagsModal(true)}>
+            <GoTag size={15} />
+          </button>
+
           <button onClick={() => setShowPreferencesModal(true)}>
-            <GoGear />
+            <GoGear size={15} />
           </button>
         </div>
 
-        <div className="px-3 flex flex-row items-center gap-3">
+        <div className="flex flex-row items-center gap-3 w-full px-3">
           <div className="relative w-full">
             <GoSearch
-              className="absolute left-2 top-2"
+              className="absolute left-2 h-full"
               color="gray"
               size={13}
             />
@@ -81,12 +87,12 @@ export default function Sidebar() {
               placeholder={
                 searchBy === 'name' ? 'Search by note name...' : 'tag1, tag2'
               }
-              className="bg-gray-200 px-7 rounded w-full text-xs py-1 outline-none"
+              className="bg-gray-200 px-7 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
 
-            {searchBy === 'name' ? (
+            {/* {searchBy === 'name' ? (
               <GoTag
                 onClick={() => setSearchBy('tag')}
                 className="absolute top-2 right-2"
@@ -98,10 +104,10 @@ export default function Sidebar() {
                 className="absolute top-2 right-2"
                 size={13}
               />
-            )}
+            )} */}
           </div>
 
-          <div className="flex flex-row items-center gap-3">
+          {/* <div className="flex flex-row items-center gap-3">
             <button onClick={handleCreateNewNote} className="py-2">
               <GoPlusCircle />
             </button>
@@ -109,7 +115,7 @@ export default function Sidebar() {
             <button onClick={() => setShowTagsModal(true)} className="py-2">
               <GoTag />
             </button>
-          </div>
+          </div> */}
         </div>
 
         <div className="w-full pb-5 flex flex-col gap-2 border-white border-t pt-5 overflow-y-auto max-h-[85vh] px-3">
@@ -186,10 +192,10 @@ function NoteItem({ fileName, index }: NoteItemProps) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={() => handleOpenNote(index)}
-        className={`${selectedNoteName === fileName && 'outline-dashed outline-green-500'} relative h-full p-2 w-full text-xs bg-gray-200 hover:outline-dashed outline-1  w-full rounded`}
+        className={`${selectedNoteName === fileName && 'outline-dashed outline-green-500'} relative h-full p-2 w-full text-xs bg-gray-200 outline-1  w-full rounded`}
       >
         <div className="flex flex-row items-center gap-1">
-          <GoFile />
+          <GoFile size={13} />
           <p
             className={`truncate ${isHovered ? 'max-w-[70%]' : 'max-w-[85%]'}`}
           >
@@ -199,7 +205,7 @@ function NoteItem({ fileName, index }: NoteItemProps) {
           {thisNoteTags.length > 0 && (
             <p className="flex items-center gap-1">
               &middot;
-              <GoTag /> {thisNoteTags.length}
+              <GoTag size={13} /> {thisNoteTags.length}
             </p>
           )}
         </div>
