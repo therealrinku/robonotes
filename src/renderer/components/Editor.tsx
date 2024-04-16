@@ -78,8 +78,12 @@ export default function Editor() {
   }, [title, description]);
 
   useEffect(() => {
+    //@ts-expect-error
+    let timeout: NodeJS.Timeout = null;
     if (autoSavedTimestamp) {
-      setTimeout(() => setAutoSavedTimestamp(null), 2000);
+      timeout = setTimeout(() => setAutoSavedTimestamp(null), 2000);
+    } else {
+      clearTimeout(timeout);
     }
   }, [autoSavedTimestamp]);
 
