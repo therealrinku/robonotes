@@ -7,20 +7,20 @@ import {
   useState,
 } from 'react';
 
-interface TagsModal {
+interface TagsModel {
   [key: string]: {
     [key: string]: boolean;
   };
 }
 interface RootContextProps {
   notes: string[];
-  tags: TagsModal;
+  tags: TagsModel;
   rootDir: string;
   setNotes: Dispatch<SetStateAction<string[]>>;
   setRootDir: Dispatch<SetStateAction<string>>;
   selectedNoteIndex: number;
   setSelectedNoteIndex: Dispatch<SetStateAction<number>>;
-  setTags: Dispatch<SetStateAction<TagsModal>>;
+  setTags: Dispatch<SetStateAction<TagsModel>>;
 }
 
 export const RootContext = createContext<RootContextProps>({
@@ -37,7 +37,7 @@ export const RootContext = createContext<RootContextProps>({
 export function RootContextProvider({ children }: PropsWithChildren) {
   const [rootDir, setRootDir] = useState<string>('');
   const [notes, setNotes] = useState<Array<string>>([]);
-  const [tags, setTags] = useState<TagsModal>({});
+  const [tags, setTags] = useState<TagsModel>({});
   const [selectedNoteIndex, setSelectedNoteIndex] = useState<number>(-1);
 
   useEffect(() => {
