@@ -3,6 +3,7 @@ import PrivacySvg from '../assets/images/privacy.svg';
 import FileSvg from '../assets/images/file.svg';
 import HashtagSvg from '../assets/images/hashtags.svg';
 import { useState } from 'react';
+import useDir from '../hooks/useDir';
 
 export default function InitialSetup() {
   const [step, setStep] = useState(1);
@@ -83,13 +84,14 @@ function ThirdCard() {
 }
 
 function FourthCard() {
-  const [rootDir, setRootDir] = useState('');
+  const [_rootDir, _setRootDir] = useState('');
+  const { setRootDir } = useDir();
 
   function handleSelectFolder() {
     window.electron.ipcRenderer.once('open-root-dir-selector', (arg) => {
       const path = String(arg);
       window.localStorage.setItem('rootDir', path);
-      setRootDir(String(arg));
+      _setRootDir(String(arg));
     });
 
     window.electron.ipcRenderer.sendMessage('open-root-dir-selector');
@@ -109,17 +111,20 @@ function FourthCard() {
           onClick={handleSelectFolder}
           className="mt-5 text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded"
         >
-          {rootDir ? 'Change Folder' : 'Select Folder'}
+          {_rootDir ? 'Change Folder' : 'Select Folder'}
         </button>
 
-        {rootDir && (
-          <button className="mt-5 text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded">
+        {_rootDir && (
+          <button
+            onClick={() => setRootDir(_rootDir)}
+            className="mt-5 text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded"
+          >
             Continue...
           </button>
         )}
       </div>
 
-      {rootDir && <p className="text-xs">Selected Folder: {rootDir}</p>}
+      {_rootDir && <p className="text-xs">Selected Folder: {_rootDir}</p>}
     </div>
   );
 }
