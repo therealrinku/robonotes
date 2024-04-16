@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import EmptySvg from '../assets/images/empty.svg';
 import useTags from '../hooks/useTags';
 import useNotes from '../hooks/useNotes';
 import useDir from '../hooks/useDir';
-import { FiBold, FiItalic } from 'react-icons/fi';
 
 export default function Editor() {
   const { selectedNoteName, handleCloseNote, handleSaveNote } = useNotes();
@@ -24,6 +23,9 @@ export default function Editor() {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [autoSavedTimestamp, setAutoSavedTimestamp] = useState<number | null>(
+    null,
+  );
 
   function handleSave(title: string, description: string) {
     setFileContent({ title: title, content: description });
@@ -69,29 +71,25 @@ export default function Editor() {
 
       timeout = setTimeout(() => {
         console.log('---autosaving---');
+        setAutoSavedTimestamp(Date.now());
         handleSave(title, description);
       }, 1200);
     }
-
-    return () => {
-      clearTimeout(timeout);
-    };
   }, [title, description]);
+
+  useEffect(() => {
+    if (autoSavedTimestamp) {
+      setTimeout(() => setAutoSavedTimestamp(null), 2000);
+    }
+  }, [autoSavedTimestamp]);
 
   return (
     <div className="w-full max-h-[100vh] overflow-hidden">
       {selectedNoteName && fileContent && (
-        <div className="w-full text-sm">
-          <div className="flex flex-row items-center gap-2 p-3 self-end mx-auto">
-            <div className="ml-auto flex flex-row items-center gap-2">
-              <button
-                disabled={!haveUnsavedChanges}
-                onClick={() => handleSave(title, description)}
-                className="flex items-center text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded"
-              >
-                <p>Save</p>
-                <p>{haveUnsavedChanges ? '*' : ''}</p>
-              </button>
+        <div className="relative w-full text-sm">
+          <div className="absolute flex flex-row items-center gap-2 my-5 self-end mx-auto right-5">
+            <div className="ml-auto flex flex-row items-center gap-5">
+              {autoSavedTimestamp && <p className="text-xs">Saving....</p>}
 
               <button
                 onClick={handleCloseNote}
@@ -102,11 +100,11 @@ export default function Editor() {
             </div>
           </div>
 
-          <div className="flex flex-col h-[90vh] overflow-y-auto">
+          <div className="flex flex-col h-[100vh] overflow-y-auto py-5">
             <input
               type="text"
               placeholder="Title..."
-              className="p-3 outline-none font-bold text-lg"
+              className="p-3 outline-none font-bold text-lg max-w-[85%]"
               autoFocus={true}
               defaultValue={'2023 - Memo'}
               value={title}
