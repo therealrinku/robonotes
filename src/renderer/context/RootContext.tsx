@@ -50,6 +50,7 @@ export function RootContextProvider({ children }: PropsWithChildren) {
       //@ts-ignore
       setTags(JSON.parse(arg) || []);
     });
+    
     window.electron.ipcRenderer.sendMessage('load-directory', rootDir);
     window.electron.ipcRenderer.sendMessage('load-tags', rootDir);
 

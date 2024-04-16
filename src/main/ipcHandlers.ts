@@ -8,10 +8,6 @@ import {
 } from 'fs';
 
 export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
-  if (!mainWindow) {
-    return;
-  }
-
   ipcMain.on('load-tags', async (event, ...args) => {
     const rootDir = args[0];
     const fileName = `tags.json`;
@@ -29,6 +25,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   });
 
   ipcMain.on('open-root-dir-selector', async (event, _arg) => {
+    //@ts-ignore
     const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
       properties: ['openDirectory'],
     });
@@ -71,7 +68,6 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   ipcMain.on('load-directory', async (event, dir) => {
     //@ts-ignore
     const allFiles = [];
-
     const files = readdirSync(dir);
     files.forEach((file) => {
       if (file.endsWith('.robu')) {
