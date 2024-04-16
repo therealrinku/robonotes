@@ -3,6 +3,7 @@ import EmptySvg from '../assets/images/empty.svg';
 import useTags from '../hooks/useTags';
 import useNotes from '../hooks/useNotes';
 import useDir from '../hooks/useDir';
+import { FiBold, FiItalic } from 'react-icons/fi';
 
 export default function Editor() {
   const { selectedNoteName, handleCloseNote, handleSaveNote } = useNotes();
@@ -78,19 +79,10 @@ export default function Editor() {
   }, [title, description]);
 
   return (
-    <div className="w-full">
+    <div className="w-full max-h-[100vh] overflow-hidden">
       {selectedNoteName && fileContent && (
         <div className="w-full text-sm">
           <div className="flex flex-row items-center gap-2 p-3 self-end mx-auto">
-            {/* <div className="text-xs py-2 px-3 rounded bg-gray-100 flex flex-row items-center gap-5">
-            <button className="hover:text-green-800">
-              <FiBold />
-            </button>
-            <button className="hover:text-green-800">
-              <FiItalic />
-            </button>
-          </div> */}
-
             <div className="ml-auto flex flex-row items-center gap-2">
               <button
                 disabled={!haveUnsavedChanges}
@@ -110,7 +102,7 @@ export default function Editor() {
             </div>
           </div>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col h-[90vh] overflow-y-auto">
             <input
               type="text"
               placeholder="Title..."
@@ -121,21 +113,23 @@ export default function Editor() {
               onChange={(e) => setTitle(e.target.value)}
             />
 
-            <div className="flex flex-row items-center gap-2 pb-5 pl-2">
-              {thisNoteTags.map((tag) => {
-                return (
-                  <div
-                    key={tag}
-                    className="flex justify-center text-xs bg-gray-200 p-1 px-5 rounded-full disabled:opacity-70"
-                  >
-                    {tag}
-                  </div>
-                );
-              })}
-            </div>
+            {thisNoteTags.length > 0 && (
+              <div className="flex flex-row flex-wrap items-center gap-2 pb-5 pl-2 pr-[4px]">
+                {thisNoteTags.map((tag) => {
+                  return (
+                    <div
+                      key={tag}
+                      className="flex justify-center text-xs bg-gray-200 p-1 px-5 rounded-full disabled:opacity-70"
+                    >
+                      {tag}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
 
             <textarea
-              className="w-full h-[78vh] px-3 outline-none"
+              className="w-full pb-5 px-3 outline-none h-full"
               placeholder="My important note..."
               value={description}
               autoCorrect="off"
