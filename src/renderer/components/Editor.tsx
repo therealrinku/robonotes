@@ -27,6 +27,8 @@ export default function Editor() {
     null,
   );
 
+  const [showAllTags, setShowAllTags] = useState(false);
+
   function handleSave(title: string, description: string) {
     setFileContent({ title: title, content: description });
     handleSaveNote(title, description);
@@ -108,34 +110,45 @@ export default function Editor() {
             <input
               type="text"
               placeholder="Title..."
-              className="p-3 outline-none font-bold text-lg max-w-[85%]"
-              autoFocus={true}
+              className="p-3 outline-none font-bold text-lg max-w-[85%] ml-3"
               defaultValue={'2023 - Memo'}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
 
             {thisNoteTags.length > 0 && (
-              <div className="flex flex-row flex-wrap items-center gap-2 pb-5 pl-2 pr-[4px]">
-                {thisNoteTags.map((tag) => {
-                  return (
-                    <div
-                      key={tag}
-                      className="flex justify-center text-xs bg-gray-200 p-1 px-5 rounded-full disabled:opacity-70"
-                    >
-                      {tag}
-                    </div>
-                  );
-                })}
+              <div className="flex flex-row flex-wrap items-center gap-2 pr-[4px] mx-5 text-xs">
+                {(showAllTags ? thisNoteTags : thisNoteTags.slice(0, 5)).map(
+                  (tag) => {
+                    return (
+                      <div
+                        key={tag}
+                        className="flex justify-center bg-gray-200 py-1 px-2 rounded disabled:opacity-70"
+                      >
+                        #{tag}
+                      </div>
+                    );
+                  },
+                )}
+
+                {thisNoteTags.length > 5 && (
+                  <button
+                    className="underline"
+                    onClick={() => setShowAllTags((prev) => !prev)}
+                  >
+                    Show {showAllTags ? 'less' : 'all'}
+                  </button>
+                )}
               </div>
             )}
 
             <textarea
-              className="w-full pb-5 px-3 outline-none h-full"
+              className="w-full outline-none h-full mt-5 pt-5 border-t px-5"
               placeholder="My important note..."
               value={description}
               autoCorrect="off"
               spellCheck="false"
+              autoFocus={true}
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
