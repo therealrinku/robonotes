@@ -21,8 +21,7 @@
   },
   "license": "MIT",
   "author": {
-    "name": "Rinku Chaudhari",
-    "email": "rinkunited2032@gmail.com"
+    "name": "Rinku Chaudhari"
   },
   "contributors": [],
   "main": "./src/main/main.ts",
