@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import EmptySvg from '../assets/images/empty.svg';
 import useTags from '../hooks/useTags';
 import useNotes from '../hooks/useNotes';
@@ -10,23 +10,12 @@ export default function Editor() {
   const { tags } = useTags();
 
   const thisNoteTags = Object.entries(tags)
-    .filter(
-      //@ts-ignore
-      (tag) => tag[1][selectedNoteName] === true,
-    )
+    .filter((tag) => tag[1][selectedNoteName] === true)
     .map((tg) => tg[0]);
 
-  const [fileContent, setFileContent] = useState({
-    title: '',
-    content: '',
-  });
-
+  const [fileContent, setFileContent] = useState({ title: '', content: '' });
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [autoSavedTimestamp, setAutoSavedTimestamp] = useState<number | null>(
-    null,
-  );
-
   const [showAllTags, setShowAllTags] = useState(false);
 
   function handleSave(title: string, description: string) {
@@ -73,21 +62,10 @@ export default function Editor() {
 
       timeout = setTimeout(() => {
         console.log('---autosaving---');
-        setAutoSavedTimestamp(Date.now());
         handleSave(title, description);
       }, 1200);
     }
   }, [title, description]);
-
-  useEffect(() => {
-    //@ts-expect-error
-    let timeout: NodeJS.Timeout = null;
-    if (autoSavedTimestamp) {
-      timeout = setTimeout(() => setAutoSavedTimestamp(null), 2000);
-    } else {
-      clearTimeout(timeout);
-    }
-  }, [autoSavedTimestamp]);
 
   return (
     <div className="w-full max-h-[100vh] overflow-hidden">
@@ -95,8 +73,6 @@ export default function Editor() {
         <div className="relative w-full text-sm">
           <div className="absolute flex flex-row items-center gap-2 my-5 self-end mx-auto right-5">
             <div className="ml-auto flex flex-row items-center gap-5">
-              {autoSavedTimestamp && <p className="text-xs">Saving....</p>}
-
               <button
                 onClick={handleCloseNote}
                 className="text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded"
