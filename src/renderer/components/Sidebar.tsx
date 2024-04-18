@@ -2,7 +2,6 @@ import { Fragment, useMemo, useState } from 'react';
 import {
   GoFile,
   GoGear,
-  GoItalic,
   GoPencil,
   GoPlusCircle,
   GoSearch,
@@ -26,8 +25,6 @@ export default function Sidebar() {
   const [showPreferencesModal, setShowPreferencesModal] = useState(false);
   const [showTagsModal, setShowTagsModal] = useState(false);
 
-  const [searchBy, setSearchBy] = useState('name');
-
   const { tags } = useTags();
   const { notes, handleCreateNewNote } = useNotes();
   const { handleChangeDir } = useDir();
@@ -37,28 +34,25 @@ export default function Sidebar() {
       return [];
     }
 
-    return notes.filter((fileName) => {
-      const allSearchTags = searchQuery
-        .split(',')
-        .map((item) => item.trim())
-        .filter((item) => item.length > 0);
+    return notes.filter((noteName) => {
+      const allQueries = searchQuery.split(',').map((item) => item.trim());
 
-      if (searchBy === 'name') {
-        //@ts-ignore
+      // if it has multiple queries, all needs to match aka all or nothing
 
-        return fileName.toLowerCase().includes(searchQuery.toLowerCase());
-      } else if (allSearchTags.length > 0 && searchBy === 'tag') {
-        const thisNoteTags = Object.entries(tags).filter(
-          //@ts-ignore
-          (tag) => tag[1][fileName] === true,
-        );
+      const thisNoteTags = Object.entries(tags)
+        .filter((tag) => tag[1][noteName] === true)
+        .map((tg) => tg[0]);
 
-        return thisNoteTags.some((tag) => allSearchTags.includes(tag[0]));
-      } else {
-        return true;
-      }
+      return allQueries.every((query) => {
+        if (query.startsWith('#')) {
+          const tagToMatch = query.slice(1);
+          return thisNoteTags.some((tag) => tag === tagToMatch);
+        } else {
+          return noteName.toLowerCase().includes(query.toLowerCase());
+        }
+      });
     });
-  }, [searchQuery, notes, searchBy]);
+  }, [searchQuery, notes]);
 
   return (
     <Fragment>
@@ -85,38 +79,12 @@ export default function Sidebar() {
               size={13}
             />
             <input
-              placeholder={
-                searchBy === 'name' ? 'Search by note name...' : 'tag1, tag2'
-              }
-              className="bg-gray-200 px-7 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500"
+              placeholder="my secret note, #dev, #devrel"
+              className="bg-gray-200 pl-7 pr-3 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-
-            {searchBy === 'name' ? (
-              <GoTag
-                onClick={() => setSearchBy('tag')}
-                className="absolute top-2 right-2"
-                size={13}
-              />
-            ) : (
-              <GoItalic
-                onClick={() => setSearchBy('name')}
-                className="absolute top-2 right-2"
-                size={13}
-              />
-            )}
           </div>
-
-          {/* <div className="flex flex-row items-center gap-3">
-            <button onClick={handleCreateNewNote} className="py-2">
-              <GoPlusCircle />
-            </button>
-
-            <button onClick={() => setShowTagsModal(true)} className="py-2">
-              <GoTag />
-            </button>
-          </div> */}
         </div>
 
         <div className="w-full pb-5 flex flex-col gap-2 border-white border-t pt-5 overflow-y-auto max-h-[85vh] px-3">
