@@ -35,7 +35,7 @@ export default function TagsModal({ onClose }: Props) {
       <div className="mt-10 flex flex-row items-center gap-2">
         <input
           placeholder="New Tag.. (3-20 length)"
-          className="bg-gray-100 px-2 rounded w-full text-xs py-2 outline-none w-[75%]"
+          className="bg-gray-100 px-2 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500 w-full"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />

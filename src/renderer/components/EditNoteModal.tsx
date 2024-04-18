@@ -37,7 +37,7 @@ export default function EditNoteModal({
       <div className="flex flex-row items-center gap-3 self-start">
         <input
           placeholder="Rename.."
-          className="bg-gray-100 px-2 rounded w-full text-xs py-2 outline-none w-full"
+          className="bg-gray-100 px-2 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500 w-full"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
