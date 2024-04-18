@@ -25,16 +25,16 @@ export default function TagsModal({ onClose }: Props) {
   }
 
   return (
-    <ModalWrapper onClose={onClose}>
-      <div className="flex flex-row flex-wrap self-start gap-2 ml-5 max-h-[150px] overflow-y-auto">
+    <ModalWrapper title="Tags Center" onClose={onClose}>
+      <div className="flex flex-row flex-wrap self-start gap-2 max-h-[150px] overflow-y-auto">
         {tagNames.map((tagName) => {
           return <Tag tagName={tagName} key={tagName} />;
         })}
       </div>
 
-      <div className="mt-5 flex flex-row items-center gap-2">
+      <div className="mt-10 flex flex-row items-center gap-2">
         <input
-          placeholder="Add New Tag.. (3-20 length)"
+          placeholder="New Tag.. (3-20 length)"
           className="bg-gray-100 px-2 rounded w-full text-xs py-2 outline-none w-[75%]"
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -74,7 +74,7 @@ function Tag({ tagName }: { tagName: string }) {
           onClick={handleDeleteTag}
           className="absolute top-0 left-0 h-full w-full bg-gray-100 flex items-center justify-center rounded"
         >
-          <GoTrash />
+          <GoTrash color="red" />
         </button>
       )}
     </div>

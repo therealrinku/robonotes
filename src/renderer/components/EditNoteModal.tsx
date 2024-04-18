@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import ModalWrapper from './ModalWrapper';
 import useTags from '../hooks/useTags';
-import { GoPlus, GoTrash } from 'react-icons/go';
+import { GoTrash } from 'react-icons/go';
 
 interface Props {
   onClose: () => void;
@@ -17,7 +17,6 @@ export default function EditNoteModal({
   fileName,
 }: Props) {
   const [text, setText] = useState(initialText || '');
-  const [showTagSelector, setShowTagSelector] = useState(false);
   const { tags, addTagToNote, removeTagFromNote } = useTags();
 
   function handleAddTag(tagName: string) {
@@ -34,11 +33,11 @@ export default function EditNoteModal({
   );
 
   return (
-    <ModalWrapper onClose={onClose}>
-      <div className="mt-5 flex flex-row items-center gap-2 self-start mx-5">
+    <ModalWrapper title="Edit Note" onClose={onClose}>
+      <div className="flex flex-row items-center gap-3 self-start">
         <input
           placeholder="Rename.."
-          className="bg-gray-200 px-2 rounded w-full text-xs py-2 outline-none w-full"
+          className="bg-gray-100 px-2 rounded w-full text-xs py-2 outline-none w-full"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
@@ -46,13 +45,13 @@ export default function EditNoteModal({
         <button
           onClick={() => onRename(text)}
           disabled={!text.trim()}
-          className="text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded disabled:opacity-70"
+          className="text-xs bg-gray-100 hover:bg-gray-300 py-2 px-5 rounded disabled:opacity-70"
         >
-          Save
+          Rename
         </button>
       </div>
 
-      <div className="mt-5 self-start mx-5">
+      <div className="self-start mt-10">
         <p className="text-sm font-bold">Tags</p>
 
         <div className="flex flex-row flex-wrap items-center mt-2 gap-2 max-h-[150px] overflow-y-auto ">
@@ -70,7 +69,6 @@ export default function EditNoteModal({
             <select
               onChange={(e) => {
                 handleAddTag(e.target.value);
-                setShowTagSelector(false);
                 e.target.selectedIndex = 0;
               }}
               className="text-xs py-2 pl-5 pr-7 outline-none rounded"
