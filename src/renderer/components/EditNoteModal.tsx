@@ -66,20 +66,25 @@ export default function EditNoteModal({
             );
           })}
 
-          {!showTagSelector && allTagNames.length > 0 && (
-            <button onClick={() => setShowTagSelector(true)} className="ml-2">
-              <GoPlus />
-            </button>
-          )}
-
-          {showTagSelector && (
+          {allTagNames.length > 0 && (
             <select
               onChange={(e) => {
                 handleAddTag(e.target.value);
                 setShowTagSelector(false);
+                e.target.selectedIndex = 0;
               }}
-              className="ml-2 text-xs py-2 px-4 outline-none rounded-full"
+              className="text-xs py-2 pl-5 pr-7 outline-none rounded"
+              defaultValue={'new'}
             >
+              <option
+                className="truncate max-w-[85%]"
+                disabled
+                selected
+                value={'new'}
+              >
+                Add new tag
+              </option>
+
               {allTagNames.map((tag) => {
                 return (
                   <option key={tag} value={tag}>
@@ -87,9 +92,6 @@ export default function EditNoteModal({
                   </option>
                 );
               })}
-              <option className="truncate max-w-[85%]" disabled selected>
-                Select new tag
-              </option>
             </select>
           )}
         </div>
@@ -115,14 +117,14 @@ function TagItem({ fileName, removeTagFromNote, tagName }: TagItemProps) {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative text-xs bg-gray-200 py-2 px-5 rounded-full disabled:opacity-70"
+      className="relative text-xs bg-gray-200 py-2 px-5 rounded disabled:opacity-70"
     >
       {tagName}
 
       {isHovered && (
         <button
           onClick={() => handleDeleteTag(tagName)}
-          className="absolute top-0 left-0 flex justify-center items-center rounded-full  h-full w-full bg-gray-200"
+          className="absolute top-0 left-0 flex justify-center items-center rounded h-full w-full bg-gray-200"
         >
           <GoTrash />
         </button>

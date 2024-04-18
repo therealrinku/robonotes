@@ -65,14 +65,14 @@ function Tag({ tagName }: { tagName: string }) {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative text-xs bg-gray-100 p-2 w-24 rounded disabled:opacity-70"
+      className="relative text-xs bg-gray-100 text-center p-2 w-24 rounded disabled:opacity-70"
     >
       <p>{tagName}</p>
 
       {isHovered && (
         <button
           onClick={handleDeleteTag}
-          className="absolute top-0 h-full right-2 bg-gray-200"
+          className="absolute top-0 left-0 h-full w-full bg-gray-100 flex items-center justify-center rounded"
         >
           <GoTrash />
         </button>
