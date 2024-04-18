@@ -11,18 +11,18 @@
     "hot",
     "reload"
   ],
-  "homepage": "https://github.com/therealrinku/robunot.git#readme",
+  "homepage": "https://github.com/therealrinku/robonotes.git#readme",
   "bugs": {
-    "url": "https://github.com/therealrinku/robunot.git/issues"
+    "url": "https://github.com/therealrinku/robonotes.git/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/therealrinku/robunot.git.git"
+    "url": "git+https://github.com/therealrinku/robonotes.git.git"
   },
   "license": "MIT",
   "author": {
     "name": "Rinku Chaudhari",
-    "url": "https://github.com/therealrinku"
+    "email": "rinkunited2032@gmail.com"
   },
   "contributors": [],
   "main": "./src/main/main.ts",
@@ -123,7 +123,7 @@
     "css-minimizer-webpack-plugin": "^5.0.1",
     "detect-port": "^1.5.1",
     "electron": "^26.2.1",
-    "electron-builder": "^24.6.4",
+    "electron-builder": "^24.13.3",
     "electron-devtools-installer": "^3.2.0",
     "electronmon": "^2.0.2",
     "eslint": "^8.49.0",
@@ -165,8 +165,8 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "robonotes",
+    "appId": "org.erb.robonotes",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
@@ -210,6 +210,7 @@
     },
     "linux": {
       "target": [
+        "deb",
         "AppImage"
       ],
       "category": "Development"
@@ -225,7 +226,7 @@
     "publish": {
       "provider": "github",
       "owner": "Rinku Chaudhari",
-      "repo": "robunot"
+      "repo": "robonotes"
     }
   },
   "collective": {},
