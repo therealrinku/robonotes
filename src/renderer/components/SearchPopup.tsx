@@ -67,6 +67,7 @@ export default function SearchPopup({ onClose }: Props) {
           className="bg-gray-100 mx-5 px-3 rounded text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          autoFocus={true}
         />
 
         <div className="max-h-[200px] overflow-y-auto flex flex-col gap-2 px-5 pb-5">

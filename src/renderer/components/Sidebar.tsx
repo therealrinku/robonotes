@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import {
   GoFile,
   GoGear,
@@ -28,6 +28,22 @@ export default function Sidebar() {
 
   const { notes, handleCreateNewNote } = useNotes();
   const { handleChangeDir } = useDir();
+
+  function handleShortcuts(e: KeyboardEvent) {
+    if (e.ctrlKey && e.key === 's') {
+      setShowSearchPopup(true);
+    }
+
+    // if (e.ctrlKey && e.key === 'n') {
+    //   handleCreateNewNote();
+    // }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleShortcuts);
+
+    return () => document.removeEventListener('keydown', handleShortcuts);
+  }, []);
 
   return (
     <Fragment>
