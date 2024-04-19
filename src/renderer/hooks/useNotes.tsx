@@ -10,7 +10,8 @@ export default function useNotes() {
 
   const selectedNoteName = notes[selectedNoteIndex];
 
-  function handleOpenNote(noteIndex: number) {
+  function handleOpenNote(noteName: string) {
+    const noteIndex = notes.findIndex((nn) => nn === noteName);
     setSelectedNoteIndex(noteIndex);
   }
 

@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useState } from 'react';
 import {
   GoFile,
   GoGear,
@@ -14,84 +14,53 @@ import EditNoteModal from './EditNoteModal';
 import useTags from '../hooks/useTags';
 import useNotes from '../hooks/useNotes';
 import useDir from '../hooks/useDir';
+import SearchPopup from './SearchPopup';
 
 interface NoteItemProps {
-  fileName: string;
+  noteName: string;
   index: number;
 }
 
 export default function Sidebar() {
-  const [searchQuery, setSearchQuery] = useState('');
   const [showPreferencesModal, setShowPreferencesModal] = useState(false);
   const [showTagsModal, setShowTagsModal] = useState(false);
+  const [showSearchPopup, setShowSearchPopup] = useState(false);
 
-  const { tags } = useTags();
   const { notes, handleCreateNewNote } = useNotes();
   const { handleChangeDir } = useDir();
-
-  const filteredNotes = useMemo(() => {
-    if (!Array.isArray(notes) || notes.length == 0) {
-      return [];
-    }
-
-    return notes.filter((noteName) => {
-      const allQueries = searchQuery.split(',').map((item) => item.trim());
-
-      // if it has multiple queries, all needs to match aka all or nothing
-
-      const thisNoteTags = Object.entries(tags)
-        .filter((tag) => tag[1][noteName] === true)
-        .map((tg) => tg[0]);
-
-      return allQueries.every((query) => {
-        if (query.startsWith('#')) {
-          const tagToMatch = query.slice(1);
-          return thisNoteTags.some((tag) => tag === tagToMatch);
-        } else {
-          return noteName.toLowerCase().includes(query.toLowerCase());
-        }
-      });
-    });
-  }, [searchQuery, notes]);
 
   return (
     <Fragment>
       <div className="relative bg-gray-100 min-w-64 max-w-64 min-h-screen flex flex-col items-center gap-5 py-5">
-        <div className="absolute bottom-3 text-xs w-full px-3 flex flex-row items-center justify-end gap-5">
-          <button onClick={handleCreateNewNote}>
-            <GoPlusCircle size={15} />
-          </button>
-
-          <button onClick={() => setShowTagsModal(true)}>
-            <GoTag size={15} />
-          </button>
-
-          <button onClick={() => setShowPreferencesModal(true)}>
-            <GoGear size={15} />
-          </button>
-        </div>
-
         <div className="flex flex-row items-center gap-3 w-full px-3">
-          <div className="relative w-full">
-            <GoSearch
-              className="absolute left-2 h-full"
-              color="gray"
-              size={13}
-            />
-            <input
-              placeholder="my secret note, #dev, #devrel"
-              className="bg-gray-200 pl-7 pr-3 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+          <div className=" w-full flex items-center gap-3 justify-between">
+            <p className="text-xs font-bold">Robonotes</p>
+
+            <div className="flex items-center gap-3">
+              <button onClick={() => setShowSearchPopup(true)}>
+                <GoSearch size={15} />
+              </button>
+
+              <button onClick={handleCreateNewNote}>
+                <GoPlusCircle size={15} />
+              </button>
+
+              <button onClick={() => setShowTagsModal(true)}>
+                <GoTag size={15} />
+              </button>
+
+              <button onClick={() => setShowPreferencesModal(true)}>
+                <GoGear size={15} />
+              </button>
+            </div>
           </div>
         </div>
 
         <div className="w-full pb-5 flex flex-col gap-2 border-white border-t pt-5 overflow-y-auto max-h-[85vh] px-3">
-          {filteredNotes.length > 0 ? (
-            filteredNotes.map((fileName: string, index) => {
+          {notes.length > 0 ? (
+            notes.map((noteName: string, index) => {
               return (
-                <NoteItem key={fileName} fileName={fileName} index={index} />
+                <NoteItem key={noteName} noteName={noteName} index={index} />
               );
             })
           ) : notes.length === 0 ? (
@@ -110,11 +79,7 @@ export default function Sidebar() {
                 Create new note
               </button>
             </div>
-          ) : (
-            <div className="text-xs text-center">
-              <p>No notes found.</p>
-            </div>
-          )}
+          ) : null}
         </div>
       </div>
 
@@ -126,11 +91,15 @@ export default function Sidebar() {
       )}
 
       {showTagsModal && <TagsModal onClose={() => setShowTagsModal(false)} />}
+
+      {showSearchPopup && (
+        <SearchPopup onClose={() => setShowSearchPopup(false)} />
+      )}
     </Fragment>
   );
 }
 
-function NoteItem({ fileName, index }: NoteItemProps) {
+export function NoteItem({ noteName, index }: NoteItemProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [showRenameModal, setShowRenameModal] = useState(false);
 
@@ -143,16 +112,16 @@ function NoteItem({ fileName, index }: NoteItemProps) {
   } = useNotes();
 
   const thisNoteTags = Object.entries(tags).filter(
-    (tag) => tag[1][fileName] === true,
+    (tag) => tag[1][noteName] === true,
   );
 
   function handleRename(newName: string) {
-    handleRenameNote(index, fileName, newName);
+    handleRenameNote(index, noteName, newName);
     setShowRenameModal(false);
   }
 
   function handleDelete() {
-    handleDeleteNote(fileName);
+    handleDeleteNote(noteName);
   }
 
   return (
@@ -160,15 +129,15 @@ function NoteItem({ fileName, index }: NoteItemProps) {
       <button
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onClick={() => handleOpenNote(index)}
-        className={`${selectedNoteName === fileName && 'outline-dashed outline-green-500'} relative h-full p-2 w-full text-xs bg-gray-200 outline-1  w-full rounded`}
+        onClick={() => handleOpenNote(noteName)}
+        className={`${selectedNoteName === noteName && 'outline-dashed outline-green-500'} relative h-full p-2 w-full text-xs bg-gray-200 outline-1  w-full rounded`}
       >
         <div className="flex flex-row items-center gap-1">
           <GoFile size={13} />
           <p
             className={`truncate ${isHovered ? 'max-w-[70%]' : 'max-w-[85%]'}`}
           >
-            {fileName}
+            {noteName}
           </p>
 
           {thisNoteTags.length > 0 && (
@@ -206,9 +175,9 @@ function NoteItem({ fileName, index }: NoteItemProps) {
       {showRenameModal && (
         <EditNoteModal
           onClose={() => setShowRenameModal(false)}
-          initialText={fileName}
+          initialText={noteName}
           onRename={handleRename}
-          fileName={fileName}
+          fileName={noteName}
         />
       )}
     </Fragment>

@@ -93,7 +93,7 @@ export default function Editor() {
             />
 
             {thisNoteTags.length > 0 && (
-              <div className="flex flex-row flex-wrap items-center gap-2 pr-[4px] mx-5 text-xs">
+              <div className="flex flex-row flex-wrap items-center gap-2 pr-[4px] mx-6 text-xs">
                 {(showAllTags ? thisNoteTags : thisNoteTags.slice(0, 5)).map(
                   (tag) => {
                     return (
@@ -119,7 +119,7 @@ export default function Editor() {
             )}
 
             <textarea
-              className="w-full outline-none h-full mt-5 pt-5 border-t px-5"
+              className="w-full outline-none h-full mt-5 pt-5 border-t px-6"
               placeholder="My important note..."
               value={description}
               autoCorrect="off"
