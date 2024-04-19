@@ -30,7 +30,7 @@ export default function Sidebar() {
   const { handleChangeDir } = useDir();
 
   function handleShortcuts(e: KeyboardEvent) {
-    if (e.ctrlKey && e.key === 's') {
+    if (e.ctrlKey && e.key === 'p') {
       setShowSearchPopup(true);
     }
 
