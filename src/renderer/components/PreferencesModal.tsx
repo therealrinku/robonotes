@@ -1,4 +1,4 @@
-import { GoFileDirectory } from 'react-icons/go';
+import { GoFileDiff, GoFileDirectory } from 'react-icons/go';
 import ModalWrapper from './ModalWrapper';
 import useDir from '../hooks/useDir';
 
@@ -19,9 +19,20 @@ export default function PreferencesModal({ onClose, handleChangeDir }: Props) {
 
         <button
           onClick={handleChangeDir}
-          className="flex items-center text-xs bg-gray-200 hover:bg-gray-200 py-2 px-5 rounded"
+          className="flex items-center text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded"
         >
           <p>Change Directory</p>
+        </button>
+
+        <div className="border border-t-1 border-gray-100 w-full"></div>
+        <button
+          onClick={() =>
+            window.open('https://github.com/therealrinku/robonotes', '_blank')
+          }
+          className="flex items-center gap-2 text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded"
+        >
+          <GoFileDiff />
+          <span>View Source on Github</span>
         </button>
       </div>
     </ModalWrapper>

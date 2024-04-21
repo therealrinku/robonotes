@@ -15,6 +15,7 @@ import useTags from '../hooks/useTags';
 import useNotes from '../hooks/useNotes';
 import useDir from '../hooks/useDir';
 import SearchPopup from './SearchPopup';
+import { configs } from '../utils/configs';
 
 interface NoteItemProps {
   noteName: string;
@@ -40,6 +41,18 @@ export default function Sidebar() {
   }
 
   useEffect(() => {
+    window.electron.ipcRenderer.on('open-preferences', () => {
+      setShowPreferencesModal(true);
+    });
+
+    window.electron.ipcRenderer.on('open-tags-modal', () => {
+      setShowTagsModal(true);
+    });
+
+    window.electron.ipcRenderer.on('open-search', () => {
+      setShowSearchPopup(true);
+    });
+
     document.addEventListener('keydown', handleShortcuts);
 
     return () => document.removeEventListener('keydown', handleShortcuts);
@@ -50,7 +63,7 @@ export default function Sidebar() {
       <div className="relative bg-gray-100 min-w-64 max-w-64 min-h-screen flex flex-col items-center gap-5 py-5">
         <div className="flex flex-row items-center gap-3 w-full px-3">
           <div className=" w-full flex items-center gap-3 justify-between">
-            <p className="text-xs font-bold">Robonotes</p>
+            <p className="text-xs font-bold">robonotes v{configs.version}</p>
 
             <div className="flex items-center gap-3">
               <button onClick={() => setShowSearchPopup(true)}>

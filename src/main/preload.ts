@@ -12,6 +12,9 @@ export type Channels =
   | 'rename-note'
   | 'update-tags'
   | 'load-tags'
+  | 'open-preferences'
+  | 'open-search'
+  | 'open-tags-modal'
 
 const electronHandler = {
   ipcRenderer: {

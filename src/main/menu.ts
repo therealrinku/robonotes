@@ -155,29 +155,17 @@ export default class MenuBuilder {
       label: 'Help',
       submenu: [
         {
-          label: 'Learn More',
+          label: 'View Source Code',
           click() {
-            shell.openExternal('https://electronjs.org');
+            shell.openExternal('https://github.com/therealrinku/robonotes');
           },
         },
         {
-          label: 'Documentation',
+          label: 'Website',
           click() {
             shell.openExternal(
-              'https://github.com/electron/electron/tree/main/docs#readme',
+              'https://therealrinku.github.io/robonotes/website/index.html',
             );
-          },
-        },
-        {
-          label: 'Community Discussions',
-          click() {
-            shell.openExternal('https://www.electronjs.org/community');
-          },
-        },
-        {
-          label: 'Search Issues',
-          click() {
-            shell.openExternal('https://github.com/electron/electron/issues');
           },
         },
       ],
@@ -198,11 +186,28 @@ export default class MenuBuilder {
         label: '&File',
         submenu: [
           {
-            label: '&Open',
-            accelerator: 'Ctrl+O',
+            label: 'Tags',
+            accelerator: 'Ctrl+T',
+            click: () => {
+              this.mainWindow.webContents.send('open-tags-modal');
+            },
           },
           {
-            label: '&Close',
+            label: 'Quick Search',
+            accelerator: 'Ctrl+P',
+            click: () => {
+              this.mainWindow.webContents.send('open-search');
+            },
+          },
+          {
+            label: 'Preferences',
+            accelerator: 'Ctrl+Y',
+            click: () => {
+              this.mainWindow.webContents.send('open-preferences');
+            },
+          },
+          {
+            label: '&Close robonotes',
             accelerator: 'Ctrl+W',
             click: () => {
               this.mainWindow.close();
@@ -256,29 +261,17 @@ export default class MenuBuilder {
         label: 'Help',
         submenu: [
           {
-            label: 'Learn More',
+            label: 'View Source Code',
             click() {
-              shell.openExternal('https://electronjs.org');
+              shell.openExternal('https://github.com/therealrinku/robonotes');
             },
           },
           {
-            label: 'Documentation',
+            label: 'Website',
             click() {
               shell.openExternal(
-                'https://github.com/electron/electron/tree/main/docs#readme',
+                'https://therealrinku.github.io/robonotes/website/index.html',
               );
-            },
-          },
-          {
-            label: 'Community Discussions',
-            click() {
-              shell.openExternal('https://www.electronjs.org/community');
-            },
-          },
-          {
-            label: 'Search Issues',
-            click() {
-              shell.openExternal('https://github.com/electron/electron/issues');
             },
           },
         ],

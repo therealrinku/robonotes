@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 import { GoX } from 'react-icons/go';
 
 interface Props extends PropsWithChildren {
@@ -7,6 +7,18 @@ interface Props extends PropsWithChildren {
 }
 
 export default function ModalWrapper({ title, children, onClose }: Props) {
+  function handleKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Escape') {
+      onClose();
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <div
       className="fixed top-0 left-0 w-screen h-screen flex flex-col items-center justify-center z-50"
