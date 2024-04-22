@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import EmptySvg from '../assets/images/empty.svg';
 import useTags from '../hooks/useTags';
 import useNotes from '../hooks/useNotes';
+import { GoFile } from 'react-icons/go';
 
 export default function Editor() {
   const { selectedNoteName, handleCloseNote, handleSaveNote, selectedNote } =
@@ -17,9 +18,16 @@ export default function Editor() {
   const [description, setDescription] = useState('');
   const [showAllTags, setShowAllTags] = useState(false);
 
-  function handleSave(title: string, description: string) {
-    setFileContent({ title: title, content: description });
+  function handleSave() {
+    if (haveUnsavedChanges) {
+      setFileContent({ title: title, content: description });
+      handleSaveNote(title, description);
+    }
+  }
+
+  function handleClose() {
     handleSaveNote(title, description);
+    handleCloseNote();
   }
 
   const haveUnsavedChanges = useMemo(() => {
@@ -41,19 +49,16 @@ export default function Editor() {
     }
   }, [selectedNote]);
 
-  // auto save featurs
-  let timeout: NodeJS.Timeout;
+  function handleKeyDown(e: KeyboardEvent) {
+    if (e.ctrlKey && e.key === 's') {
+      handleSave();
+    }
+  }
 
   useEffect(() => {
-    if (haveUnsavedChanges) {
-      clearTimeout(timeout);
-
-      timeout = setTimeout(() => {
-        console.log('---autosaving---');
-        handleSave(title, description);
-      }, 1500);
-    }
-  }, [title, description]);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <div className="w-full max-h-[100vh] overflow-hidden">
@@ -62,7 +67,15 @@ export default function Editor() {
           <div className="absolute flex flex-row items-center gap-2 my-5 self-end mx-auto right-5">
             <div className="ml-auto flex flex-row items-center gap-5">
               <button
-                onClick={handleCloseNote}
+                onClick={handleSave}
+                disabled={!haveUnsavedChanges}
+                className={`${haveUnsavedChanges && 'bg-red-500 hover:bg-red-600 text-white'} flex items-center gap-2 text-xs bg-gray-200 py-2 px-5 rounded`}
+              >
+                <GoFile />
+                <span>Save (Ctrl + S)</span>
+              </button>
+              <button
+                onClick={handleClose}
                 className="text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded"
               >
                 <p>Close</p>

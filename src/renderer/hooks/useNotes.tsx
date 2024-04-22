@@ -10,6 +10,7 @@ export default function useNotes() {
     setSelectedNoteIndex,
     rootDir,
     openedNotes,
+    setOpenedNotes,
   } = useContext(RootContext);
 
   const { moveTagToRenamedNote, removeNoteFromAssociatedTags } = useTags();
@@ -87,6 +88,16 @@ export default function useNotes() {
   function handleSaveNote(noteTitle: string, noteDescription: string) {
     const args = [rootDir, selectedNoteName, noteTitle, noteDescription];
     window.electron.ipcRenderer.sendMessage('save-file', args);
+
+    setOpenedNotes((prev) => {
+      return {
+        ...prev,
+        [selectedNoteName]: {
+          title: noteTitle,
+          content: noteDescription,
+        },
+      };
+    });
   }
 
   return {
