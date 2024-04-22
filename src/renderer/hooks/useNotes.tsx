@@ -3,8 +3,14 @@ import { RootContext } from '../context/RootContext';
 import useTags from './useTags';
 
 export default function useNotes() {
-  const { notes, setNotes, selectedNoteIndex, setSelectedNoteIndex, rootDir } =
-    useContext(RootContext);
+  const {
+    notes,
+    setNotes,
+    selectedNoteIndex,
+    setSelectedNoteIndex,
+    rootDir,
+    openedNotes,
+  } = useContext(RootContext);
 
   const { moveTagToRenamedNote, removeNoteFromAssociatedTags } = useTags();
 
@@ -13,6 +19,10 @@ export default function useNotes() {
   function handleOpenNote(noteName: string) {
     const noteIndex = notes.findIndex((nn) => nn === noteName);
     setSelectedNoteIndex(noteIndex);
+
+    if (!openedNotes[noteName]) {
+      window.electron.ipcRenderer.sendMessage('read-note', rootDir, noteName);
+    }
   }
 
   function handleCreateNewNote() {
@@ -82,6 +92,7 @@ export default function useNotes() {
   return {
     notes,
     selectedNoteName,
+    selectedNote: openedNotes[selectedNoteName],
     handleRenameNote,
     handleDeleteNote,
     handleOpenNote,

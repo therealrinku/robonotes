@@ -38,11 +38,13 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   });
 
   ipcMain.on('read-note', async (event, ...args) => {
-    const [rootDir, fileName] = args;
+    const [rootDir, noteName] = args;
 
-    const content = readFileSync(`${rootDir}/${fileName}.robu`, 'utf-8');
+    const content = readFileSync(`${rootDir}/${noteName}.robu`, 'utf-8');
 
-    event.reply('read-note', JSON.parse(content));
+    const parsedContent = JSON.parse(content) || {};
+    const finalContent = { noteName, ...parsedContent };
+    event.reply('read-note', finalContent);
   });
 
   ipcMain.on('rename-note', async (event, ...args) => {

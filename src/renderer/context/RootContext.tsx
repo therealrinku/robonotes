@@ -8,8 +8,15 @@ import {
 } from 'react';
 
 interface TagsModel {
-  [key: string]: {
-    [key: string]: boolean;
+  [tagName: string]: {
+    [noteName: string]: boolean;
+  };
+}
+
+interface NoteModel {
+  [noteName: string]: {
+    title: string;
+    content: string;
   };
 }
 interface RootContextProps {
@@ -21,6 +28,8 @@ interface RootContextProps {
   selectedNoteIndex: number;
   setSelectedNoteIndex: Dispatch<SetStateAction<number>>;
   setTags: Dispatch<SetStateAction<TagsModel>>;
+  openedNotes: NoteModel;
+  setOpenedNotes: Dispatch<SetStateAction<NoteModel>>;
 }
 
 export const RootContext = createContext<RootContextProps>({
@@ -32,15 +41,34 @@ export const RootContext = createContext<RootContextProps>({
   selectedNoteIndex: -1,
   setSelectedNoteIndex: () => {},
   setTags: () => {},
+  openedNotes: {},
+  setOpenedNotes: () => {},
 });
 
 export function RootContextProvider({ children }: PropsWithChildren) {
   const [rootDir, setRootDir] = useState<string>('');
   const [notes, setNotes] = useState<Array<string>>([]);
   const [tags, setTags] = useState<TagsModel>({});
+  // cached note content
+  const [openedNotes, setOpenedNotes] = useState<NoteModel>({});
   const [selectedNoteIndex, setSelectedNoteIndex] = useState<number>(-1);
 
   useEffect(() => {
+    window.electron.ipcRenderer.on('read-note', (arg) => {
+      type noteObject = { noteName: string; title: string; content: string };
+
+      const castedArg = arg as noteObject;
+      setOpenedNotes((prev) => {
+        return {
+          ...prev,
+          [castedArg.noteName]: {
+            title: castedArg.title,
+            content: castedArg.content,
+          },
+        };
+      });
+    });
+
     window.electron.ipcRenderer.on('load-directory', (arg) => {
       const castedArg = arg as string[];
       setNotes(castedArg || []);
@@ -68,6 +96,8 @@ export function RootContextProvider({ children }: PropsWithChildren) {
         setSelectedNoteIndex,
         tags,
         setTags,
+        openedNotes,
+        setOpenedNotes,
       }}
     >
       {children}

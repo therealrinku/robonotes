@@ -2,11 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 import EmptySvg from '../assets/images/empty.svg';
 import useTags from '../hooks/useTags';
 import useNotes from '../hooks/useNotes';
-import useDir from '../hooks/useDir';
 
 export default function Editor() {
-  const { selectedNoteName, handleCloseNote, handleSaveNote } = useNotes();
-  const { rootDir } = useDir();
+  const { selectedNoteName, handleCloseNote, handleSaveNote, selectedNote } =
+    useNotes();
   const { tags } = useTags();
 
   const thisNoteTags = Object.entries(tags)
@@ -23,26 +22,6 @@ export default function Editor() {
     handleSaveNote(title, description);
   }
 
-  useEffect(() => {
-    if (selectedNoteName) {
-      window.electron.ipcRenderer.on('read-note', (arg) => {
-        type noteObject = { title: string; content: string };
-
-        const castedArg = arg as noteObject;
-
-        setFileContent(castedArg);
-        setTitle(castedArg.title);
-        setDescription(castedArg.content);
-      });
-
-      window.electron.ipcRenderer.sendMessage(
-        'read-note',
-        rootDir,
-        selectedNoteName,
-      );
-    }
-  }, [selectedNoteName]);
-
   const haveUnsavedChanges = useMemo(() => {
     if (fileContent.title !== title || fileContent.content !== description) {
       return true;
@@ -51,7 +30,18 @@ export default function Editor() {
     return false;
   }, [fileContent, title, description]);
 
-  // auto save feature
+  useEffect(() => {
+    if (selectedNote) {
+      setFileContent({
+        title: selectedNote.title,
+        content: selectedNote.content,
+      });
+      setTitle(selectedNote.title);
+      setDescription(selectedNote.content);
+    }
+  }, [selectedNote]);
+
+  // auto save featurs
   let timeout: NodeJS.Timeout;
 
   useEffect(() => {
@@ -61,7 +51,7 @@ export default function Editor() {
       timeout = setTimeout(() => {
         console.log('---autosaving---');
         handleSave(title, description);
-      }, 1200);
+      }, 1500);
     }
   }, [title, description]);
 
