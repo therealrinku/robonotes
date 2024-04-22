@@ -20,8 +20,8 @@ export default function Editor() {
 
   function handleSave(_title: string, _description: string) {
     if (haveUnsavedChanges) {
-      setFileContent({ title: title, content: description });
-      handleSaveNote(title, description);
+      setFileContent({ title: _title, content: _description });
+      handleSaveNote(_title, _description);
     }
   }
 
@@ -49,15 +49,26 @@ export default function Editor() {
     }
   }, [selectedNote]);
 
-  function handleKeyDown(e: KeyboardEvent) {
-    if (e.ctrlKey && e.key === 's') {
-      handleSave(title, description);
-    }
-  }
+  // auto save feature
+  let timeout: NodeJS.Timeout | null = null;
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    if (haveUnsavedChanges) {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+
+      timeout = setTimeout(() => {
+        console.log('---autosaving---');
+        handleSave(title, description);
+      }, 1200);
+    }
+
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
   }, [title, description]);
 
   return (
@@ -66,14 +77,6 @@ export default function Editor() {
         <div className="relative w-full text-sm">
           <div className="absolute flex flex-row items-center gap-2 my-5 self-end mx-auto right-5">
             <div className="ml-auto flex flex-row items-center gap-5">
-              <button
-                onClick={() => handleSave(title, description)}
-                disabled={!haveUnsavedChanges}
-                className={`${haveUnsavedChanges && 'bg-red-500 hover:bg-red-600 text-white'} flex items-center gap-2 text-xs bg-gray-200 py-2 px-5 rounded`}
-              >
-                <GoFile />
-                <span>Save (Ctrl + S)</span>
-              </button>
               <button
                 onClick={handleClose}
                 className="text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded"
