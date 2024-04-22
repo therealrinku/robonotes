@@ -18,7 +18,7 @@ export default function Editor() {
   const [description, setDescription] = useState('');
   const [showAllTags, setShowAllTags] = useState(false);
 
-  function handleSave() {
+  function handleSave(_title: string, _description: string) {
     if (haveUnsavedChanges) {
       setFileContent({ title: title, content: description });
       handleSaveNote(title, description);
@@ -51,14 +51,14 @@ export default function Editor() {
 
   function handleKeyDown(e: KeyboardEvent) {
     if (e.ctrlKey && e.key === 's') {
-      handleSave();
+      handleSave(title, description);
     }
   }
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [title, description]);
 
   return (
     <div className="w-full max-h-[100vh] overflow-hidden">
@@ -67,7 +67,7 @@ export default function Editor() {
           <div className="absolute flex flex-row items-center gap-2 my-5 self-end mx-auto right-5">
             <div className="ml-auto flex flex-row items-center gap-5">
               <button
-                onClick={handleSave}
+                onClick={() => handleSave(title, description)}
                 disabled={!haveUnsavedChanges}
                 className={`${haveUnsavedChanges && 'bg-red-500 hover:bg-red-600 text-white'} flex items-center gap-2 text-xs bg-gray-200 py-2 px-5 rounded`}
               >
