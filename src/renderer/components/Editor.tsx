@@ -59,12 +59,16 @@ export default function Editor() {
       }
 
       timeout = setTimeout(() => {
-        console.log('---autosaving---');
+        console.log('--autosaving--');
         handleSave(title, description);
       }, 1200);
     }
 
     return () => {
+      if (haveUnsavedChanges) {
+        handleSave(title, description);
+      }
+
       if (timeout) {
         clearTimeout(timeout);
       }
