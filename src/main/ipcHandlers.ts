@@ -66,7 +66,6 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   });
 
   ipcMain.on('load-directory', async (event, dir) => {
-    //@ts-ignore
     const allFiles: string[] = [];
 
     const files = readdirSync(dir);
@@ -76,8 +75,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
       }
     });
 
-    //@ts-ignore
-    event.reply('load-directory', JSON.parse(allFiles));
+    event.reply('load-directory', allFiles);
   });
 
   ipcMain.on('create-note', async (event, ...dir) => {
