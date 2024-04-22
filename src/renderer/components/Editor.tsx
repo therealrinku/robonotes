@@ -26,14 +26,13 @@ export default function Editor() {
   useEffect(() => {
     if (selectedNoteName) {
       window.electron.ipcRenderer.on('read-note', (arg) => {
-        //@ts-ignore
-        setFileContent(arg);
-        //@ts-ignore
+        type noteObject = { title: string; content: string };
 
-        setTitle(arg.title);
-        //@ts-ignore
+        const castedArg = arg as noteObject;
 
-        setDescription(arg.content);
+        setFileContent(castedArg);
+        setTitle(castedArg.title);
+        setDescription(castedArg.content);
       });
 
       window.electron.ipcRenderer.sendMessage(
@@ -53,11 +52,10 @@ export default function Editor() {
   }, [fileContent, title, description]);
 
   // auto save feature
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
+  let timeout: NodeJS.Timeout;
 
+  useEffect(() => {
     if (haveUnsavedChanges) {
-      //@ts-ignore
       clearTimeout(timeout);
 
       timeout = setTimeout(() => {

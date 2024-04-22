@@ -24,7 +24,6 @@ export default function EditNoteModal({
   }
 
   const thisNoteTags = Object.entries(tags).filter(
-    //@ts-ignore
     (tag) => tag[1][fileName] === true,
   );
 

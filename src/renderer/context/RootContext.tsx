@@ -42,15 +42,15 @@ export function RootContextProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     window.electron.ipcRenderer.on('load-directory', (arg) => {
-      //@ts-ignore
-      setNotes(JSON.parse(arg) || []);
+      const castedArg = arg as string[];
+      setNotes(castedArg || []);
     });
 
     window.electron.ipcRenderer.on('load-tags', (arg) => {
-      //@ts-ignore
-      setTags(JSON.parse(arg) || []);
+      const castedArg = arg as TagsModel;
+      setTags(castedArg || {});
     });
-    
+
     window.electron.ipcRenderer.sendMessage('load-directory', rootDir);
     window.electron.ipcRenderer.sendMessage('load-tags', rootDir);
 

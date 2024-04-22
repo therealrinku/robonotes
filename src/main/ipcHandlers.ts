@@ -13,7 +13,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
     const fileName = `tags.json`;
 
     const tags = readFileSync(`${rootDir}/${fileName}`, 'utf-8');
-    event.reply('load-tags', tags);
+    event.reply('load-tags', JSON.parse(tags));
   });
 
   ipcMain.on('update-tags', async (event, ...args) => {
@@ -67,7 +67,8 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
 
   ipcMain.on('load-directory', async (event, dir) => {
     //@ts-ignore
-    const allFiles = [];
+    const allFiles: string[] = [];
+
     const files = readdirSync(dir);
     files.forEach((file) => {
       if (file.endsWith('.robu')) {
@@ -76,7 +77,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
     });
 
     //@ts-ignore
-    event.reply('load-directory', JSON.stringify(allFiles));
+    event.reply('load-directory', JSON.parse(allFiles));
   });
 
   ipcMain.on('create-note', async (event, ...dir) => {

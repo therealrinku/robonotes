@@ -8,11 +8,9 @@ export default function useTags() {
     const updatedTags = { ...tags };
 
     for (let tagKey in updatedTags) {
-      //@ts-expect-error
       const noteNames = updatedTags[tagKey];
       for (let nn in noteNames) {
         if (nn === noteName) {
-          //@ts-expect-error
           delete updatedTags[tagKey][nn];
         }
       }
@@ -24,7 +22,6 @@ export default function useTags() {
       updatedTags,
     );
 
-    //@ts-expect-error
     setTags(updatedTags);
   }
 
@@ -32,13 +29,10 @@ export default function useTags() {
     const updatedTags = { ...tags };
 
     for (let tagKey in updatedTags) {
-      //@ts-expect-error
       const noteNames = updatedTags[tagKey];
       for (let noteName in noteNames) {
         if (noteName === lastNoteName) {
-          //@ts-expect-error
           delete updatedTags[tagKey][noteName];
-          //@ts-expect-error
           updatedTags[tagKey][newNoteName] = true;
         }
       }
@@ -50,14 +44,12 @@ export default function useTags() {
       updatedTags,
     );
 
-    //@ts-expect-error
     setTags(updatedTags);
   }
 
   function removeTagFromNote(noteName: string, tagName: string) {
     const updatedTags = { ...tags };
 
-    //@ts-expect-error
     delete updatedTags[tagName][noteName];
 
     window.electron.ipcRenderer.sendMessage(
@@ -66,14 +58,12 @@ export default function useTags() {
       updatedTags,
     );
 
-    //@ts-expect-error
     setTags(updatedTags);
   }
 
   function addTagToNote(noteName: string, tagName: string) {
     const updatedTags = { ...tags };
 
-    //@ts-expect-error
     updatedTags[tagName][noteName] = true;
 
     window.electron.ipcRenderer.sendMessage(
@@ -82,7 +72,6 @@ export default function useTags() {
       updatedTags,
     );
 
-    //@ts-expect-error
     setTags(updatedTags);
   }
 
@@ -99,14 +88,12 @@ export default function useTags() {
       updatedTags,
     );
 
-    //@ts-expect-error
     setTags(updatedTags);
   }
 
   function removeTag(tagName: string) {
     const updatedTags = { ...tags };
 
-    //@ts-expect-error
     delete updatedTags[tagName];
 
     window.electron.ipcRenderer.sendMessage(
@@ -115,7 +102,6 @@ export default function useTags() {
       updatedTags,
     );
 
-    //@ts-expect-error
     setTags(updatedTags);
   }
 
