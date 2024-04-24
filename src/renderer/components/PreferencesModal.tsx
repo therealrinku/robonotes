@@ -29,7 +29,7 @@ export default function PreferencesModal({ onClose, handleChangeDir }: Props) {
           </button>
         </div>
 
-        <div className="flex flex-col items-start gap-2">
+        {/* <div className="flex flex-col items-start gap-2">
           <b>Theme</b>
 
           <div className="flex items-start gap-5">
@@ -52,7 +52,7 @@ export default function PreferencesModal({ onClose, handleChangeDir }: Props) {
               </span>
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
     </ModalWrapper>
   );
