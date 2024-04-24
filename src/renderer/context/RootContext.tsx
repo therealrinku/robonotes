@@ -19,6 +19,9 @@ interface NoteModel {
     content: string;
   };
 }
+
+type ThemeModel = 'dark' | 'light';
+
 interface RootContextProps {
   notes: string[];
   tags: TagsModel;
@@ -30,6 +33,8 @@ interface RootContextProps {
   setTags: Dispatch<SetStateAction<TagsModel>>;
   openedNotes: NoteModel;
   setOpenedNotes: Dispatch<SetStateAction<NoteModel>>;
+  theme: ThemeModel;
+  setTheme: Dispatch<SetStateAction<ThemeModel>>;
 }
 
 export const RootContext = createContext<RootContextProps>({
@@ -43,6 +48,8 @@ export const RootContext = createContext<RootContextProps>({
   setTags: () => {},
   openedNotes: {},
   setOpenedNotes: () => {},
+  theme: 'light',
+  setTheme: () => {},
 });
 
 export function RootContextProvider({ children }: PropsWithChildren) {
@@ -52,6 +59,7 @@ export function RootContextProvider({ children }: PropsWithChildren) {
   // cached note content
   const [openedNotes, setOpenedNotes] = useState<NoteModel>({});
   const [selectedNoteIndex, setSelectedNoteIndex] = useState<number>(-1);
+  const [theme, setTheme] = useState<ThemeModel>('light');
 
   useEffect(() => {
     window.electron.ipcRenderer.on('read-note', (arg) => {
@@ -83,6 +91,8 @@ export function RootContextProvider({ children }: PropsWithChildren) {
     window.electron.ipcRenderer.sendMessage('load-tags', rootDir);
 
     setRootDir(localStorage.getItem('rootDir') || '');
+
+    setTheme(localStorage.getItem('theme') as ThemeModel);
   }, [rootDir]);
 
   return (
@@ -98,6 +108,8 @@ export function RootContextProvider({ children }: PropsWithChildren) {
         setTags,
         openedNotes,
         setOpenedNotes,
+        theme,
+        setTheme,
       }}
     >
       {children}
