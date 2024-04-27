@@ -52,6 +52,31 @@ export default function SearchPopup({ onClose }: Props) {
     });
   }, [searchQuery, notes]);
 
+  const [activeNoteIndex, setActiveNoteIndex] = useState<number | null>(null);
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+
+      if (activeNoteIndex === 0) {
+        setActiveNoteIndex(filteredNotes.length - 1);
+      } else {
+        setActiveNoteIndex((prev) => Number(prev) - 1);
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+
+      if (activeNoteIndex === filteredNotes.length - 1) {
+        setActiveNoteIndex(0);
+      } else {
+        setActiveNoteIndex((prev) => Number(prev) + 1);
+      }
+    } else if (e.key === 'Enter' && activeNoteIndex) {
+      handleOpenNote(filteredNotes[activeNoteIndex]);
+      onClose();
+    }
+  }
+
   return (
     <div
       className="fixed top-0 left-0 h-full w-full z-10"
@@ -68,11 +93,13 @@ export default function SearchPopup({ onClose }: Props) {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           autoFocus={true}
+          onKeyDown={handleKeyDown}
         />
 
         <div className="max-h-[200px] overflow-y-auto flex flex-col gap-2 px-5 pb-5">
           {filteredNotes.length > 0 ? (
-            filteredNotes.map((noteName: string) => {
+            filteredNotes.map((noteName: string, index: number) => {
+              const isSelected = activeNoteIndex === index;
               return (
                 <button
                   key={noteName}
@@ -80,7 +107,9 @@ export default function SearchPopup({ onClose }: Props) {
                     handleOpenNote(noteName);
                     onClose();
                   }}
-                  className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 p-2 rounded"
+                  className={`flex items-center gap-2 bg-gray-100 hover:bg-gray-200 p-2 rounded ${
+                    isSelected ? 'bg-gray-300' : ''
+                  }`}
                 >
                   <GoFile size={13} />
                   <p className="text-xs"> {noteName}</p>
