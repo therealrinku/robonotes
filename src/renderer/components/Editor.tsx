@@ -98,6 +98,7 @@ export default function Editor() {
               defaultValue={'2023 - Memo'}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              autoCorrect='off'
             />
 
             {thisNoteTags.length > 0 && (
