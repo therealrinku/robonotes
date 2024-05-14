@@ -36,7 +36,7 @@ export default function EditNoteModal({
       <div className="flex flex-row items-center gap-3 self-start">
         <input
           placeholder="Rename.."
-          className="bg-gray-100 px-2 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500 w-full"
+          className="bg-gray-100 dark:bg-[#121212] px-2 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500 w-full"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
@@ -44,7 +44,7 @@ export default function EditNoteModal({
         <button
           onClick={() => onRename(text)}
           disabled={!text.trim()}
-          className="text-xs bg-gray-100 hover:bg-gray-300 py-2 px-5 rounded disabled:opacity-70"
+          className="text-xs bg-gray-100 dark:bg-[#121212] hover:bg-gray-300 py-2 px-5 rounded disabled:opacity-70"
         >
           Rename
         </button>
@@ -70,7 +70,7 @@ export default function EditNoteModal({
                 handleAddTag(e.target.value);
                 e.target.selectedIndex = 0;
               }}
-              className="text-xs py-2 pl-5 pr-7 outline-none rounded"
+              className="text-xs py-2 pl-5 pr-7 outline-none rounded bg-white dark:bg-[#121212]"
               defaultValue={'new'}
             >
               <option
@@ -114,14 +114,14 @@ function TagItem({ fileName, removeTagFromNote, tagName }: TagItemProps) {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative text-xs bg-gray-200 py-2 px-5 rounded disabled:opacity-70"
+      className="relative text-xs bg-gray-200 dark:bg-[#404040] py-2 px-5 rounded disabled:opacity-70"
     >
       {tagName}
 
       {isHovered && (
         <button
           onClick={() => handleDeleteTag(tagName)}
-          className="absolute top-0 left-0 flex justify-center items-center rounded h-full w-full bg-gray-200"
+          className="absolute top-0 left-0 flex justify-center items-center rounded h-full w-full bg-gray-200 dark:bg-[#404040]"
         >
           <GoTrash />
         </button>

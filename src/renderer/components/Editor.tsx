@@ -76,14 +76,14 @@ export default function Editor() {
   }, [title, description]);
 
   return (
-    <div className="w-full max-h-[100vh] overflow-hidden">
+    <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#282828]">
       {selectedNoteName && fileContent && (
         <div className="relative w-full text-sm">
           <div className="absolute flex flex-row items-center gap-2 my-5 self-end mx-auto right-5">
             <div className="ml-auto flex flex-row items-center gap-5">
               <button
                 onClick={handleClose}
-                className="text-xs bg-gray-200 hover:bg-gray-300 py-2 px-5 rounded"
+                className="text-xs bg-gray-200 dark:bg-[#404040] hover:bg-gray-300 py-2 px-5 rounded"
               >
                 <p>Close</p>
               </button>
@@ -94,7 +94,7 @@ export default function Editor() {
             <input
               type="text"
               placeholder="Title..."
-              className="p-3 outline-none font-bold text-lg max-w-[85%] ml-3"
+              className="p-3 outline-none font-bold text-lg max-w-[85%] ml-3 bg-inherit"
               defaultValue={'2023 - Memo'}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -108,7 +108,7 @@ export default function Editor() {
                     return (
                       <div
                         key={tag}
-                        className="flex justify-center bg-gray-200 py-1 px-2 rounded disabled:opacity-70"
+                        className="flex justify-center bg-gray-200 dark:bg-[#404040] py-1 px-2 rounded disabled:opacity-70"
                       >
                         #{tag}
                       </div>
@@ -128,7 +128,7 @@ export default function Editor() {
             )}
 
             <textarea
-              className="w-full outline-none h-full mt-5 pt-5 border-t px-6"
+              className="w-full outline-none h-full mt-5 pt-5 border-t px-6 bg-inherit"
               placeholder="My important note..."
               value={description}
               autoCorrect="off"

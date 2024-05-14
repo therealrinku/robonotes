@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import './App.css';
 import { RootContextProvider } from './context/RootContext';
 import useDir from './hooks/useDir';
+import { useEffect } from 'react';
 
 export default function App() {
   return (
@@ -19,6 +20,28 @@ export default function App() {
 
 function SetupApp() {
   const { rootDir } = useDir();
+
+  useEffect(() => {
+    // load-theme
+    if (localStorage.getItem('color-theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+
+    // change-theme from menubar
+    window.electron.ipcRenderer.on('toggle-theme', () => {
+      toggleTheme();
+    });
+  }, []);
+
+  function toggleTheme() {
+    if (localStorage.getItem('color-theme') === 'dark') {
+      localStorage.setItem('color-theme', 'light');
+      document.documentElement.classList.remove('dark');
+    } else {
+      localStorage.setItem('color-theme', 'dark');
+      document.documentElement.classList.add('dark');
+    }
+  }
 
   if (rootDir) {
     return <Home />;

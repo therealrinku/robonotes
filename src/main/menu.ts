@@ -238,6 +238,12 @@ export default class MenuBuilder {
                   },
                 },
                 {
+                  label: 'Toggle Theme',
+                  click: () => {
+                    this.mainWindow.webContents.send('toggle-theme');
+                  },
+                },
+                {
                   label: 'Toggle &Developer Tools',
                   accelerator: 'Alt+Ctrl+I',
                   click: () => {

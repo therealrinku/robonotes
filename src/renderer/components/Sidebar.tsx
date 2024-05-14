@@ -60,7 +60,7 @@ export default function Sidebar() {
 
   return (
     <Fragment>
-      <div className="relative bg-gray-100 min-w-64 max-w-64 min-h-screen flex flex-col items-center gap-5 py-5">
+      <div className="relative bg-gray-100 dark:bg-[#121212] min-w-64 max-w-64 min-h-screen flex flex-col items-center gap-5 py-5">
         <div className="flex flex-row items-center gap-3 w-full px-3">
           <div className=" w-full flex items-center gap-3 justify-between">
             <p className="text-xs font-bold">robonotes v{configs.version}</p>
@@ -97,13 +97,13 @@ export default function Sidebar() {
               <p>No notes found.</p>
               <button
                 onClick={handleChangeDir}
-                className="mt-5 text-xs bg-gray-200 py-2 px-5 rounded"
+                className="mt-5 text-xs bg-gray-200 dark:bg-[#404040] py-2 px-5 rounded"
               >
                 Change directory
               </button>
               <button
                 onClick={handleCreateNewNote}
-                className="mt-5 text-xs bg-gray-200 py-2 px-5 rounded"
+                className="mt-5 text-xs bg-gray-200 dark:bg-[#404040] py-2 px-5 rounded"
               >
                 Create new note
               </button>
@@ -159,7 +159,7 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={() => handleOpenNote(noteName)}
-        className={`${selectedNoteName === noteName && 'outline-dashed outline-green-500'} relative h-full p-2 w-full text-xs bg-gray-200 outline-1  w-full rounded`}
+        className={`${selectedNoteName === noteName && 'outline-dashed outline-green-500'} relative h-full p-2 w-full text-xs bg-gray-200 dark:bg-[#404040] outline-1  w-full rounded`}
       >
         <div className="flex flex-row items-center gap-1">
           <GoFile size={13} />

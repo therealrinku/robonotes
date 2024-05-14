@@ -86,10 +86,10 @@ export default function SearchPopup({ onClose }: Props) {
         <GoX color="white" size={25} />
       </button>
 
-      <div className=" mt-5 w-96 mx-auto bg-white pt-5 rounded flex flex-col gap-5">
+      <div className=" mt-5 w-96 mx-auto bg-white dark:bg-[#404040] pt-5 rounded flex flex-col gap-5">
         <input
           placeholder="Quick Search...."
-          className="bg-gray-100 mx-5 px-3 rounded text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500"
+          className="bg-gray-100 dark:bg-[#121212] mx-5 px-3 rounded text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           autoFocus={true}
@@ -107,7 +107,7 @@ export default function SearchPopup({ onClose }: Props) {
                     handleOpenNote(noteName);
                     onClose();
                   }}
-                  className={`flex items-center gap-2 bg-gray-100 hover:bg-gray-200 p-2 rounded ${
+                  className={`flex items-center gap-2 bg-gray-100 dark:bg-[#121212] hover:bg-gray-200 dark:bg-[#404040] p-2 rounded ${
                     isSelected ? 'bg-gray-300' : ''
                   }`}
                 >

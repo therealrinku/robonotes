@@ -35,7 +35,7 @@ export default function TagsModal({ onClose }: Props) {
       <div className="mt-10 flex flex-row items-center gap-2">
         <input
           placeholder="New Tag.. (3-20 length)"
-          className="bg-gray-100 px-2 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500 w-full"
+          className="bg-gray-100 dark:bg-[#121212] px-2 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500 w-full"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
@@ -43,7 +43,7 @@ export default function TagsModal({ onClose }: Props) {
         <button
           onClick={handleAddTag}
           disabled={!text.trim() || text.length < 3 || text.length > 20}
-          className="text-xs bg-gray-100 hover:bg-gray-200 py-2 px-5 rounded disabled:opacity-70"
+          className="text-xs bg-gray-100 dark:bg-[#121212] hover:bg-gray-200 dark:bg-[#404040] py-2 px-5 rounded disabled:opacity-70"
         >
           Add
         </button>
@@ -65,14 +65,14 @@ function Tag({ tagName }: { tagName: string }) {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative text-xs bg-gray-100 text-center p-2 w-24 rounded disabled:opacity-70"
+      className="relative text-xs bg-gray-100 dark:bg-[#121212] text-center p-2 w-24 rounded disabled:opacity-70"
     >
       <p>{tagName}</p>
 
       {isHovered && (
         <button
           onClick={handleDeleteTag}
-          className="absolute top-0 left-0 h-full w-full bg-gray-100 flex items-center justify-center rounded"
+          className="absolute top-0 left-0 h-full w-full bg-gray-100 dark:bg-[#121212] flex items-center justify-center rounded"
         >
           <GoTrash color="red" />
         </button>

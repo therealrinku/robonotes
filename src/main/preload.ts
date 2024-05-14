@@ -15,6 +15,7 @@ export type Channels =
   | 'open-preferences'
   | 'open-search'
   | 'open-tags-modal'
+  | 'toggle-theme'
 
 const electronHandler = {
   ipcRenderer: {
