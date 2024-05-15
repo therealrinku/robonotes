@@ -9,80 +9,93 @@
 
   <body class="bg-gray-200">
     <div
-      class="h-screen w-screen max-w-[800px] px-5 mx-auto flex flex-col items-center justify-center gap-5"
+      class="h-screen w-screen max-w-[800px] px-5 mx-auto flex flex-col justify-center gap-10"
     >
-      <div class="flex flex-col items-center gap-2">
-        <p class="font-bold text-2xl">robonotes v0.0.4</p>
+      <div class="flex flex-col gap-2">
+        <div class="flex items-center gap-3">
+          <p class="font-bold text-2xl">robonotes</p>
+          <a
+            href="https://github.com/therealrinku/robonotes"
+            class="border border-black px-3 py-1 rounded flex items-center gap-2 text-xs"
+            target="_blank"
+          >
+            <img
+              src="https://cdn-icons-png.flaticon.com/128/2111/2111432.png"
+              class="w-4 h-4"
+            />
+            <p>Github</p>
+          </a>
+        </div>
 
-        <p class="italic text-center">
+        <p class="italic">
           minimal, no nonsense privacy focused local only note taking
           application.
         </p>
-
-        <a
-          href="https://github.com/therealrinku/robonotes"
-          class="border border-black p-2 rounded flex items-center gap-2"
-        >
-          <img
-            src="https://cdn-icons-png.flaticon.com/128/2111/2111432.png"
-            class="w-5 h-5"
-          />
-          <span>Github</span>
-        </a>
       </div>
 
-      <img
-        class="w-[75%] max-w-[700px] h-auto rounded"
-        src="https://firebasestorage.googleapis.com/v0/b/arc3share.appspot.com/o/files%2F323857733-6e484f75-afa1-40b7-98df-ea9b265be177.png?alt=media&token=98b99abc-c79a-4843-aa88-b7abbf9c4a57"
-      />
-
-      <p>Downloads</p>
-
-      <div class="flex items-center justify-center flex-wrap gap-2">
+      <div class="flex flex-col gap-3">
+        <div
+          class="border border-black py-2 px-5 rounded-md self-start"
+          id="main-download-link"
+        ></div>
         <a
-          href="https://github.com/therealrinku/robonotes/releases/download/v0.0.4/robonotes_0.0.4_amd64.deb"
-          class="border border-black p-2 rounded flex items-center gap-2"
+          target="_blank"
+          class="underline text-xs"
+          href="https://github.com/therealrinku/robonotes/releases"
+          >More download options</a
         >
-          <img
-            src="https://cdn-icons-png.flaticon.com/128/25/25719.png"
-            class="w-5 h-5"
-          />
-          <span>Linux (deb)</span>
-        </a>
+      </div>
 
-        <a
-          href="https://github.com/therealrinku/robonotes/releases/download/v0.0.4/robonotes-0.0.4.AppImage"
-          class="border border-black p-2 rounded flex items-center gap-2"
-        >
-          <img
-            src="https://cdn-icons-png.flaticon.com/128/25/25719.png"
-            class="w-5 h-5"
-          />
-          <span>Linux (AppImage)</span>
-        </a>
-
-        <a
-          href="https://github.com/therealrinku/robonotes/releases/download/v0.0.4/robonotes.Setup.0.0.4.exe"
-          class="border border-black p-2 rounded flex items-center gap-2"
-        >
-          <img
-            src="https://cdn-icons-png.flaticon.com/128/732/732076.png"
-            class="w-5 h-5"
-          />
-          <span>Windows (exe)</span>
-        </a>
-
-        <button
-          disabled
-          class="border border-black p-2 rounded flex items-center gap-2"
-        >
-          <img
-            src="https://cdn-icons-png.flaticon.com/128/2/2235.png"
-            class="w-5 h-5"
-          />
-          <span>Mac (coming soon)</span>
-        </button>
+      <div class="w-[80%] max-w-[700px] min-h-[400px] h-auto">
+        <img
+          class="w-inherit h-inherit rounded"
+          src="https://firebasestorage.googleapis.com/v0/b/arc3share.appspot.com/o/files%2F323857733-6e484f75-afa1-40b7-98df-ea9b265be177.png?alt=media&token=98b99abc-c79a-4843-aa88-b7abbf9c4a57"
+        />
       </div>
     </div>
+
+    <script>
+      //check which os is user running
+      const os = window.navigator.platform;
+
+      const platformIcons = {
+        Win: 'https://cdn-icons-png.flaticon.com/128/732/732076.png',
+        Linux: 'https://cdn-icons-png.flaticon.com/128/25/25719.png',
+        Mac: 'https://cdn-icons-png.flaticon.com/128/2/2235.png',
+      };
+
+      const platformDownloadLinks = {
+        Win: 'https://github.com/therealrinku/robonotes/releases/download/v0.0.4/robonotes.Setup.0.0.4.exe',
+        LinuxDeb:
+          'https://github.com/therealrinku/robonotes/releases/download/v0.0.4/robonotes_0.0.4_amd64.deb',
+        LinuxAppImage:
+          'https://github.com/therealrinku/robonotes/releases/download/v0.0.4/robonotes-0.0.4.AppImage',
+        Github: 'https://github.com/therealrinku/robonotes/releases',
+      };
+
+      const main = document.getElementById('main-download-link');
+      console.log(main);
+      if (os.startsWith('Linux')) {
+        main.innerHTML = `<a href="${platformDownloadLinks.LinuxDeb}" class="flex items-center gap-2">
+          <img src="${platformIcons.Linux}" class="w-4 h-4" />
+          <p>Download for Linux</p>
+        </a>`;
+      } else if (os.startsWith('Win')) {
+        main.innerHTML = `<a href="${platformDownloadLinks.Win}" class="flex items-center gap-2">
+          <img src="${platformIcons.Win}" class="w-4 h-4" />
+          <p>Download for Windows</p>
+        </a>`;
+      } else if (os.startsWith('Mac')) {
+        main.innerHTML = `<a href="${platformDownloadLinks.LinuxAppImage}" class="flex items-center gap-2">
+          <img src="${platformIcons.Mac}" class="w-4 h-4" />
+          <p>Download for Mac</p>
+        </a>`;
+      } else {
+        main.innerHTML = `<a href="${platformDownloadLinks.Github}" class="flex items-center gap-2">
+          <img src="https://cdn-icons-png.flaticon.com/128/3502/3502477.png" class="w-4 h-4" />
+          <p>Downloads</p>
+        </a>`;
+      }
+    </script>
   </body>
 </html>
