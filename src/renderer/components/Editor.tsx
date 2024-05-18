@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import EmptySvg from '../assets/images/empty.svg';
 import useTags from '../hooks/useTags';
 import useNotes from '../hooks/useNotes';
-import { GoFile } from 'react-icons/go';
 
 export default function Editor() {
   const { selectedNoteName, handleCloseNote, handleSaveNote, selectedNote } =
@@ -13,71 +12,71 @@ export default function Editor() {
     .filter((tag) => tag[1][selectedNoteName] === true)
     .map((tg) => tg[0]);
 
-  const [fileContent, setFileContent] = useState({ title: '', content: '' });
+  const [loadedNoteName, setLoadedNoteName] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [showAllTags, setShowAllTags] = useState(false);
 
   function handleSave(_title: string, _description: string) {
+    console.log(_title, _description, 'pussydick');
     if (haveUnsavedChanges) {
-      setFileContent({ title: _title, content: _description });
       handleSaveNote(_title, _description);
     }
   }
 
   function handleClose() {
-    handleSaveNote(title, description);
+    handleSave(title, description);
     handleCloseNote();
   }
 
   const haveUnsavedChanges = useMemo(() => {
-    if (fileContent.title !== title || fileContent.content !== description) {
+    if (
+      selectedNote?.title !== title ||
+      selectedNote?.content !== description
+    ) {
       return true;
     }
 
     return false;
-  }, [fileContent, title, description]);
+  }, [selectedNote, title, description]);
 
+  // load note once to prevent re-rendering issues
+  // which causes issues like cursor jumping to the end in textarea and input fieldss
   useEffect(() => {
-    if (selectedNote) {
-      setFileContent({
-        title: selectedNote.title,
-        content: selectedNote.content,
-      });
-      setTitle(selectedNote.title);
-      setDescription(selectedNote.content);
+    if (selectedNote && loadedNoteName !== selectedNoteName) {
+      setTitle(selectedNote?.title);
+      setDescription(selectedNote?.content);
+      setLoadedNoteName(selectedNoteName);
     }
-  }, [selectedNote]);
+  }, [selectedNote, selectedNoteName]);
 
-  // auto save feature
-  let timeout: NodeJS.Timeout | null = null;
-
+  // save on unmount
   useEffect(() => {
-    if (haveUnsavedChanges) {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-
-      timeout = setTimeout(() => {
-        console.log('--autosaving--');
-        handleSave(title, description);
-      }, 1200);
-    }
-
     return () => {
       if (haveUnsavedChanges) {
         handleSave(title, description);
       }
-
-      if (timeout) {
-        clearTimeout(timeout);
-      }
     };
-  }, [title, description]);
+  }, []);
+
+  // auto save feature
+  const timeout = useRef<NodeJS.Timeout | null>(null);
+  function handleAutoSave(_title: string, _description: string) {
+    if (haveUnsavedChanges) {
+      if (timeout.current) {
+        clearTimeout(timeout.current);
+      }
+
+      timeout.current = setTimeout(() => {
+        console.log('--autosaving--');
+        handleSave(_title, _description);
+      }, 1000);
+    }
+  }
 
   return (
     <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#282828]">
-      {selectedNoteName && fileContent && (
+      {selectedNoteName && (
         <div className="relative w-full text-sm">
           <div className="absolute flex flex-row items-center gap-2 my-5 self-end mx-auto right-5">
             <div className="ml-auto flex flex-row items-center gap-5">
@@ -95,10 +94,12 @@ export default function Editor() {
               type="text"
               placeholder="Title..."
               className="p-3 outline-none font-bold text-lg max-w-[85%] ml-3 bg-inherit"
-              defaultValue={'2023 - Memo'}
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              autoCorrect='off'
+              onChange={(e) => {
+                setTitle(e.target.value);
+                handleAutoSave(e.target.value, description);
+              }}
+              autoCorrect="off"
             />
 
             {thisNoteTags.length > 0 && (
@@ -134,7 +135,10 @@ export default function Editor() {
               autoCorrect="off"
               spellCheck="false"
               autoFocus={true}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => {
+                setDescription(e.target.value);
+                handleAutoSave(title, e.target.value);
+              }}
             />
           </div>
         </div>
