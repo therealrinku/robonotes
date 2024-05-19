@@ -253,6 +253,12 @@ export default class MenuBuilder {
               ]
             : [
                 {
+                  label: 'Toggle Theme',
+                  click: () => {
+                    this.mainWindow.webContents.send('toggle-theme');
+                  },
+                },
+                {
                   label: 'Toggle &Full Screen',
                   accelerator: 'F11',
                   click: () => {
