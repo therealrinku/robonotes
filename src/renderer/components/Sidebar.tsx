@@ -161,17 +161,16 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
         onClick={() => handleOpenNote(noteName)}
         className={`${selectedNoteName === noteName && 'outline-dashed outline-green-500'} relative h-full p-2 w-full text-xs bg-gray-200 dark:bg-[#404040] outline-1  w-full rounded`}
       >
-        <div className="flex flex-row items-center gap-1">
+        <div className="flex flex-row items-center gap-2">
           <GoFile size={13} />
           <p
-            className={`truncate ${isHovered ? 'max-w-[70%]' : 'max-w-[85%]'}`}
+            className={`truncate ${isHovered ? 'max-w-[65%]' : 'max-w-[75%]'}`}
           >
             {noteName}
           </p>
 
-          {thisNoteTags.length > 0 && (
-            <p className="flex items-center gap-1">
-              &middot;
+          {thisNoteTags.length > 0 && !isHovered && (
+            <p className="flex items-center gap-1 ml-auto">
               <GoTag size={13} /> {thisNoteTags.length}
             </p>
           )}
