@@ -66,19 +66,28 @@ export default function Sidebar() {
             <p className="text-xs font-bold">robonotes v{configs.version}</p>
 
             <div className="flex items-center gap-3">
-              <button onClick={() => setShowSearchPopup(true)}>
+              <button
+                title="Quick search (Ctrl + P)"
+                onClick={() => setShowSearchPopup(true)}
+              >
                 <GoSearch size={15} />
               </button>
 
-              <button onClick={handleCreateNewNote}>
+              <button title="Add new note" onClick={handleCreateNewNote}>
                 <GoPlusCircle size={15} />
               </button>
 
-              <button onClick={() => setShowTagsModal(true)}>
+              <button
+                title="Manage tags (Ctrl + T)"
+                onClick={() => setShowTagsModal(true)}
+              >
                 <GoTag size={15} />
               </button>
 
-              <button onClick={() => setShowPreferencesModal(true)}>
+              <button
+                title="Preferences (Ctrl + Y)"
+                onClick={() => setShowPreferencesModal(true)}
+              >
                 <GoGear size={15} />
               </button>
             </div>
@@ -179,6 +188,7 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
         {isHovered && (
           <div className="absolute top-0 right-0 h-full flex flex-row items-center">
             <button
+              title="Edit title & tags"
               onClick={(e) => {
                 e.stopPropagation();
                 setShowRenameModal(true);
@@ -188,6 +198,7 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
               <GoPencil size={14} />
             </button>
             <button
+              title="Delete note"
               onClick={(e) => {
                 e.stopPropagation();
                 handleDelete();
