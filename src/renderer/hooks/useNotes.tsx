@@ -67,7 +67,7 @@ export default function useNotes() {
   }
 
   function handleDeleteNote(noteName: string) {
-    const confirmed = confirm('Are you sure to delete this note ? ');
+    const confirmed = confirm(`Are you sure want to delete ${noteName}? `);
 
     if (!confirmed) {
       return;
