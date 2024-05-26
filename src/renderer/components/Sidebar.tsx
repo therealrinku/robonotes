@@ -147,6 +147,7 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
     handleRenameNote,
     handleDeleteNote,
     selectedNoteName,
+    handleCloseNote,
   } = useNotes();
 
   const thisNoteTags = Object.entries(tags).filter(
@@ -162,12 +163,20 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
     handleDeleteNote(noteName);
   }
 
+  function handleClickNoteItem() {
+    if (selectedNoteName === noteName) {
+      handleCloseNote();
+    } else {
+      handleOpenNote(noteName);
+    }
+  }
+
   return (
     <Fragment>
       <button
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onClick={() => handleOpenNote(noteName)}
+        onClick={handleClickNoteItem}
         className={`${selectedNoteName === noteName && 'outline-dashed outline-green-500'} relative h-full p-2 w-full text-xs bg-gray-200 dark:bg-[#404040] outline-1  w-full rounded`}
       >
         <div className="flex flex-row items-center gap-2">
