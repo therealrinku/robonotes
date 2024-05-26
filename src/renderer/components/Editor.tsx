@@ -12,13 +12,11 @@ export default function Editor() {
     .filter((tag) => tag[1][selectedNoteName] === true)
     .map((tg) => tg[0]);
 
-  const [loadedNoteName, setLoadedNoteName] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [showAllTags, setShowAllTags] = useState(false);
 
   function handleSave(_title: string, _description: string) {
-    console.log(_title, _description, 'pussydick');
     if (haveUnsavedChanges) {
       handleSaveNote(_title, _description);
     }
@@ -40,15 +38,10 @@ export default function Editor() {
     return false;
   }, [selectedNote, title, description]);
 
-  // load note once to prevent re-rendering issues
-  // which causes issues like cursor jumping to the end in textarea and input fieldss
   useEffect(() => {
-    if (selectedNote && loadedNoteName !== selectedNoteName) {
-      setTitle(selectedNote?.title);
-      setDescription(selectedNote?.content);
-      setLoadedNoteName(selectedNoteName);
-    }
-  }, [selectedNote, selectedNoteName]);
+    setTitle(selectedNote?.title || '');
+    setDescription(selectedNote?.content || '');
+  }, [selectedNote]);
 
   // save on unmount
   useEffect(() => {
