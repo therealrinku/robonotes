@@ -177,8 +177,12 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleClickNoteItem}
-        className={`${selectedNoteName === noteName && 'outline-dashed outline-green-500'} relative h-full p-2 w-full text-xs bg-gray-200 dark:bg-[#404040] outline-1  w-full rounded`}
+        className="relative h-full p-2 w-full text-xs bg-gray-200 dark:bg-[#404040] outline-1  w-full rounded"
       >
+        {selectedNoteName === noteName && (
+          <div className="border-l-2 border-l-green-500 absolute top-0 left-0 h-full rounded"></div>
+        )}
+
         <div className="flex flex-row items-center gap-2">
           <GoFile size={13} />
           <p
