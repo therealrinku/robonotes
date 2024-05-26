@@ -14,5 +14,5 @@ export default function useDir() {
     window.electron.ipcRenderer.sendMessage('open-root-dir-selector');
   }
 
-  return { rootDir, handleChangeDir, setRootDir };
+  return { rootDir, handleChangeDir };
 }

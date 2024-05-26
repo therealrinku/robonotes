@@ -84,18 +84,7 @@ function ThirdCard() {
 }
 
 function FourthCard() {
-  const [_rootDir, _setRootDir] = useState('');
-  const { setRootDir } = useDir();
-
-  function handleSelectFolder() {
-    window.electron.ipcRenderer.once('open-root-dir-selector', (arg) => {
-      const path = String(arg);
-      window.localStorage.setItem('rootDir', path);
-      _setRootDir(String(arg));
-    });
-
-    window.electron.ipcRenderer.sendMessage('open-root-dir-selector');
-  }
+  const { rootDir, handleChangeDir } = useDir();
 
   return (
     <div className="flex text-sm flex-col items-center gap-2">
@@ -108,23 +97,20 @@ function FourthCard() {
 
       <div className="flex flex-row items-center gap-2">
         <button
-          onClick={handleSelectFolder}
+          onClick={handleChangeDir}
           className="mt-5 text-xs bg-gray-200 dark:bg-[#404040] hover:bg-gray-300 py-2 px-5 rounded"
         >
-          {_rootDir ? 'Change Folder' : 'Select Folder'}
+          {rootDir ? 'Change Folder' : 'Select Folder'}
         </button>
 
-        {_rootDir && (
-          <button
-            onClick={() => setRootDir(_rootDir)}
-            className="mt-5 text-xs bg-gray-200 dark:bg-[#404040] hover:bg-gray-300 py-2 px-5 rounded"
-          >
+        {rootDir && (
+          <button className="mt-5 text-xs bg-gray-200 dark:bg-[#404040] hover:bg-gray-300 py-2 px-5 rounded">
             Continue...
           </button>
         )}
       </div>
 
-      {_rootDir && <p className="text-xs">Selected Folder: {_rootDir}</p>}
+      {rootDir && <p className="text-xs">Selected Folder: {rootDir}</p>}
     </div>
   );
 }
