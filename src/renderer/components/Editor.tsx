@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import EmptySvg from '../assets/images/empty.svg';
 import useTags from '../hooks/useTags';
 import useNotes from '../hooks/useNotes';
+import { GoInfo } from 'react-icons/go';
 
 export default function Editor() {
   const { selectedNoteName, handleCloseNote, handleSaveNote, selectedNote } =
@@ -78,6 +79,8 @@ export default function Editor() {
     );
   }
 
+  const wordCount = description.split(' ').filter((word) => word !== '').length;
+
   return (
     <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#282828]">
       <div className="relative w-full text-sm">
@@ -110,7 +113,7 @@ export default function Editor() {
           </div>
 
           <textarea
-            className="w-full outline-none h-full pt-3 border-t border-gray-200 dark:border-gray-700 px-6 bg-inherit"
+            className="w-full outline-none h-full pt-3 border-b border-t border-gray-200 dark:border-gray-700 px-6 bg-inherit"
             placeholder="My important note..."
             value={description}
             autoCorrect="off"
@@ -121,6 +124,16 @@ export default function Editor() {
               handleAutoSave(title, e.target.value);
             }}
           />
+
+          <div className="mx-5 py-2 flex items-center gap-2 text-xs self-end">
+            <GoInfo size={15} />
+            <p>
+              <span className="font-bold">{description.length}</span> charcters
+            </p>
+            <p>
+              <span className="font-bold">{wordCount}</span> words
+            </p>
+          </div>
         </div>
       </div>
     </div>
