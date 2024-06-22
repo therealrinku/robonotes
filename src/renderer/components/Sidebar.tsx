@@ -234,11 +234,11 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
           )}
           <p className={`truncate max-w-[75%]`}>{noteName}</p>
 
-          {thisNoteTags.length > 0 && !isHovered && (
+          {/* {thisNoteTags.length > 0 && !isHovered && (
             <p className="flex items-center gap-1 ml-auto">
-              <GoTag size={13} /> {thisNoteTags.length}
+              <GoTag size={13} /> {thisNoteTags.length < 9 ? thisNoteTags.length : '9+'}
             </p>
-          )}
+          )} */}
         </div>
 
         {isHovered && (

@@ -113,7 +113,7 @@ export default function Editor() {
           </div>
 
           <textarea
-            className="w-full outline-none h-full pt-3 border-b border-t border-gray-200 dark:border-gray-700 px-6 bg-inherit"
+            className="w-full outline-none h-full py-3 border-b border-t border-gray-200 dark:border-gray-700 px-6 bg-inherit"
             placeholder="My important note..."
             value={description}
             autoCorrect="off"
@@ -125,10 +125,15 @@ export default function Editor() {
             }}
           />
 
-          <div className="mx-5 py-2 flex items-center gap-2 text-xs self-end">
+          <div className="w-full py-1 flex items-center gap-4 text-xs justify-end pr-5">
             <GoInfo size={15} />
+            <p>{haveUnsavedChanges ? 'Unsaved' : 'Saved'}</p>
+
             <p>
-              <span className="font-bold">{description.length}</span> charcters
+              <span className="font-bold"> {thisNoteTags.length}</span> Tags
+            </p>
+            <p>
+              <span className="font-bold">{description.length}</span> characters
             </p>
             <p>
               <span className="font-bold">{wordCount}</span> words
