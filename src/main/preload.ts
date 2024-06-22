@@ -16,6 +16,7 @@ export type Channels =
   | 'open-search'
   | 'open-tags-modal'
   | 'toggle-theme'
+  | 'check-if-root-dir-exists'
 
 const electronHandler = {
   ipcRenderer: {

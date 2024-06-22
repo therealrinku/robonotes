@@ -5,9 +5,17 @@ import {
   renameSync,
   unlinkSync,
   writeFileSync,
+  existsSync,
 } from 'fs';
 
 export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
+  ipcMain.on('check-if-root-dir-exists', async (event, ...args) => {
+    const rootDir = args[0];
+
+    const isValidRootDir = existsSync(rootDir);
+    event.reply('check-if-root-dir-exists', isValidRootDir);
+  });
+
   ipcMain.on('load-tags', async (event, ...args) => {
     const rootDir = args[0];
     const fileName = `tags.json`;

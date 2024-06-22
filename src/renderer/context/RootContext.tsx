@@ -80,11 +80,28 @@ export function RootContextProvider({ children }: PropsWithChildren) {
       setTags(castedArg || {});
     });
 
+    // validate if root dir is actually a valid directory in the filesystem
+    window.electron.ipcRenderer.on(
+      'check-if-root-dir-exists',
+      (isValidRootDir) => {
+        if (!isValidRootDir) {
+          setRootDir('');
+        } else {
+          setRootDir(localStorage.getItem('rootDir') || '');
+        }
+      },
+    );
+
     window.electron.ipcRenderer.sendMessage('load-directory', rootDir);
     window.electron.ipcRenderer.sendMessage('load-tags', rootDir);
-
-    setRootDir(localStorage.getItem('rootDir') || '');
   }, [rootDir]);
+
+  useEffect(() => {
+    window.electron.ipcRenderer.sendMessage(
+      'check-if-root-dir-exists',
+      localStorage.getItem('rootDir'),
+    );
+  }, []);
 
   return (
     <RootContext.Provider
