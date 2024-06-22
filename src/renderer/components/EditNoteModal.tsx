@@ -2,29 +2,31 @@ import { useState } from 'react';
 import ModalWrapper from './ModalWrapper';
 import useTags from '../hooks/useTags';
 import { GoTrash } from 'react-icons/go';
+import useNotes from '../hooks/useNotes';
 
 interface Props {
   onClose: () => void;
   initialText: string;
   onRename: Function;
-  fileName: string;
+  noteName: string;
 }
 
 export default function EditNoteModal({
   onClose,
   initialText,
   onRename,
-  fileName,
+  noteName,
 }: Props) {
   const [text, setText] = useState(initialText || '');
   const { tags, addTagToNote, removeTagFromNote } = useTags();
+  const { handleDeleteNote } = useNotes();
 
   function handleAddTag(tagName: string) {
-    addTagToNote(fileName, tagName);
+    addTagToNote(noteName, tagName);
   }
 
   const thisNoteTags = Object.entries(tags).filter(
-    (tag) => tag[1][fileName] === true,
+    (tag) => tag[1][noteName] === true,
   );
 
   const allTagNames = Object.keys(tags).filter((tg) =>
@@ -33,7 +35,7 @@ export default function EditNoteModal({
 
   return (
     <ModalWrapper title="Edit Note" onClose={onClose}>
-      <div className="flex flex-row items-center gap-3 self-start">
+      <div className="flex flex-col self-start w-full gap-3">
         <input
           placeholder="Rename.."
           className="bg-gray-100 dark:bg-[#121212] px-2 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500 w-full"
@@ -48,29 +50,40 @@ export default function EditNoteModal({
         >
           Rename
         </button>
+
+        <button
+          onClick={() => {
+            handleDeleteNote(noteName);
+          }}
+          className="text-xs bg-red-500 px-5 py-2 rounded-md text-white"
+        >
+          Delete
+        </button>
       </div>
 
       <div className="self-start mt-10">
         <p className="text-sm font-bold">Tags</p>
 
-        <div className="flex flex-row flex-wrap items-center mt-2 gap-2 max-h-[150px] overflow-y-auto ">
+        <div className="flex flex-row flex-wrap items-center mt-2 gap-2 max-h-[180px] overflow-y-auto ">
           {thisNoteTags.map((tag) => {
             return (
               <TagItem
                 tagName={tag[0]}
                 removeTagFromNote={removeTagFromNote}
-                fileName={fileName}
+                noteName={noteName}
               />
             );
           })}
+        </div>
 
+        <div className="mt-5">
           {allTagNames.length > 0 && (
             <select
               onChange={(e) => {
                 handleAddTag(e.target.value);
                 e.target.selectedIndex = 0;
               }}
-              className="text-xs py-2 pl-5 pr-7 outline-none rounded bg-white dark:bg-[#121212]"
+              className="border text-xs py-2 w-32 pl-4 outline-none rounded bg-white dark:bg-[#121212]"
               defaultValue={'new'}
             >
               <option
@@ -98,16 +111,16 @@ export default function EditNoteModal({
 }
 
 interface TagItemProps {
-  fileName: string;
+  noteName: string;
   removeTagFromNote: any;
   tagName: string;
 }
 
-function TagItem({ fileName, removeTagFromNote, tagName }: TagItemProps) {
+function TagItem({ noteName, removeTagFromNote, tagName }: TagItemProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   function handleDeleteTag(tagName: string) {
-    removeTagFromNote(fileName, tagName);
+    removeTagFromNote(noteName, tagName);
   }
 
   return (

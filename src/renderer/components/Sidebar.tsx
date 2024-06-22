@@ -2,6 +2,7 @@ import { Fragment, useEffect, useMemo, useState } from 'react';
 import {
   GoDotFill,
   GoDuplicate,
+  GoKebabHorizontal,
   GoMoon,
   GoNote,
   GoPencil,
@@ -190,13 +191,12 @@ export default function Sidebar() {
 
 export function NoteItem({ noteName, index }: NoteItemProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const [showRenameModal, setShowRenameModal] = useState(false);
+  const [showEditNoteModal, setShowEditNoteModal] = useState(false);
 
   const { tags } = useTags();
   const {
     handleOpenNote,
     handleRenameNote,
-    handleDeleteNote,
     selectedNoteName,
     handleCloseNote,
   } = useNotes();
@@ -207,11 +207,7 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
 
   function handleRename(newName: string) {
     handleRenameNote(index, noteName, newName);
-    setShowRenameModal(false);
-  }
-
-  function handleDelete() {
-    handleDeleteNote(noteName);
+    setShowEditNoteModal(false);
   }
 
   function handleClickNoteItem() {
@@ -236,11 +232,7 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
           ) : (
             <GoNote size={13} />
           )}
-          <p
-            className={`truncate ${isHovered ? 'max-w-[65%]' : 'max-w-[85%]'}`}
-          >
-            {noteName}
-          </p>
+          <p className={`truncate max-w-[75%]`}>{noteName}</p>
 
           {thisNoteTags.length > 0 && !isHovered && (
             <p className="flex items-center gap-1 ml-auto">
@@ -252,35 +244,24 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
         {isHovered && (
           <div className="absolute top-0 right-0 h-full flex flex-row items-center">
             <button
-              title="Edit title & tags"
               onClick={(e) => {
                 e.stopPropagation();
-                setShowRenameModal(true);
+                setShowEditNoteModal(true);
               }}
               className="h-full px-2"
             >
-              <GoPencil size={14} />
-            </button>
-            <button
-              title="Delete note"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDelete();
-              }}
-              className="h-full px-2"
-            >
-              <GoTrash size={14} color="red" />
+              <GoKebabHorizontal size={14} />
             </button>
           </div>
         )}
       </button>
 
-      {showRenameModal && (
+      {showEditNoteModal && (
         <EditNoteModal
-          onClose={() => setShowRenameModal(false)}
+          onClose={() => setShowEditNoteModal(false)}
           initialText={noteName}
           onRename={handleRename}
-          fileName={noteName}
+          noteName={noteName}
         />
       )}
     </Fragment>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import ModalWrapper from './ModalWrapper';
 import useTags from '../hooks/useTags';
-import { GoTrash } from 'react-icons/go';
+import { GoPlus, GoTag, GoTrash } from 'react-icons/go';
 
 interface Props {
   onClose: () => void;
@@ -26,15 +26,15 @@ export default function TagsModal({ onClose }: Props) {
 
   return (
     <ModalWrapper title="Tags Center" onClose={onClose}>
-      <div className="flex flex-row flex-wrap self-start gap-2 max-h-[150px] overflow-y-auto">
+      <div className="flex flex-col gap-2 max-h-[180px] overflow-y-auto">
         {tagNames.map((tagName) => {
           return <Tag tagName={tagName} key={tagName} />;
         })}
       </div>
 
-      <div className="mt-10 flex flex-row items-center gap-2">
+      <div className="mt-7 flex flex-row items-center gap-2">
         <input
-          placeholder="New Tag.. (3-20 length)"
+          placeholder="Add New Tag"
           className="bg-gray-100 dark:bg-[#121212] px-2 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500 w-full"
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -43,9 +43,9 @@ export default function TagsModal({ onClose }: Props) {
         <button
           onClick={handleAddTag}
           disabled={!text.trim() || text.length < 3 || text.length > 20}
-          className="text-xs bg-gray-100 dark:bg-[#121212] hover:bg-gray-200 dark:bg-[#404040] py-2 px-5 rounded disabled:opacity-70"
+          className="border px-2 py-[7px] rounded-md"
         >
-          Add
+          <GoPlus />
         </button>
       </div>
     </ModalWrapper>
@@ -65,7 +65,7 @@ function Tag({ tagName }: { tagName: string }) {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative text-xs bg-gray-100 dark:bg-[#121212] text-center p-2 w-24 rounded disabled:opacity-70"
+      className="relative text-xs bg-gray-100 dark:bg-[#121212] text-center p-2 w-full rounded disabled:opacity-70"
     >
       <p>{tagName}</p>
 
