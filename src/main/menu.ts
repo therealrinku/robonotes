@@ -193,13 +193,6 @@ export default class MenuBuilder {
             },
           },
           {
-            label: 'Quick Search',
-            accelerator: 'Ctrl+P',
-            click: () => {
-              this.mainWindow.webContents.send('open-search');
-            },
-          },
-          {
             label: 'Preferences',
             accelerator: 'Ctrl+Y',
             click: () => {

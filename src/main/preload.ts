@@ -13,7 +13,6 @@ export type Channels =
   | 'update-tags'
   | 'load-tags'
   | 'open-preferences'
-  | 'open-search'
   | 'open-tags-modal'
   | 'toggle-theme'
   | 'check-if-root-dir-exists'

@@ -1,11 +1,12 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import {
-  GoFile,
-  GoGear,
+  GoDotFill,
+  GoDuplicate,
+  GoNote,
   GoPencil,
-  GoPlusCircle,
   GoSearch,
   GoTag,
+  GoTools,
   GoTrash,
 } from 'react-icons/go';
 import PreferencesModal from './PreferencesModal';
@@ -14,7 +15,6 @@ import EditNoteModal from './EditNoteModal';
 import useTags from '../hooks/useTags';
 import useNotes from '../hooks/useNotes';
 import useDir from '../hooks/useDir';
-import SearchPopup from './SearchPopup';
 import { configs } from '../utils/configs';
 
 interface NoteItemProps {
@@ -25,16 +25,13 @@ interface NoteItemProps {
 export default function Sidebar() {
   const [showPreferencesModal, setShowPreferencesModal] = useState(false);
   const [showTagsModal, setShowTagsModal] = useState(false);
-  const [showSearchPopup, setShowSearchPopup] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const { notes, handleCreateNewNote } = useNotes();
   const { handleChangeDir } = useDir();
+  const { tags } = useTags();
 
   function handleShortcuts(e: KeyboardEvent) {
-    if (e.ctrlKey && e.key === 'p') {
-      setShowSearchPopup(true);
-    }
-
     // if (e.ctrlKey && e.key === 'n') {
     //   handleCreateNewNote();
     // }
@@ -49,54 +46,86 @@ export default function Sidebar() {
       setShowTagsModal(true);
     });
 
-    window.electron.ipcRenderer.on('open-search', () => {
-      setShowSearchPopup(true);
-    });
-
     document.addEventListener('keydown', handleShortcuts);
 
     return () => document.removeEventListener('keydown', handleShortcuts);
   }, []);
 
+  const filteredNotes = useMemo(() => {
+    if (
+      !Array.isArray(notes) ||
+      notes.length == 0 ||
+      searchQuery.trim().length === 0
+    ) {
+      return notes;
+    }
+
+    return notes.filter((noteName) => {
+      const allQueries = searchQuery.split(',').map((item) => item.trim());
+
+      // if it has multiple queries, all needs to match aka all or nothing
+
+      const thisNoteTags = Object.entries(tags)
+        .filter((tag) => tag[1][noteName] === true)
+        .map((tg) => tg[0]);
+
+      return allQueries.every((query) => {
+        if (query.startsWith('#')) {
+          const tagToMatch = query.slice(1);
+          return thisNoteTags.some((tag) => tag === tagToMatch);
+        } else {
+          return noteName.toLowerCase().includes(query.toLowerCase());
+        }
+      });
+    });
+  }, [searchQuery, notes]);
+
   return (
     <Fragment>
       <div className="relative bg-gray-100 dark:bg-[#121212] min-w-64 max-w-64 min-h-screen flex flex-col items-center gap-5 py-5">
+        <div className="absolute bottom-2 right-2 flex items-center gap-3">
+          <p className="text-xs font-bold">robonotes v{configs.version}</p>
+
+          <button
+            title="Preferences (Ctrl + Y)"
+            onClick={() => setShowPreferencesModal(true)}
+          >
+            <GoTools size={15} />
+          </button>
+
+          <button
+            title="Tags (Ctrl + T)"
+            onClick={() => setShowTagsModal(true)}
+          >
+            <GoTag size={15} />
+          </button>
+        </div>
+
         <div className="flex flex-row items-center gap-3 w-full px-3">
           <div className=" w-full flex items-center gap-3 justify-between">
-            <p className="text-xs font-bold">robonotes v{configs.version}</p>
-
-            <div className="flex items-center gap-3">
-              <button
-                title="Quick search (Ctrl + P)"
-                onClick={() => setShowSearchPopup(true)}
-              >
-                <GoSearch size={15} />
-              </button>
-
-              <button title="Add new note" onClick={handleCreateNewNote}>
-                <GoPlusCircle size={15} />
-              </button>
-
-              <button
-                title="Manage tags (Ctrl + T)"
-                onClick={() => setShowTagsModal(true)}
-              >
-                <GoTag size={15} />
-              </button>
-
-              <button
-                title="Preferences (Ctrl + Y)"
-                onClick={() => setShowPreferencesModal(true)}
-              >
-                <GoGear size={15} />
-              </button>
+            <div className="flex items-center w-full">
+              <GoSearch className="absolute ml-2 " color="gray" />
+              <input
+                title="Search with note name or by tag name, #tagname, note name"
+                className="w-full text-xs bg-gray-200 dark:bg-[#404040] p-2 rounded pl-8"
+                placeholder="Search notes..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />{' '}
             </div>
+
+            <button
+              onClick={handleCreateNewNote}
+              className="text-lg flex items-center gap-1"
+            >
+              <GoDuplicate />
+            </button>
           </div>
         </div>
 
-        <div className="w-full pb-5 flex flex-col gap-2 border-white border-t pt-5 overflow-y-auto max-h-[85vh] px-3">
-          {notes.length > 0 ? (
-            notes.map((noteName: string, index) => {
+        <div className="w-full pb-5 flex flex-col gap-3 border-white border-t overflow-y-auto max-h-[85vh] px-3 pt-3">
+          {filteredNotes.length > 0 ? (
+            filteredNotes.map((noteName: string, index) => {
               return (
                 <NoteItem key={noteName} noteName={noteName} index={index} />
               );
@@ -129,10 +158,6 @@ export default function Sidebar() {
       )}
 
       {showTagsModal && <TagsModal onClose={() => setShowTagsModal(false)} />}
-
-      {showSearchPopup && (
-        <SearchPopup onClose={() => setShowSearchPopup(false)} />
-      )}
     </Fragment>
   );
 }
@@ -179,16 +204,19 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
         onClick={handleClickNoteItem}
         className="relative h-full p-2 w-full text-xs bg-gray-200 dark:bg-[#404040] outline-1  w-full rounded"
       >
-        {selectedNoteName === noteName && (
-          <div className="border-l-2 border-l-green-500 absolute top-0 left-0 h-full rounded"></div>
-        )}
-
         <div className="flex flex-row items-center gap-2">
-          <GoFile size={13} />
+          <GoNote size={13} />
           <p
-            className={`truncate ${isHovered ? 'max-w-[65%]' : 'max-w-[75%]'}`}
+            className={`truncate ${isHovered ? 'max-w-[65%]' : 'max-w-[85%]'}`}
           >
             {noteName}
+            {selectedNoteName === noteName && !isHovered && (
+              <GoDotFill
+                className="absolute top-[13px] right-2"
+                size={7}
+                color="green"
+              />
+            )}
           </p>
 
           {thisNoteTags.length > 0 && !isHovered && (
