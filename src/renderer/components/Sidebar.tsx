@@ -82,7 +82,7 @@ export default function Sidebar() {
 
   return (
     <Fragment>
-      <div className="relative bg-gray-100 dark:bg-[#121212] w-[25%] max-w-[500px] min-h-screen flex flex-col items-center gap-5 py-5">
+      <div className="relative bg-gray-100 dark:bg-[#121212] w-[25%] min-w-[250px] max-w-[500px] min-h-screen flex flex-col items-center gap-5 py-5">
         <div className="absolute bottom-2 right-2 flex items-center gap-3">
           <p className="text-xs font-bold">robonotes v{configs.version}</p>
 
@@ -123,7 +123,7 @@ export default function Sidebar() {
           </div>
         </div>
 
-        <div className="w-full pb-5 flex flex-col gap-3 border-white border-t overflow-y-auto max-h-[85vh] px-3 pt-3">
+        <div className="w-full pb-5 flex flex-col gap-3 border-gray-200 dark:border-gray-700 border-t overflow-y-auto max-h-[85vh] px-3 pt-3">
           {filteredNotes.length > 0 ? (
             filteredNotes.map((noteName: string, index) => {
               return (
@@ -205,14 +205,15 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
         className="relative h-full p-2 w-full text-xs bg-gray-200 dark:bg-[#404040] outline-1  w-full rounded"
       >
         <div className="flex flex-row items-center gap-2">
-          <GoNote size={13} />
+          {selectedNoteName === noteName ? (
+            <GoNote color="red" size={13} />
+          ) : (
+            <GoNote size={13} />
+          )}
           <p
             className={`truncate ${isHovered ? 'max-w-[65%]' : 'max-w-[85%]'}`}
           >
             {noteName}
-            {selectedNoteName === noteName && !isHovered && (
-              <GoDotFill className="absolute top-[13px] right-2" size={7} />
-            )}
           </p>
 
           {thisNoteTags.length > 0 && !isHovered && (

@@ -67,11 +67,21 @@ export default function Editor() {
     }
   }
 
+  if (!selectedNoteName) {
+    return (
+      <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#282828]">
+        <div className="w-full h-screen flex flex-col items-center justify-center gap-2">
+          <img src={EmptySvg} className="h-32 w-32" />
+          <p className="text-xs">No note opened yet.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#282828]">
-      {selectedNoteName && (
-        <div className="relative w-full text-sm">
-          <div className="absolute flex flex-row items-center gap-2 my-5 self-end mx-auto right-5">
+      <div className="relative w-full text-sm">
+        {/* <div className="absolute flex flex-row items-center gap-2 my-5 self-end mx-auto right-5">
             <div className="ml-auto flex flex-row items-center gap-5">
               <button
                 onClick={handleClose}
@@ -80,69 +90,39 @@ export default function Editor() {
                 <p>Close</p>
               </button>
             </div>
-          </div>
+          </div> */}
 
-          <div className="flex flex-col h-[100vh] overflow-y-auto py-5">
+        <div className="flex flex-col h-[100vh] overflow-y-auto">
+          <div className="">
             <input
               type="text"
               placeholder="Title..."
-              className="p-3 outline-none font-bold text-lg max-w-[85%] ml-3 bg-inherit"
+              className="p-3 py-[22px] outline-none font-bold text-lg max-w-[85%] ml-3 bg-inherit"
               value={title}
               onChange={(e) => {
                 setTitle(e.target.value);
                 handleAutoSave(e.target.value, description);
               }}
               autoCorrect="off"
-            />
-
-            {thisNoteTags.length > 0 && (
-              <div className="flex flex-row flex-wrap items-center gap-2 pr-[4px] mx-6 text-xs">
-                {(showAllTags ? thisNoteTags : thisNoteTags.slice(0, 5)).map(
-                  (tag) => {
-                    return (
-                      <div
-                        key={tag}
-                        className="flex justify-center bg-gray-200 dark:bg-[#404040] py-1 px-2 rounded disabled:opacity-70"
-                      >
-                        #{tag}
-                      </div>
-                    );
-                  },
-                )}
-
-                {thisNoteTags.length > 5 && (
-                  <button
-                    className="underline"
-                    onClick={() => setShowAllTags((prev) => !prev)}
-                  >
-                    Show {showAllTags ? 'less' : 'all'}
-                  </button>
-                )}
-              </div>
-            )}
-
-            <textarea
-              className="w-full outline-none h-full mt-5 pt-5 border-t px-6 bg-inherit"
-              placeholder="My important note..."
-              value={description}
-              autoCorrect="off"
+              autoComplete="off"
               spellCheck="false"
-              autoFocus={true}
-              onChange={(e) => {
-                setDescription(e.target.value);
-                handleAutoSave(title, e.target.value);
-              }}
             />
           </div>
-        </div>
-      )}
 
-      {!selectedNoteName && (
-        <div className="w-full h-screen flex flex-col items-center justify-center gap-2">
-          <img src={EmptySvg} className="h-32 w-32" />
-          <p className="text-xs">No note opened yet.</p>
+          <textarea
+            className="w-full outline-none h-full pt-3 border-t border-gray-200 dark:border-gray-700 px-6 bg-inherit"
+            placeholder="My important note..."
+            value={description}
+            autoCorrect="off"
+            spellCheck="false"
+            autoFocus={true}
+            onChange={(e) => {
+              setDescription(e.target.value);
+              handleAutoSave(title, e.target.value);
+            }}
+          />
         </div>
-      )}
+      </div>
     </div>
   );
 }
