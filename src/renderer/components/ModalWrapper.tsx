@@ -33,7 +33,7 @@ export default function ModalWrapper({ title, children, onClose }: Props) {
           </button>
         </div>
 
-        <div className="py-5 px-5 w-full">{children}</div>
+        <div className="w-full">{children}</div>
       </div>
     </div>
   );

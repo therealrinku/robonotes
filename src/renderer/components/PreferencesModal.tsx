@@ -12,7 +12,7 @@ export default function PreferencesModal({ onClose, handleChangeDir }: Props) {
 
   return (
     <ModalWrapper title="Preferences" onClose={onClose}>
-      <div className="text-xs flex flex-col gap-5">
+      <div className="text-xs flex flex-col gap-5 p-5">
         <div className="flex flex-col items-start gap-2">
           <p>
             <b>Root Directory</b>

@@ -26,13 +26,13 @@ export default function TagsModal({ onClose }: Props) {
 
   return (
     <ModalWrapper title="Tags Center" onClose={onClose}>
-      <div className="flex flex-col gap-2 max-h-[180px] overflow-y-auto">
+      <div className="flex flex-col gap-2 max-h-[180px] overflow-y-auto px-5 pt-5">
         {tagNames.map((tagName) => {
           return <Tag tagName={tagName} key={tagName} />;
         })}
       </div>
 
-      <div className="mt-7 flex flex-row items-center gap-2">
+      <div className="mt-7 flex flex-row items-center gap-2 px-5 pb-5">
         <input
           placeholder="Add New Tag"
           className="bg-gray-100 dark:bg-[#121212] px-2 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500 w-full"
