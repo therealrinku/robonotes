@@ -2,9 +2,11 @@ import { Fragment, useEffect, useMemo, useState } from 'react';
 import {
   GoDotFill,
   GoDuplicate,
+  GoMoon,
   GoNote,
   GoPencil,
   GoSearch,
+  GoSun,
   GoTag,
   GoTools,
   GoTrash,
@@ -26,6 +28,9 @@ export default function Sidebar() {
   const [showPreferencesModal, setShowPreferencesModal] = useState(false);
   const [showTagsModal, setShowTagsModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isDarkMode, setIsDarkMode] = useState(
+    localStorage.getItem('color-theme') === 'dark',
+  );
 
   const { notes, handleCreateNewNote } = useNotes();
   const { handleChangeDir } = useDir();
@@ -80,17 +85,31 @@ export default function Sidebar() {
     });
   }, [searchQuery, notes]);
 
+  function toggleTheme() {
+    if (isDarkMode) {
+      localStorage.setItem('color-theme', 'light');
+      document.documentElement.classList.remove('dark');
+      setIsDarkMode(false);
+    } else {
+      localStorage.setItem('color-theme', 'dark');
+      document.documentElement.classList.add('dark');
+      setIsDarkMode(true);
+    }
+  }
+
   return (
     <Fragment>
       <div className="relative bg-gray-100 dark:bg-[#121212] w-[25%] min-w-[250px] max-w-[500px] min-h-screen flex flex-col items-center gap-5 py-5">
-        <div className="absolute bottom-2 right-2 flex items-center gap-3">
-          <p className="text-xs font-bold">robonotes v{configs.version}</p>
+        <div className="absolute bottom-2 right-2 flex items-center gap-4">
+          <p className="text-xs font-bold self-center">
+            robonotes v{configs.version}
+          </p>
 
           <button
-            title="Preferences (Ctrl + Y)"
-            onClick={() => setShowPreferencesModal(true)}
+            title={isDarkMode ? 'Light Mode' : 'Dark Mode'}
+            onClick={toggleTheme}
           >
-            <GoTools size={15} />
+            {isDarkMode ? <GoSun size={15} /> : <GoMoon size={15} />}
           </button>
 
           <button
@@ -98,6 +117,13 @@ export default function Sidebar() {
             onClick={() => setShowTagsModal(true)}
           >
             <GoTag size={15} />
+          </button>
+
+          <button
+            title="Preferences (Ctrl + Y)"
+            onClick={() => setShowPreferencesModal(true)}
+          >
+            <GoTools size={15} />
           </button>
         </div>
 
