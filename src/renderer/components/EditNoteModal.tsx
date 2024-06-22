@@ -43,47 +43,53 @@ export default function EditNoteModal({
           onChange={(e) => setText(e.target.value)}
         />
 
-        <button
-          onClick={() => onRename(text)}
-          disabled={!text.trim()}
-          className="text-xs bg-gray-100 dark:bg-[#121212] hover:bg-gray-300 py-2 px-5 rounded disabled:opacity-70"
-        >
-          Rename
-        </button>
+        <div className="flex flex-row gap-3">
+          <button
+            onClick={() => onRename(text)}
+            disabled={!text.trim()}
+            className="text-xs bg-gray-100 dark:bg-[#121212] hover:bg-gray-300 py-2 px-5 rounded disabled:opacity-70"
+          >
+            Rename
+          </button>
 
-        <button
-          onClick={() => {
-            handleDeleteNote(noteName);
-          }}
-          className="text-xs bg-red-500 px-5 py-2 rounded-md text-white"
-        >
-          Delete
-        </button>
+          <button
+            onClick={() => {
+              handleDeleteNote(noteName);
+            }}
+            className="text-xs bg-red-500 px-5 py-2 rounded-md text-white"
+          >
+            Delete
+          </button>
+        </div>
       </div>
 
       <div className="self-start mt-10">
-        <p className="text-sm font-bold">Tags</p>
+        <p className="text-sm font-bold">
+          Tags {thisNoteTags.length > 0 ? `(${thisNoteTags.length})` : ''}
+        </p>
 
-        <div className="flex flex-row flex-wrap items-center mt-2 gap-2 max-h-[180px] overflow-y-auto ">
-          {thisNoteTags.map((tag) => {
-            return (
-              <TagItem
-                tagName={tag[0]}
-                removeTagFromNote={removeTagFromNote}
-                noteName={noteName}
-              />
-            );
-          })}
-        </div>
+        {thisNoteTags.length > 0 && (
+          <div className="flex flex-row flex-wrap items-center mt-2 mt-3 gap-2 max-h-[180px] overflow-y-auto ">
+            {thisNoteTags.map((tag) => {
+              return (
+                <TagItem
+                  tagName={tag[0]}
+                  removeTagFromNote={removeTagFromNote}
+                  noteName={noteName}
+                />
+              );
+            })}
+          </div>
+        )}
 
-        <div className="mt-5">
+        <div className="mt-2">
           {allTagNames.length > 0 && (
             <select
               onChange={(e) => {
                 handleAddTag(e.target.value);
                 e.target.selectedIndex = 0;
               }}
-              className="border text-xs py-2 w-32 pl-4 outline-none rounded bg-white dark:bg-[#121212]"
+              className="text-xs py-2 w-32 pl-4 outline-none rounded bg-gray-100 dark:bg-[#121212] "
               defaultValue={'new'}
             >
               <option
@@ -127,7 +133,7 @@ function TagItem({ noteName, removeTagFromNote, tagName }: TagItemProps) {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative text-xs bg-gray-200 dark:bg-[#404040] py-2 px-5 rounded disabled:opacity-70"
+      className="relative text-xs bg-gray-100 dark:bg-[#121212] py-2 px-5 rounded disabled:opacity-70"
     >
       {tagName}
 
