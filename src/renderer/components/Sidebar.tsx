@@ -211,11 +211,7 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
           >
             {noteName}
             {selectedNoteName === noteName && !isHovered && (
-              <GoDotFill
-                className="absolute top-[13px] right-2"
-                size={7}
-                color="green"
-              />
+              <GoDotFill className="absolute top-[13px] right-2" size={7} />
             )}
           </p>
 
