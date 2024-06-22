@@ -44,6 +44,10 @@ export default function Sidebar() {
   }
 
   useEffect(() => {
+    window.electron.ipcRenderer.on('toggle-theme', () => {
+      toggleTheme();
+    });
+
     window.electron.ipcRenderer.on('open-preferences', () => {
       setShowPreferencesModal(true);
     });
