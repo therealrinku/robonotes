@@ -1,8 +1,8 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import {
-  GoDuplicate,
   GoKebabHorizontal,
   GoMoon,
+  GoPlusCircle,
   GoSearch,
   GoSun,
   GoTag,
@@ -135,7 +135,7 @@ export default function Sidebar() {
               <GoSearch className="absolute ml-2 " color="gray" />
               <input
                 title="Search with note name or by tag name, #tagname, note name"
-                className="w-full text-xs bg-gray-200 dark:bg-[#404040] p-2 rounded pl-8"
+                className="w-full text-xs bg-gray-200 dark:bg-[#404040] p-2 rounded pl-8 outline-blue-600"
                 placeholder="Search notes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -143,10 +143,11 @@ export default function Sidebar() {
             </div>
 
             <button
+              title="Create New Note"
               onClick={handleCreateNewNote}
               className="text-lg flex items-center gap-1"
             >
-              <GoDuplicate />
+              <GoPlusCircle />
             </button>
           </div>
         </div>
