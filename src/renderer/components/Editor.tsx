@@ -2,7 +2,13 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import EmptySvg from '../assets/images/empty.svg';
 import useTags from '../hooks/useTags';
 import useNotes from '../hooks/useNotes';
-import { GoInfo } from 'react-icons/go';
+import {
+  GoAlert,
+  GoAlertFill,
+  GoCheck,
+  GoInfo,
+  GoIssueClosed,
+} from 'react-icons/go';
 
 export default function Editor() {
   const { selectedNoteName, handleCloseNote, handleSaveNote, selectedNote } =
@@ -46,10 +52,22 @@ export default function Editor() {
 
   // save on unmount
   useEffect(() => {
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 's') {
+        handleSave(title, description);
+      }
+    });
+
     return () => {
       if (haveUnsavedChanges) {
         handleSave(title, description);
       }
+
+      document.removeEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 's') {
+          handleSave(title, description);
+        }
+      });
     };
   }, []);
 
@@ -126,8 +144,16 @@ export default function Editor() {
           />
 
           <div className="w-full py-1 flex items-center gap-4 text-xs justify-end pr-5">
-            <GoInfo size={15} />
-            <p>{haveUnsavedChanges ? 'Unsaved' : 'Saved'}</p>
+            <span className="flex items-center gap-1">
+              {!haveUnsavedChanges ? (
+                <GoIssueClosed size={15} />
+              ) : (
+                <GoAlertFill size={15} className="text-red-600" />
+              )}
+              <p className={`${haveUnsavedChanges && 'text-red-600'}`}>
+                {haveUnsavedChanges ? 'Unsaved Changes (Ctrl + S)' : 'Saved'}{' '}
+              </p>
+            </span>
 
             <p>
               <span className="font-bold"> {thisNoteTags.length}</span> Tags
