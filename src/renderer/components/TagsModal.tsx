@@ -35,7 +35,7 @@ export default function TagsModal({ onClose }: Props) {
           <GoTag className="absolute left-2 h-full" color="gray" size={13} />
           <input
             placeholder="Add New Tag"
-            className="bg-gray-100 dark:bg-[#121212] pl-8 pr-2 rounded w-full text-xs h-full outline-none focus:outline focus:outline-1 focus:outline-blue-500 w-full"
+            className="bg-gray-100 dark:bg-[#121212] pl-8 pr-10 rounded w-full text-xs h-full outline-none focus:outline focus:outline-1 focus:outline-blue-500 w-full"
             value={text}
             onChange={(e) => setText(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleAddTag()}
@@ -43,14 +43,14 @@ export default function TagsModal({ onClose }: Props) {
           <button
             onClick={handleAddTag}
             disabled={!text.trim() || text.length < 3 || text.length > 20}
-            className="absolute right-0 border-l h-full px-2"
+            className="absolute right-0 border-l dark:border-gray-700 h-full px-2"
           >
-            <GoPlus />
+            <GoPlus size={16} />
           </button>
         </div>
       </div>
 
-      <div className="h-[180px]  overflow-y-auto px-5 pt-10 mb-5">
+      <div className="h-[100px]  overflow-y-auto px-5 mt-10 mb-5">
         {tagNames.length > 0 ? (
           <div className="flex flex-wrap gap-2">
             {tagNames.map((tagName) => {

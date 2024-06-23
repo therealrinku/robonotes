@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import ModalWrapper from './ModalWrapper';
 import useTags from '../hooks/useTags';
-import { GoTrash } from 'react-icons/go';
+import { GoNote, GoPencil, GoTrash } from 'react-icons/go';
 import useNotes from '../hooks/useNotes';
 
 interface Props {
@@ -36,81 +36,76 @@ export default function EditNoteModal({
   return (
     <ModalWrapper title="Edit Note" onClose={onClose}>
       <div className="flex flex-col self-start w-full gap-3 px-5 py-5">
-        <input
-          placeholder="Rename.."
-          className="bg-gray-100 dark:bg-[#121212] px-2 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-green-500 w-full"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-
-        <div className="flex flex-row gap-3">
+        <div className="flex items-center relative">
+          <GoNote size={13} color="gray" className="absolute left-2" />
+          <input
+            placeholder="Rename.."
+            className="bg-gray-100 dark:bg-[#121212] px-8 pr-16 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-blue-500 w-full"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
           <button
             onClick={() => onRename(text)}
             disabled={!text.trim()}
-            className="text-xs bg-gray-100 dark:bg-[#121212] hover:bg-gray-300 py-2 px-5 rounded disabled:opacity-70"
+            className="absolute right-7 border-l dark:border-gray-700 h-full px-2"
           >
-            Rename
+            <GoPencil size={13} />
           </button>
-
           <button
             onClick={() => {
               handleDeleteNote(noteName);
             }}
-            className="text-xs bg-red-500 px-5 py-2 rounded-md text-white"
+            className="absolute right-0 border-l dark:border-gray-700 h-full px-2 text-red-500"
           >
-            Delete
+            <GoTrash size={13} />
           </button>
         </div>
       </div>
 
-      <div className="self-start mt-5">
-        <div className="text-sm font-bold flex flex-row items-center gap-5 px-5">
-          <p>
-            Tags {thisNoteTags.length > 0 ? `(${thisNoteTags.length})` : ''}{' '}
-          </p>
+      <div className="self-start my-5 px-5">
+        <p className="text-xs mb-3">
+          Tags {thisNoteTags.length > 0 ? `(${thisNoteTags.length})` : ''}{' '}
+        </p>
 
-          {allTagNames.length > 0 && (
-            <select
-              onChange={(e) => {
-                handleAddTag(e.target.value);
-                e.target.selectedIndex = 0;
-              }}
-              className="py-2 w-32 bg-inherit outline-none"
-              defaultValue={'new'}
+        {allTagNames.length > 0 && (
+          <select
+            onChange={(e) => {
+              handleAddTag(e.target.value);
+              e.target.selectedIndex = 0;
+            }}
+            className="bg-gray-100 dark:bg-[#121212] pl-5 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-blue-500"
+            defaultValue={'new'}
+          >
+            <option
+              className="truncate max-w-[85%]"
+              disabled
+              selected
+              value={'new'}
             >
-              <option
-                className="truncate max-w-[85%]"
-                disabled
-                selected
-                value={'new'}
-              >
-                Add new tag
-              </option>
+              Add new tag
+            </option>
 
-              {allTagNames.map((tag) => {
-                return (
-                  <option key={tag} value={tag}>
-                    {tag}
-                  </option>
-                );
-              })}
-            </select>
-          )}
-        </div>
-
-        {thisNoteTags.length > 0 && (
-          <div className="flex flex-row flex-wrap items-center mt-2 mt-3 gap-2 px-5 pb-5 max-h-[180px] overflow-y-auto ">
-            {thisNoteTags.map((tag) => {
+            {allTagNames.map((tag) => {
               return (
-                <TagItem
-                  tagName={tag[0]}
-                  removeTagFromNote={removeTagFromNote}
-                  noteName={noteName}
-                />
+                <option key={tag} value={tag}>
+                  {tag}
+                </option>
               );
             })}
-          </div>
+          </select>
         )}
+
+        <div className="flex flex-row flex-wrap items-center gap-2 pb-5 h-[100px] overflow-y-auto ">
+          {thisNoteTags.map((tag) => {
+            return (
+              <TagItem
+                tagName={tag[0]}
+                removeTagFromNote={removeTagFromNote}
+                noteName={noteName}
+              />
+            );
+          })}
+        </div>
       </div>
     </ModalWrapper>
   );
