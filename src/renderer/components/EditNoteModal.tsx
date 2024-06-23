@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import ModalWrapper from './ModalWrapper';
 import useTags from '../hooks/useTags';
-import { GoNote, GoPencil, GoTrash } from 'react-icons/go';
+import { GoNote, GoPencil, GoPlus, GoTag, GoTrash } from 'react-icons/go';
 import useNotes from '../hooks/useNotes';
 
 interface Props {
@@ -18,11 +18,14 @@ export default function EditNoteModal({
   noteName,
 }: Props) {
   const [text, setText] = useState(initialText || '');
+  const [showTagsDropdown, setShowTagsDropdown] = useState(false);
+
   const { tags, addTagToNote, removeTagFromNote } = useTags();
   const { handleDeleteNote } = useNotes();
 
   function handleAddTag(tagName: string) {
     addTagToNote(noteName, tagName);
+    setShowTagsDropdown(false);
   }
 
   const thisNoteTags = Object.entries(tags).filter(
@@ -63,48 +66,52 @@ export default function EditNoteModal({
       </div>
 
       <div className="self-start my-5 px-5">
-        <p className="text-xs mb-3">
-          Tags {thisNoteTags.length > 0 ? `(${thisNoteTags.length})` : ''}{' '}
-        </p>
+        <div className="relative flex flex-row items-center gap-2">
+          <p className="text-xs">
+            Tags {thisNoteTags.length > 0 ? `(${thisNoteTags.length})` : ''}{' '}
+          </p>
 
-        {allTagNames.length > 0 && (
-          <select
-            onChange={(e) => {
-              handleAddTag(e.target.value);
-              e.target.selectedIndex = 0;
-            }}
-            className="bg-gray-100 dark:bg-[#121212] pl-5 rounded w-full text-xs py-2 outline-none focus:outline focus:outline-1 focus:outline-blue-500"
-            defaultValue={'new'}
-          >
-            <option
-              className="truncate max-w-[85%]"
-              disabled
-              selected
-              value={'new'}
-            >
-              Add new tag
-            </option>
+          {allTagNames.length > 0 && (
+            <button onClick={() => setShowTagsDropdown((prev) => !prev)}>
+              <GoPlus />
+            </button>
+          )}
 
-            {allTagNames.map((tag) => {
+          {showTagsDropdown && (
+            <div className="flex max-h-[100px] overflow-y-auto  flex-col rounded-md w-24 top-5 bg-gray-100 dark:bg-[#121212] text-xs absolute z-50 border dark:border-gray-700">
+              {allTagNames.map((tag) => {
+                return (
+                  <button
+                    onClick={() => handleAddTag(tag)}
+                    key={tag}
+                    value={tag}
+                    className="hover:bg-gray-200 dark:bg-[#121212] w-full py-1"
+                  >
+                    {tag}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-row flex-wrap items-start mt-4 gap-2 h-[100px] overflow-y-auto ">
+          {thisNoteTags.length > 0 ? (
+            thisNoteTags.map((tag) => {
               return (
-                <option key={tag} value={tag}>
-                  {tag}
-                </option>
+                <TagItem
+                  tagName={tag[0]}
+                  removeTagFromNote={removeTagFromNote}
+                  noteName={noteName}
+                />
               );
-            })}
-          </select>
-        )}
-
-        <div className="flex flex-row flex-wrap items-center gap-2 pb-5 h-[100px] overflow-y-auto ">
-          {thisNoteTags.map((tag) => {
-            return (
-              <TagItem
-                tagName={tag[0]}
-                removeTagFromNote={removeTagFromNote}
-                noteName={noteName}
-              />
-            );
-          })}
+            })
+          ) : (
+            <div className="flex flex-col items-center w-full justify-center gap-3 text-xs h-full">
+              <GoTag size={20} />
+              <p>No any added yet.</p>
+            </div>
+          )}
         </div>
       </div>
     </ModalWrapper>
@@ -135,7 +142,7 @@ function TagItem({ noteName, removeTagFromNote, tagName }: TagItemProps) {
       {isHovered && (
         <button
           onClick={() => handleDeleteTag(tagName)}
-          className="absolute top-0 left-0 flex justify-center items-center rounded h-full w-full bg-gray-200 dark:bg-[#404040]"
+          className="absolute top-0 left-0 flex justify-center items-center rounded h-full w-full bg-gray-200 dark:bg-[#121212]"
         >
           <GoTrash />
         </button>
