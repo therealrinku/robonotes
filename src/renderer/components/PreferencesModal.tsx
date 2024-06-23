@@ -20,9 +20,13 @@ export default function PreferencesModal({ onClose, handleChangeDir }: Props) {
 
           <span className="flex items-center gap-2">
             <GoFileDirectory size={18} />
-            <span>{rootDir}</span>
+            <span className="break-all">{rootDir}</span>
           </span>
-          <button onClick={handleChangeDir} className="underline">
+
+          <button
+            onClick={handleChangeDir}
+            className="p-2 w-full rounded-md mt-5 bg-gray-100 hover:bg-gray-200 dark:bg-[#121212] dark:hover:bg-[#121212]"
+          >
             Change
           </button>
         </div>

@@ -65,8 +65,8 @@ export default function EditNoteModal({
         </div>
       </div>
 
-      <div className="self-start my-5 px-5">
-        <div className="relative flex flex-row items-center gap-2">
+      <div className="self-start my-5">
+        <div className="relative flex flex-row items-center gap-2 px-5">
           <p className="text-xs">
             Tags {thisNoteTags.length > 0 ? `(${thisNoteTags.length})` : ''}{' '}
           </p>
@@ -78,14 +78,14 @@ export default function EditNoteModal({
           )}
 
           {showTagsDropdown && (
-            <div className="flex max-h-[100px] overflow-y-auto  flex-col rounded-md w-24 top-5 bg-gray-100 dark:bg-[#121212] text-xs absolute z-50 border dark:border-gray-700">
+            <div className="shadow-lg max-h-[100px] overflow-y-auto py-1 flex-col rounded-md w-24 top-5 bg-gray-100 dark:bg-[#121212] text-xs absolute z-50 border dark:border-gray-700">
               {allTagNames.map((tag) => {
                 return (
                   <button
                     onClick={() => handleAddTag(tag)}
                     key={tag}
                     value={tag}
-                    className="hover:bg-gray-200 dark:bg-[#121212] w-full py-1"
+                    className="hover:bg-gray-200 dark:bg-[#121212] w-full py-[7px] text-left pl-5"
                   >
                     {tag}
                   </button>
@@ -95,7 +95,7 @@ export default function EditNoteModal({
           )}
         </div>
 
-        <div className="flex flex-row flex-wrap items-start mt-4 gap-2 h-[100px] overflow-y-auto ">
+        <div className="flex flex-col mt-4 gap-2 h-[100px] overflow-y-auto px-5">
           {thisNoteTags.length > 0 ? (
             thisNoteTags.map((tag) => {
               return (
@@ -109,7 +109,7 @@ export default function EditNoteModal({
           ) : (
             <div className="flex flex-col items-center w-full justify-center gap-3 text-xs h-full">
               <GoTag size={20} />
-              <p>No any added yet.</p>
+              <p>No any tags added yet.</p>
             </div>
           )}
         </div>
@@ -135,8 +135,9 @@ function TagItem({ noteName, removeTagFromNote, tagName }: TagItemProps) {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative text-xs bg-gray-100 dark:bg-[#121212] py-2 px-5 rounded disabled:opacity-70"
+      className="relative flex items-center gap-3 text-xs bg-gray-100 dark:bg-[#121212] py-2 px-5 rounded disabled:opacity-70"
     >
+      <GoTag />
       {tagName}
 
       {isHovered && (
@@ -144,7 +145,7 @@ function TagItem({ noteName, removeTagFromNote, tagName }: TagItemProps) {
           onClick={() => handleDeleteTag(tagName)}
           className="absolute top-0 left-0 flex justify-center items-center rounded h-full w-full bg-gray-200 dark:bg-[#121212]"
         >
-          <GoTrash />
+          <GoTrash color="red" />
         </button>
       )}
     </div>
