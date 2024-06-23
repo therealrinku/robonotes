@@ -1,17 +1,14 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import {
-  GoDotFill,
   GoDuplicate,
   GoKebabHorizontal,
   GoMoon,
-  GoNote,
-  GoPencil,
   GoSearch,
   GoSun,
   GoTag,
   GoTools,
-  GoTrash,
 } from 'react-icons/go';
+import { PiNoteFill, PiNoteLight } from 'react-icons/pi';
 import PreferencesModal from './PreferencesModal';
 import TagsModal from './TagsModal';
 import EditNoteModal from './EditNoteModal';
@@ -232,9 +229,9 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
       >
         <div className="flex flex-row items-center gap-2">
           {selectedNoteName === noteName ? (
-            <GoNote color="red" size={13} />
+            <PiNoteFill size={18} />
           ) : (
-            <GoNote size={13} />
+            <PiNoteLight size={18} />
           )}
           <p className={`truncate max-w-[75%]`}>{noteName}</p>
 
