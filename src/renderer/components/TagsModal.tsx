@@ -41,6 +41,7 @@ export default function TagsModal({ onClose }: Props) {
             onKeyDown={(e) => e.key === 'Enter' && handleAddTag()}
           />
           <button
+            title='Add Tag'
             onClick={handleAddTag}
             disabled={!text.trim() || text.length < 3 || text.length > 20}
             className="absolute right-0 border-l dark:border-gray-700 h-full px-2"

@@ -48,6 +48,7 @@ export default function EditNoteModal({
             onChange={(e) => setText(e.target.value)}
           />
           <button
+            title="Rename Note"
             onClick={() => onRename(text)}
             disabled={!text.trim()}
             className="absolute right-7 border-l dark:border-gray-700 h-full px-2"
@@ -55,6 +56,7 @@ export default function EditNoteModal({
             <GoPencil size={13} />
           </button>
           <button
+            title="Delete Note"
             onClick={() => {
               handleDeleteNote(noteName);
             }}
@@ -72,7 +74,10 @@ export default function EditNoteModal({
           </p>
 
           {allTagNames.length > 0 && (
-            <button onClick={() => setShowTagsDropdown((prev) => !prev)}>
+            <button
+              title="Add New Tag"
+              onClick={() => setShowTagsDropdown((prev) => !prev)}
+            >
               <GoPlus />
             </button>
           )}
