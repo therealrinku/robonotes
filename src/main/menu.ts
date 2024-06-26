@@ -186,13 +186,6 @@ export default class MenuBuilder {
         label: '&File',
         submenu: [
           {
-            label: 'Tags',
-            accelerator: 'Ctrl+T',
-            click: () => {
-              this.mainWindow.webContents.send('open-tags-modal');
-            },
-          },
-          {
             label: 'Preferences',
             accelerator: 'Ctrl+Y',
             click: () => {

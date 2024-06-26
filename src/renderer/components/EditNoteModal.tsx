@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import ModalWrapper from './ModalWrapper';
-import useTags from '../hooks/useTags';
-import { GoNote, GoPencil, GoPlus, GoTag, GoTrash } from 'react-icons/go';
+import { GoNote, GoPencil, GoTag, GoTrash } from 'react-icons/go';
 import useNotes from '../hooks/useNotes';
 
 interface Props {
@@ -17,25 +16,9 @@ export default function EditNoteModal({
   onRename,
   noteName,
 }: Props) {
-  const [text, setText] = useState(initialText || '');
-  const [showTagsDropdown, setShowTagsDropdown] = useState(false);
-
-  const { tags, addTagToNote, removeTagFromNote } = useTags();
   const { handleDeleteNote } = useNotes();
 
-  function handleAddTag(tagName: string) {
-    addTagToNote(noteName, tagName);
-    setShowTagsDropdown(false);
-  }
-
-  const thisNoteTags = Object.entries(tags).filter(
-    (tag) => tag[1][noteName] === true,
-  );
-
-  const allTagNames = Object.keys(tags).filter((tg) =>
-    thisNoteTags.every((tn) => tn[0] !== tg),
-  );
-
+  const [text, setText] = useState(initialText || '');
   return (
     <ModalWrapper title="Edit Note" onClose={onClose}>
       <div className="flex flex-col self-start w-full gap-3 px-5 py-5">
@@ -64,59 +47,6 @@ export default function EditNoteModal({
           >
             <GoTrash size={13} />
           </button>
-        </div>
-      </div>
-
-      <div className="self-start my-5">
-        <div className="relative flex flex-row items-center gap-2 px-5">
-          <p className="text-xs">
-            Tags {thisNoteTags.length > 0 ? `(${thisNoteTags.length})` : ''}{' '}
-          </p>
-
-          {allTagNames.length > 0 && (
-            <button
-              title="Add New Tag"
-              onClick={() => setShowTagsDropdown((prev) => !prev)}
-            >
-              <GoPlus />
-            </button>
-          )}
-
-          {showTagsDropdown && (
-            <div className="shadow-lg max-h-[100px] overflow-y-auto py-1 flex-col rounded-md w-24 top-5 bg-gray-100 dark:bg-[#121212] text-xs absolute z-50 border dark:border-gray-700">
-              {allTagNames.map((tag) => {
-                return (
-                  <button
-                    onClick={() => handleAddTag(tag)}
-                    key={tag}
-                    value={tag}
-                    className="hover:bg-gray-200 dark:bg-[#121212] w-full py-[7px] text-left pl-5"
-                  >
-                    {tag}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        <div className="flex flex-col mt-4 gap-2 h-[100px] overflow-y-auto px-5">
-          {thisNoteTags.length > 0 ? (
-            thisNoteTags.map((tag) => {
-              return (
-                <TagItem
-                  tagName={tag[0]}
-                  removeTagFromNote={removeTagFromNote}
-                  noteName={noteName}
-                />
-              );
-            })
-          ) : (
-            <div className="flex flex-col items-center w-full justify-center gap-3 text-xs h-full">
-              <GoTag size={20} />
-              <p>No any tags added yet.</p>
-            </div>
-          )}
         </div>
       </div>
     </ModalWrapper>

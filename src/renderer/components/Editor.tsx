@@ -1,79 +1,53 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import EmptySvg from '../assets/images/empty.svg';
-import useTags from '../hooks/useTags';
 import useNotes from '../hooks/useNotes';
-import {
-  GoAlert,
-  GoAlertFill,
-  GoCheck,
-  GoInfo,
-  GoIssueClosed,
-} from 'react-icons/go';
+import { GoAlertFill, GoIssueClosed } from 'react-icons/go';
 
 export default function Editor() {
-  const { selectedNoteName, handleCloseNote, handleSaveNote, selectedNote } =
-    useNotes();
-  const { tags } = useTags();
+  const {
+    selectedNoteName,
+    handleRenameNote,
+    handleSaveNote,
+    selectedNoteContent,
+  } = useNotes();
 
-  const thisNoteTags = Object.entries(tags)
-    .filter((tag) => tag[1][selectedNoteName] === true)
-    .map((tg) => tg[0]);
-
-  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [showAllTags, setShowAllTags] = useState(false);
 
-  function handleSave(_title: string, _description: string) {
+  function handleSave(_description: string) {
     if (haveUnsavedChanges) {
-      handleSaveNote(_title, _description);
+      handleSaveNote(_description);
     }
   }
 
-  function handleClose() {
-    handleSave(title, description);
-    handleCloseNote();
+  function handleSaveOnCtrlS(e: KeyboardEvent) {
+    if (e.ctrlKey && e.key === 's') {
+      handleSave(description);
+    }
   }
 
   const haveUnsavedChanges = useMemo(() => {
-    if (
-      selectedNote?.title !== title ||
-      selectedNote?.content !== description
-    ) {
+    if (selectedNoteContent !== description) {
       return true;
     }
-
     return false;
-  }, [selectedNote, title, description]);
+  }, [selectedNoteContent, description]);
 
   useEffect(() => {
-    setTitle(selectedNote?.title || '');
-    setDescription(selectedNote?.content || '');
-  }, [selectedNote]);
+    setDescription(selectedNoteContent || '');
+  }, [selectedNoteContent]);
 
-  // save on unmount
   useEffect(() => {
-    document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.key === 's') {
-        handleSave(title, description);
-      }
-    });
+    document.addEventListener('keydown', handleSaveOnCtrlS);
 
     return () => {
-      if (haveUnsavedChanges) {
-        handleSave(title, description);
-      }
-
-      document.removeEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.key === 's') {
-          handleSave(title, description);
-        }
-      });
+      haveUnsavedChanges && handleSave(description);
+      document.removeEventListener('keydown', handleSaveOnCtrlS);
     };
   }, []);
 
   // auto save feature
   const timeout = useRef<NodeJS.Timeout | null>(null);
-  function handleAutoSave(_title: string, _description: string) {
+  function handleAutoSave(_description: string) {
     if (haveUnsavedChanges) {
       if (timeout.current) {
         clearTimeout(timeout.current);
@@ -81,7 +55,7 @@ export default function Editor() {
 
       timeout.current = setTimeout(() => {
         console.log('--autosaving--');
-        handleSave(_title, _description);
+        handleSave(_description);
       }, 1000);
     }
   }
@@ -102,27 +76,18 @@ export default function Editor() {
   return (
     <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#282828]">
       <div className="relative w-full text-sm">
-        {/* <div className="absolute flex flex-row items-center gap-2 my-5 self-end mx-auto right-5">
-            <div className="ml-auto flex flex-row items-center gap-5">
-              <button
-                onClick={handleClose}
-                className="text-xs bg-gray-200 dark:bg-[#404040] hover:bg-gray-300 py-2 px-5 rounded"
-              >
-                <p>Close</p>
-              </button>
-            </div>
-          </div> */}
-
         <div className="flex flex-col h-[100vh] overflow-y-auto">
           <div className="">
             <input
               type="text"
               placeholder="Title..."
               className="p-3 py-[22px] outline-none font-bold text-lg max-w-[85%] ml-3 bg-inherit"
-              value={title}
+              value={selectedNoteName}
               onChange={(e) => {
-                setTitle(e.target.value);
-                handleAutoSave(e.target.value, description);
+                if (!e.target.value.trim()) {
+                  return;
+                }
+                handleRenameNote(0, selectedNoteName, e.target.value);
               }}
               autoCorrect="off"
               autoComplete="off"
@@ -139,7 +104,7 @@ export default function Editor() {
             autoFocus={true}
             onChange={(e) => {
               setDescription(e.target.value);
-              handleAutoSave(title, e.target.value);
+              handleAutoSave(e.target.value);
             }}
           />
 
@@ -155,9 +120,6 @@ export default function Editor() {
               </p>
             </span>
 
-            <p>
-              <span className="font-bold"> {thisNoteTags.length}</span> Tags
-            </p>
             <p>
               <span className="font-bold">{description.length}</span> characters
             </p>

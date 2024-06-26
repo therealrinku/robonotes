@@ -9,30 +9,14 @@ import {
 } from 'fs';
 
 export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
-  ipcMain.on('check-if-root-dir-exists', async (event, ...args) => {
-    const rootDir = args[0];
+  ipcMain.on('check-if-root-dir-exists', async (event, args) => {
+    const [rootDir] = args;
 
     const isValidRootDir = existsSync(rootDir);
     event.reply('check-if-root-dir-exists', isValidRootDir);
   });
 
-  ipcMain.on('load-tags', async (event, ...args) => {
-    const rootDir = args[0];
-    const fileName = `tags.json`;
-
-    const tags = readFileSync(`${rootDir}/${fileName}`, 'utf-8');
-    event.reply('load-tags', JSON.parse(tags));
-  });
-
-  ipcMain.on('update-tags', async (event, ...args) => {
-    const rootDir = args[0];
-    const fileName = `tags.json`;
-
-    writeFileSync(`${rootDir}/${fileName}`, JSON.stringify(args[1]));
-    event.reply('update-tags', { success: true });
-  });
-
-  ipcMain.on('open-root-dir-selector', async (event, _arg) => {
+  ipcMain.on('open-root-dir-selector', async (event, _) => {
     //@ts-ignore
     const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
       properties: ['openDirectory'],
@@ -45,33 +29,32 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
     event.reply('open-root-dir-selector', filePaths[0]);
   });
 
-  ipcMain.on('read-note', async (event, ...args) => {
+  ipcMain.on('read-note', async (event, args) => {
     const [rootDir, noteName] = args;
 
     const content = readFileSync(`${rootDir}/${noteName}.robu`, 'utf-8');
-
-    const parsedContent = JSON.parse(content) || {};
-    const finalContent = { noteName, ...parsedContent };
+    const finalContent = { noteName, content };
     event.reply('read-note', finalContent);
   });
 
-  ipcMain.on('rename-note', async (event, ...args) => {
-    renameSync(`${args[0]}/${args[1]}.robu`, `${args[0]}/${args[2]}.robu`);
+  ipcMain.on('rename-note', async (event, args) => {
+    const [rootDir, noteName, newNoteName] = args;
+
+    renameSync(`${rootDir}/${noteName}.robu`, `${rootDir}/${newNoteName}.robu`);
     event.reply('rename-note', { success: true });
   });
 
-  ipcMain.on('delete-note', async (event, ...args) => {
-    unlinkSync(`${args[0]}/${args[1]}.robu`);
+  ipcMain.on('delete-note', async (event, args) => {
+    const [rootDir, noteName] = args;
+
+    unlinkSync(`${rootDir}/${noteName}.robu`);
     event.reply('delete-note', { success: true });
   });
 
-  ipcMain.on('save-file', async (event, args) => {
-    const fileJson = {
-      title: args[2],
-      content: args[3],
-    };
+  ipcMain.on('save-note', async (event, args) => {
+    const [rootDir, noteName, content] = args;
 
-    writeFileSync(`${args[0]}/${args[1]}.robu`, JSON.stringify(fileJson));
+    writeFileSync(`${rootDir}/${noteName}.robu`, content);
     event.reply('open-root-dir-selector', { success: true });
   });
 
@@ -88,18 +71,10 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
     event.reply('load-directory', allFiles);
   });
 
-  ipcMain.on('create-note', async (event, ...dir) => {
-    //@ts-ignore
-    const folderPath = dir[0];
-    const fileName = dir[1];
+  ipcMain.on('create-note', async (event, args) => {
+    const [rootDir, noteName] = args;
 
-    const fileJson = {
-      title: fileName,
-      content: '',
-    };
-
-    writeFileSync(`${folderPath}/${fileName}.robu`, JSON.stringify(fileJson));
-
+    writeFileSync(`${rootDir}/${noteName}.robu`, '');
     event.reply('create-note', 'success');
   });
 }

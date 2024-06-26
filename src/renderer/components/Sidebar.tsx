@@ -9,9 +9,7 @@ import {
 } from 'react-icons/go';
 import { PiNoteFill, PiNoteLight } from 'react-icons/pi';
 import PreferencesModal from './PreferencesModal';
-import TagsModal from './TagsModal';
 import EditNoteModal from './EditNoteModal';
-import useTags from '../hooks/useTags';
 import useNotes from '../hooks/useNotes';
 import useDir from '../hooks/useDir';
 import { configs } from '../utils/configs';
@@ -23,7 +21,6 @@ interface NoteItemProps {
 
 export default function Sidebar() {
   const [showPreferencesModal, setShowPreferencesModal] = useState(false);
-  const [showTagsModal, setShowTagsModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem('color-theme') === 'dark',
@@ -31,7 +28,6 @@ export default function Sidebar() {
 
   const { notes, handleCreateNewNote } = useNotes();
   const { handleChangeDir } = useDir();
-  const { tags } = useTags();
 
   function handleShortcuts(e: KeyboardEvent) {
     // if (e.ctrlKey && e.key === 'n') {
@@ -46,10 +42,6 @@ export default function Sidebar() {
 
     window.electron.ipcRenderer.on('open-preferences', () => {
       setShowPreferencesModal(true);
-    });
-
-    window.electron.ipcRenderer.on('open-tags-modal', () => {
-      setShowTagsModal(true);
     });
 
     document.addEventListener('keydown', handleShortcuts);
@@ -69,19 +61,14 @@ export default function Sidebar() {
     return notes.filter((noteName) => {
       const allQueries = searchQuery.split(',').map((item) => item.trim());
 
-      // if it has multiple queries, all needs to match aka all or nothing
-
-      const thisNoteTags = Object.entries(tags)
-        .filter((tag) => tag[1][noteName] === true)
-        .map((tg) => tg[0]);
-
       return allQueries.every((query) => {
-        if (query.startsWith('#')) {
-          const tagToMatch = query.slice(1);
-          return thisNoteTags.some((tag) => tag === tagToMatch);
-        } else {
-          return noteName.toLowerCase().includes(query.toLowerCase());
-        }
+        /* TODO: needs update */
+        // if (query.startsWith('#')) {
+        //   const tagToMatch = query.slice(1);
+        //   return thisNoteTags.some((tag) => tag === tagToMatch);
+        // } else {
+        return noteName.toLowerCase().includes(query.toLowerCase());
+        // }
       });
     });
   }, [searchQuery, notes]);
@@ -111,13 +98,6 @@ export default function Sidebar() {
             onClick={toggleTheme}
           >
             {isDarkMode ? <GoSun size={15} /> : <GoMoon size={15} />}
-          </button>
-
-          <button
-            title="Tags (Ctrl + T)"
-            onClick={() => setShowTagsModal(true)}
-          >
-            <GoTag size={15} />
           </button>
 
           <button
@@ -184,8 +164,6 @@ export default function Sidebar() {
           onClose={() => setShowPreferencesModal(false)}
         />
       )}
-
-      {showTagsModal && <TagsModal onClose={() => setShowTagsModal(false)} />}
     </Fragment>
   );
 }
@@ -193,17 +171,12 @@ export default function Sidebar() {
 export function NoteItem({ noteName, index }: NoteItemProps) {
   const [showEditNoteModal, setShowEditNoteModal] = useState(false);
 
-  const { tags } = useTags();
   const {
     handleOpenNote,
     handleRenameNote,
     selectedNoteName,
     handleCloseNote,
   } = useNotes();
-
-  const thisNoteTags = Object.entries(tags).filter(
-    (tag) => tag[1][noteName] === true,
-  );
 
   function handleRename(newName: string) {
     handleRenameNote(index, noteName, newName);
@@ -231,13 +204,6 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
             <PiNoteLight size={18} />
           )}
           <p className={`truncate max-w-[75%]`}>{noteName}</p>
-
-          {thisNoteTags.length > 0 && (
-            <p className="flex items-center gap-1 ml-auto">
-              <GoTag size={13} />{' '}
-              {thisNoteTags.length < 9 ? thisNoteTags.length : '9+'}
-            </p>
-          )}
         </div>
       </button>
 
