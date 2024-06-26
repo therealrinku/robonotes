@@ -71,7 +71,9 @@ export default function Editor() {
     );
   }
 
-  const wordCount = description.split(' ').filter((word) => word !== '').length;
+  const wordCount = description
+    .split(/\s+/)
+    .filter((word) => word !== '').length;
 
   return (
     <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#282828]">
