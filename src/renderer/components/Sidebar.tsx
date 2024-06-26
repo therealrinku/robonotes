@@ -1,6 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import {
-  GoKebabHorizontal,
   GoMoon,
   GoPlusCircle,
   GoSearch,
@@ -129,7 +128,7 @@ export default function Sidebar() {
           </button>
         </div>
 
-        <div className="flex flex-row items-center gap-3 w-full px-3">
+        <div className="flex flex-col items-center gap-3 w-full px-3">
           <div className=" w-full flex items-center gap-3 justify-between">
             <div className="flex items-center w-full">
               <GoSearch className="absolute ml-2 " color="gray" />
@@ -192,7 +191,6 @@ export default function Sidebar() {
 }
 
 export function NoteItem({ noteName, index }: NoteItemProps) {
-  const [isHovered, setIsHovered] = useState(false);
   const [showEditNoteModal, setShowEditNoteModal] = useState(false);
 
   const { tags } = useTags();
@@ -223,8 +221,6 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
   return (
     <Fragment>
       <button
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
         onClick={handleClickNoteItem}
         className="relative h-full p-2 w-full text-xs bg-gray-200 dark:bg-[#404040] outline-1  w-full rounded"
       >
@@ -236,26 +232,13 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
           )}
           <p className={`truncate max-w-[75%]`}>{noteName}</p>
 
-          {/* {thisNoteTags.length > 0 && !isHovered && (
+          {thisNoteTags.length > 0 && (
             <p className="flex items-center gap-1 ml-auto">
-              <GoTag size={13} /> {thisNoteTags.length < 9 ? thisNoteTags.length : '9+'}
+              <GoTag size={13} />{' '}
+              {thisNoteTags.length < 9 ? thisNoteTags.length : '9+'}
             </p>
-          )} */}
+          )}
         </div>
-
-        {isHovered && (
-          <div className="absolute top-0 right-0 h-full flex flex-row items-center">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowEditNoteModal(true);
-              }}
-              className="h-full px-2"
-            >
-              <GoKebabHorizontal size={14} />
-            </button>
-          </div>
-        )}
       </button>
 
       {showEditNoteModal && (
