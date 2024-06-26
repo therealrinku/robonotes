@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { RootContext } from '../context/RootContext';
 
 export default function useNotes() {
@@ -39,9 +39,9 @@ export default function useNotes() {
     noteIndex: number,
     oldName: string,
     newName: string,
+    description: string,
   ) {
     if (notes.includes(newName)) {
-      alert('Note with same name already exists!');
       return;
     }
 
@@ -54,6 +54,11 @@ export default function useNotes() {
     const updatedNotes = [...notes];
     updatedNotes[noteIndex] = newName;
     setNotes(updatedNotes);
+
+    const updatedOpenedNotes = { ...openedNotes };
+    delete updatedOpenedNotes[oldName];
+    updatedOpenedNotes[newName] = description;
+    setOpenedNotes(updatedOpenedNotes);
   }
 
   function handleDeleteNote(noteName: string) {

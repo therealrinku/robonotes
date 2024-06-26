@@ -9,14 +9,12 @@ import {
 } from 'react-icons/go';
 import { PiNoteFill, PiNoteLight } from 'react-icons/pi';
 import PreferencesModal from './PreferencesModal';
-import EditNoteModal from './EditNoteModal';
 import useNotes from '../hooks/useNotes';
 import useDir from '../hooks/useDir';
 import { configs } from '../utils/configs';
 
 interface NoteItemProps {
   noteName: string;
-  index: number;
 }
 
 export default function Sidebar() {
@@ -134,9 +132,7 @@ export default function Sidebar() {
         <div className="w-full pb-5 flex flex-col gap-3 border-gray-200 dark:border-gray-700 border-t overflow-y-auto max-h-[85vh] px-3 pt-3">
           {filteredNotes.length > 0 ? (
             filteredNotes.map((noteName: string, index) => {
-              return (
-                <NoteItem key={noteName} noteName={noteName} index={index} />
-              );
+              return <NoteItem key={noteName} noteName={noteName} />;
             })
           ) : notes.length === 0 ? (
             <div className="text-xs text-center h-[70vh] flex flex-col items-center justify-center">
@@ -168,20 +164,8 @@ export default function Sidebar() {
   );
 }
 
-export function NoteItem({ noteName, index }: NoteItemProps) {
-  const [showEditNoteModal, setShowEditNoteModal] = useState(false);
-
-  const {
-    handleOpenNote,
-    handleRenameNote,
-    selectedNoteName,
-    handleCloseNote,
-  } = useNotes();
-
-  function handleRename(newName: string) {
-    handleRenameNote(index, noteName, newName);
-    setShowEditNoteModal(false);
-  }
+export function NoteItem({ noteName }: NoteItemProps) {
+  const { handleOpenNote, selectedNoteName, handleCloseNote } = useNotes();
 
   function handleClickNoteItem() {
     if (selectedNoteName === noteName) {
@@ -206,15 +190,6 @@ export function NoteItem({ noteName, index }: NoteItemProps) {
           <p className={`truncate max-w-[75%]`}>{noteName}</p>
         </div>
       </button>
-
-      {showEditNoteModal && (
-        <EditNoteModal
-          onClose={() => setShowEditNoteModal(false)}
-          initialText={noteName}
-          onRename={handleRename}
-          noteName={noteName}
-        />
-      )}
     </Fragment>
   );
 }

@@ -5,6 +5,7 @@ import { GoAlertFill, GoIssueClosed } from 'react-icons/go';
 
 export default function Editor() {
   const {
+    notes,
     selectedNoteName,
     handleRenameNote,
     handleSaveNote,
@@ -12,18 +13,7 @@ export default function Editor() {
   } = useNotes();
 
   const [description, setDescription] = useState('');
-
-  function handleSave(_description: string) {
-    if (haveUnsavedChanges) {
-      handleSaveNote(_description);
-    }
-  }
-
-  function handleSaveOnCtrlS(e: KeyboardEvent) {
-    if (e.ctrlKey && e.key === 's') {
-      handleSave(description);
-    }
-  }
+  const [title, setTitle] = useState('');
 
   const haveUnsavedChanges = useMemo(() => {
     if (selectedNoteContent !== description) {
@@ -31,33 +21,69 @@ export default function Editor() {
     }
     return false;
   }, [selectedNoteContent, description]);
+  const wordCount = useMemo(() => {
+    return description.split(/\s+/).filter((word) => word !== '').length;
+  }, [description]);
+  const indexOfSelectedNote = useMemo(
+    () => notes.indexOf(selectedNoteName),
+    [notes, selectedNoteName],
+  );
+  const indexOfUpdatedFileNameAkaTitle = useMemo(
+    () => notes.indexOf(title),
+    [notes, title],
+  );
+  const isUpdatedTitleValid =
+    (indexOfUpdatedFileNameAkaTitle === -1 ||
+      indexOfUpdatedFileNameAkaTitle === indexOfSelectedNote) &&
+    title.trim().length >= 3 &&
+    title.trim().length <= 120;
+
+  function handleSaveOnCtrlS(e: KeyboardEvent) {
+    if (e.ctrlKey && e.key === 's' && haveUnsavedChanges) {
+      handleSaveNote(description);
+    }
+  }
 
   useEffect(() => {
     setDescription(selectedNoteContent || '');
-  }, [selectedNoteContent]);
+    setTitle(selectedNoteName || '');
+  }, [selectedNoteContent, selectedNoteName]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleSaveOnCtrlS);
 
     return () => {
-      haveUnsavedChanges && handleSave(description);
+      haveUnsavedChanges && handleSaveNote(description);
       document.removeEventListener('keydown', handleSaveOnCtrlS);
     };
   }, []);
 
-  // auto save feature
-  const timeout = useRef<NodeJS.Timeout | null>(null);
-  function handleAutoSave(_description: string) {
+  // auto save description
+  const timeout0 = useRef<NodeJS.Timeout | null>(null);
+  function handleAutoSaveDescription(_description: string) {
     if (haveUnsavedChanges) {
-      if (timeout.current) {
-        clearTimeout(timeout.current);
+      if (timeout0.current) {
+        clearTimeout(timeout0.current);
       }
 
-      timeout.current = setTimeout(() => {
-        console.log('--autosaving--');
-        handleSave(_description);
+      timeout0.current = setTimeout(() => {
+        haveUnsavedChanges && handleSaveNote(_description);
       }, 1000);
     }
+  }
+
+  // auto save title
+  const timeout1 = useRef<NodeJS.Timeout | null>(null);
+  function handleAutoSaveTitle(_title: string) {
+    if (timeout1.current) {
+      clearTimeout(timeout1.current);
+    }
+
+    timeout1.current = setTimeout(() => {
+      if (_title.trim().length >= 3 && _title.trim().length <= 120) {
+        handleRenameNote(indexOfSelectedNote, selectedNoteName, _title, description);
+      }
+    }, 1000);
   }
 
   if (!selectedNoteName) {
@@ -71,10 +97,6 @@ export default function Editor() {
     );
   }
 
-  const wordCount = description
-    .split(/\s+/)
-    .filter((word) => word !== '').length;
-
   return (
     <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#282828]">
       <div className="relative w-full text-sm">
@@ -83,13 +105,11 @@ export default function Editor() {
             <input
               type="text"
               placeholder="Title..."
-              className="p-3 py-[22px] outline-none font-bold text-lg max-w-[85%] ml-3 bg-inherit"
-              value={selectedNoteName}
+              className={`p-3 py-[22px] outline-none font-bold text-lg max-w-[85%] ml-3 bg-inherit ${!isUpdatedTitleValid && 'text-red-500'}`}
+              value={title}
               onChange={(e) => {
-                if (!e.target.value.trim()) {
-                  return;
-                }
-                handleRenameNote(0, selectedNoteName, e.target.value);
+                setTitle(e.target.value);
+                handleAutoSaveTitle(e.target.value);
               }}
               autoCorrect="off"
               autoComplete="off"
@@ -106,7 +126,7 @@ export default function Editor() {
             autoFocus={true}
             onChange={(e) => {
               setDescription(e.target.value);
-              handleAutoSave(e.target.value);
+              handleAutoSaveDescription(e.target.value);
             }}
           />
 
