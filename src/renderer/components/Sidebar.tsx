@@ -4,8 +4,8 @@ import {
   GoPlusCircle,
   GoSearch,
   GoSun,
-  GoTag,
   GoTools,
+  GoTrash,
 } from 'react-icons/go';
 import { PiNoteFill, PiNoteLight } from 'react-icons/pi';
 import PreferencesModal from './PreferencesModal';
@@ -165,7 +165,14 @@ export default function Sidebar() {
 }
 
 export function NoteItem({ noteName }: NoteItemProps) {
-  const { handleOpenNote, selectedNoteName, handleCloseNote } = useNotes();
+  const {
+    handleOpenNote,
+    selectedNoteName,
+    handleCloseNote,
+    handleDeleteNote,
+  } = useNotes();
+
+  const [isHovered, setIsHovered] = useState(false);
 
   function handleClickNoteItem() {
     if (selectedNoteName === noteName) {
@@ -179,6 +186,8 @@ export function NoteItem({ noteName }: NoteItemProps) {
     <Fragment>
       <button
         onClick={handleClickNoteItem}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         className="relative h-full p-2 w-full text-xs bg-gray-200 dark:bg-[#404040] outline-1  w-full rounded"
       >
         <div className="flex flex-row items-center gap-2">
@@ -189,6 +198,18 @@ export function NoteItem({ noteName }: NoteItemProps) {
           )}
           <p className={`truncate max-w-[75%]`}>{noteName}</p>
         </div>
+
+        {isHovered && (
+          <button
+            className="absolute top-3 right-2"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDeleteNote(noteName);
+            }}
+          >
+            <GoTrash color="red" size={13} />
+          </button>
+        )}
       </button>
     </Fragment>
   );

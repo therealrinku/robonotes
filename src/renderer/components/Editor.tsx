@@ -81,7 +81,12 @@ export default function Editor() {
 
     timeout1.current = setTimeout(() => {
       if (_title.trim().length >= 3 && _title.trim().length <= 120) {
-        handleRenameNote(indexOfSelectedNote, selectedNoteName, _title, description);
+        handleRenameNote(
+          indexOfSelectedNote,
+          selectedNoteName,
+          _title,
+          description,
+        );
       }
     }, 1000);
   }
@@ -105,7 +110,7 @@ export default function Editor() {
             <input
               type="text"
               placeholder="Title..."
-              className={`p-3 py-[22px] outline-none font-bold text-lg max-w-[85%] ml-3 bg-inherit ${!isUpdatedTitleValid && 'text-red-500'}`}
+              className={`p-3 py-[22px] outline-none font-bold text-lg w-[85%] ml-3 bg-inherit ${!isUpdatedTitleValid && 'text-red-500'}`}
               value={title}
               onChange={(e) => {
                 setTitle(e.target.value);
