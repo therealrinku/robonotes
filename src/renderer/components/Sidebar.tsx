@@ -112,7 +112,7 @@ export default function Sidebar() {
               <GoSearch className="absolute ml-2 " color="gray" />
               <input
                 title="Search with note name or by tag name, #tagname, note name"
-                className="w-full text-xs bg-gray-200 dark:bg-[#252526] p-2 rounded pl-8 outline-blue-600"
+                className="w-full text-xs bg-gray-200 dark:bg-[#303030] p-2 rounded pl-8 outline-blue-600"
                 placeholder="Search notes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -188,7 +188,7 @@ export function NoteItem({ noteName }: NoteItemProps) {
         onClick={handleClickNoteItem}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="relative h-full p-2 w-full text-xs bg-gray-200 dark:bg-[#252526] outline-1  w-full rounded"
+        className="relative h-full p-2 w-full text-xs bg-gray-200 dark:bg-[#303030] outline-1  w-full rounded"
       >
         <div className="flex flex-row items-center gap-2">
           {selectedNoteName === noteName ? (
