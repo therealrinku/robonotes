@@ -142,7 +142,7 @@ export default function Editor() {
               ) : (
                 <GoAlertFill size={15} className="text-red-600" />
               )}
-              <p className={`${haveUnsavedChanges && 'text-red-600'}`}>
+              <p className={`${haveUnsavedChanges && 'text-red-300'}`}>
                 {haveUnsavedChanges ? 'Unsaved Changes (Ctrl + S)' : 'Saved'}{' '}
               </p>
             </span>
