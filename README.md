@@ -19,14 +19,13 @@ just good old boring texts
 ## Features
 
 - ✨ Take notes with easy to use and clutter free User Interface
-- ✨ Organize notes by using tags
 - ✨ Powerful search functionality to quickly find what you're looking for
 - 🔥 Local only: all your files are stored locally, you are the owner of your notes
 
 
-![Screenshot from 2024-05-15 11-40-21](https://github.com/therealrinku/robonotes/assets/76877078/409e5e2d-fff2-410a-9d57-81e8ddc6ded8)
+![Screenshot from 2024-06-29 18-47-48](https://github.com/therealrinku/robonotes/assets/76877078/edcad54c-80de-46b8-b85e-1910d40b33ea)
 
-![Screenshot from 2024-05-15 11-40-15](https://github.com/therealrinku/robonotes/assets/76877078/0ed814ed-bfcf-44a9-81f0-1e65cbaf3f48)
+![image](https://github.com/therealrinku/robonotes/assets/76877078/cecf62bf-533e-4037-9e26-09f896652e5f)
 
 
 
