@@ -23,11 +23,9 @@ just good old boring texts
 - 🔥 Local only: all your files are stored locally, you are the owner of your notes
 
 
-![Screenshot from 2024-06-29 18-47-48](https://github.com/therealrinku/robonotes/assets/76877078/edcad54c-80de-46b8-b85e-1910d40b33ea)
+![image](https://github.com/therealrinku/robonotes/assets/76877078/e90f4d34-f72d-4b8e-a359-d2ff82d67fe3)
 
-![image](https://github.com/therealrinku/robonotes/assets/76877078/cecf62bf-533e-4037-9e26-09f896652e5f)
-
-
+![Screenshot from 2024-06-29 18-50-55](https://github.com/therealrinku/robonotes/assets/76877078/278a9354-9b0e-4534-ba3a-8479069235be)
 
 ## Download now
 https://github.com/therealrinku/robonotes/releases
