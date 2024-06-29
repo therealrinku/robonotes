@@ -93,7 +93,7 @@ export default function Editor() {
 
   if (!selectedNoteName) {
     return (
-      <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#282828]">
+      <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#1e1e1e]">
         <div className="w-full h-screen flex flex-col items-center justify-center gap-2">
           <img src={EmptySvg} className="h-32 w-32" />
           <p className="text-xs">No note opened yet.</p>
@@ -103,7 +103,7 @@ export default function Editor() {
   }
 
   return (
-    <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#282828]">
+    <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#1e1e1e]">
       <div className="relative w-full text-sm">
         <div className="flex flex-col h-[100vh] overflow-y-auto">
           <div className="">
