@@ -4,7 +4,8 @@ import Home from './pages/Home';
 import './App.css';
 import { RootContextProvider } from './context/RootContext';
 import useDir from './hooks/useDir';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import Loading from './components/Loading';
 
 export default function App() {
   return (
@@ -20,6 +21,15 @@ export default function App() {
 
 function SetupApp() {
   const { rootDir } = useDir();
+
+  const [showLoading, setShowLoading] = useState(true);
+
+  // show loading animation for 2 seconds
+  useEffect(() => {
+    setTimeout(() => {
+      setShowLoading(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     // load-theme
@@ -43,7 +53,9 @@ function SetupApp() {
     }
   }
 
-  if (rootDir) {
+  if (showLoading) {
+    return <Loading />;
+  } else if (rootDir) {
     return <Home />;
   } else {
     return <InitialSetup />;
