@@ -154,23 +154,20 @@ export default function Editor({ isSidebarOpen, toggleSidebar }: EditorProps) {
               )}
             </button>
 
-            <span className="flex items-center gap-1">
-              {!haveUnsavedChanges ? (
-                <GoIssueClosed size={15} />
-              ) : (
-                <GoAlertFill size={15} className="text-red-600" />
-              )}
-              <p className={`${haveUnsavedChanges && 'text-red-300'}`}>
-                {haveUnsavedChanges ? 'Unsaved Changes (Ctrl + S)' : 'Saved'}{' '}
-              </p>
-            </span>
-
             <p>
               <span className="font-bold">{description.length}</span> characters
             </p>
             <p>
               <span className="font-bold">{wordCount}</span> words
             </p>
+
+            <span title={haveUnsavedChanges ? "Unsaved Changes" : "Saved"} className="flex items-center gap-1">
+              {!haveUnsavedChanges ? (
+                <GoIssueClosed size={15} />
+              ) : (
+                <GoAlertFill size={15} className="text-red-600" />
+              )}
+            </span>
           </div>
         </div>
       </div>
