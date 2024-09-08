@@ -190,7 +190,7 @@ export function NoteItem({ noteName }: NoteItemProps) {
         onMouseLeave={() => setIsHovered(false)}
         className="relative h-full p-2 w-full text-xs bg-gray-200 dark:bg-[#303030] outline-1  w-full rounded"
       >
-        <div className="flex flex-row items-center gap-2">
+        <div className="flex flex-row items-center gap-2" title={noteName}>
           {selectedNoteName === noteName ? (
             <PiNoteFill size={18} />
           ) : (
