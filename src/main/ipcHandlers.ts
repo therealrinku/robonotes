@@ -10,7 +10,7 @@ import {
 
 export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   ipcMain.on('check-if-root-dir-exists', async (event, args) => {
-    const [rootDir] = args;
+    const rootDir = args;
 
     const isValidRootDir = existsSync(rootDir);
     event.reply('check-if-root-dir-exists', isValidRootDir);
