@@ -4,7 +4,7 @@
   <h3 align="center">robonotes</h3>
 
   <p align="center">
-    Minimalistic and local only, no nonsense note taking application
+    Minimalistic local only, no nonsense note taking application
     <br />
   </p>
 </div>
