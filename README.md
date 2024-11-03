@@ -29,3 +29,27 @@ just good old boring texts
 
 ## Download now
 https://github.com/therealrinku/robonotes/releases
+
+
+## Contribute to the Project
+
+To run this project locally, follow these steps:
+
+### Prerequisites
+
+- Node.js installed
+
+## Installation
+
+1. Clone the repository.
+   ```bash
+   git clone https://github.com/therealrinku/roboshare.git
+
+2. Install the dependencies.
+   ```bash
+   yarn install
+
+3. Run the project.
+   ```bash
+   yarn start
+
