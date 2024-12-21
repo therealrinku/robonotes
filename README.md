@@ -18,9 +18,11 @@ just good old boring texts
 
 ## Features
 
-- ✨ Take notes with easy to use and clutter free User Interface
-- ✨ Powerful search functionality to quickly find what you're looking for
-- 🔥 Local only: all your files are stored locally, you are the owner of your notes
+✨ Take notes with easy to use and clutter free User Interface
+
+✨ Powerful search functionality to quickly find what you're looking for
+
+🔥 Local only: all your files are stored locally, you are the owner of your notes
 
 
 ![image](https://github.com/therealrinku/robonotes/assets/76877078/e90f4d34-f72d-4b8e-a359-d2ff82d67fe3)
@@ -52,4 +54,8 @@ To run this project locally, follow these steps:
 3. Run the project.
    ```bash
    yarn start
+
+## Build and create a package
+   ```bash
+   yarn package
 
