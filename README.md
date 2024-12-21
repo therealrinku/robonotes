@@ -9,13 +9,6 @@
   </p>
 </div>
 
-## About The Project
-
-robonotes is minimalistic and local only note taking application which does what it should, take notes. <br/>
-no any fancy features, no bold font, no italic font, no todolist, no journal, no bullet points, not even images <br/>
-just good old boring texts
-
-
 ## Features
 
 ✨ Take notes with easy to use and clutter free User Interface
