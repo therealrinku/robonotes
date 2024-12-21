@@ -37,12 +37,6 @@ https://github.com/therealrinku/robonotes/releases
 
 To run this project locally, follow these steps:
 
-### Prerequisites
-
-- Node.js installed
-
-## Installation
-
 1. Clone the repository.
    ```bash
    git clone https://github.com/therealrinku/roboshare.git
