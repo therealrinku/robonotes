@@ -1,12 +1,7 @@
 <div align="center">
     <img src="https://cdn-icons-png.flaticon.com/128/2661/2661383.png" alt="Logo" width="80" height="80">
-
-  <h3 align="center">robonotes</h3>
-
-  <p align="center">
-    Minimalistic local only, no nonsense note taking application
-    <br />
-  </p>
+    <h3>robonotes</h3>
+    <p>Minimalistic local only, no nonsense note taking application</p>
 </div>
 
 ## Features
@@ -17,14 +12,13 @@
 
 🔥 Local only: all your files are stored locally, you are the owner of your notes
 
+## Headshots
 
 ![image](https://github.com/therealrinku/robonotes/assets/76877078/e90f4d34-f72d-4b8e-a359-d2ff82d67fe3)
 
 ![Screenshot from 2024-06-29 18-50-55](https://github.com/therealrinku/robonotes/assets/76877078/278a9354-9b0e-4534-ba3a-8479069235be)
 
-## Download now
-https://github.com/therealrinku/robonotes/releases
-
+[Download now](https://github.com/therealrinku/robonotes/releases)
 
 
 ## Technologies Used
