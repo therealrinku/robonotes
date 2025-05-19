@@ -6,7 +6,7 @@
 
 ## Features
 
-✨ Take notes with easy to use and clutter free User Interface
+✨ Take notes with easy to use and clutter free user interface
 
 ✨ Powerful search functionality to quickly find what you're looking for
 
