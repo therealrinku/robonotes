@@ -32,7 +32,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   ipcMain.on('read-note', async (event, args) => {
     const [rootDir, noteName] = args;
 
-    const content = readFileSync(`${rootDir}/${noteName}.robu`, 'utf-8');
+    const content = readFileSync(`${rootDir}/${noteName}.txt`, 'utf-8');
     const finalContent = { noteName, content };
     event.reply('read-note', finalContent);
   });
@@ -40,21 +40,21 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   ipcMain.on('rename-note', async (event, args) => {
     const [rootDir, noteName, newNoteName] = args;
 
-    renameSync(`${rootDir}/${noteName}.robu`, `${rootDir}/${newNoteName}.robu`);
+    renameSync(`${rootDir}/${noteName}.txt`, `${rootDir}/${newNoteName}.txt`);
     event.reply('rename-note', { success: true });
   });
 
   ipcMain.on('delete-note', async (event, args) => {
     const [rootDir, noteName] = args;
 
-    unlinkSync(`${rootDir}/${noteName}.robu`);
+    unlinkSync(`${rootDir}/${noteName}.txt`);
     event.reply('delete-note', { success: true });
   });
 
   ipcMain.on('save-note', async (event, args) => {
     const [rootDir, noteName, content] = args;
 
-    writeFileSync(`${rootDir}/${noteName}.robu`, content);
+    writeFileSync(`${rootDir}/${noteName}.txt`, content);
     event.reply('open-root-dir-selector', { success: true });
   });
 
@@ -63,8 +63,8 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
 
     const files = readdirSync(dir);
     files.forEach((file) => {
-      if (file.endsWith('.robu')) {
-        allFiles.push(file.replace('.robu', ''));
+      if (file.endsWith('.txt')) {
+        allFiles.push(file.replace('.txt', ''));
       }
     });
 
@@ -74,7 +74,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   ipcMain.on('create-note', async (event, args) => {
     const [rootDir, noteName] = args;
 
-    writeFileSync(`${rootDir}/${noteName}.robu`, '');
+    writeFileSync(`${rootDir}/${noteName}.txt`, '');
     event.reply('create-note', 'success');
   });
 }
