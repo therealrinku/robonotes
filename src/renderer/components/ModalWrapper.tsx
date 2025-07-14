@@ -25,7 +25,7 @@ export default function ModalWrapper({ title, children, onClose }: Props) {
       style={{ backgroundColor: 'rgba(0,0,0,0.9)' }}
     >
       <div className="flex flex-col items-center gap-2 bg-white dark:bg-[#252526] w-72 rounded">
-        <div className="flex flex-row items-center justify-between bg-gray-100 dark:bg-[#121212] w-full h-10 px-5 rounded-tl rounded-tr">
+        <div className="flex flex-row items-center justify-between bg-gray-100 dark:bg-[#121212] w-full h-10 px-3 rounded-tl rounded-tr">
           <p className="text-sm font-bold">{title}</p>
 
           <button onClick={onClose}>

@@ -1,6 +1,8 @@
-import { GoFileDirectory } from 'react-icons/go';
 import ModalWrapper from './ModalWrapper';
 import useDir from '../hooks/useDir';
+import { useState, useEffect } from "react";
+import { GoMoon, GoSun, GoFileDirectory } from 'react-icons/go';
+import { configs } from '../utils/configs';
 
 interface Props {
   onClose: () => void;
@@ -9,27 +11,48 @@ interface Props {
 
 export default function PreferencesModal({ onClose, handleChangeDir }: Props) {
   const { rootDir } = useDir();
+  
+  const [isDarkMode, setIsDarkMode] = useState(
+    localStorage.getItem('color-theme') === 'dark',
+  );
+
+  function toggleTheme() {
+    if (isDarkMode) {
+      localStorage.setItem('color-theme', 'light');
+      document.documentElement.classList.remove('dark');
+      setIsDarkMode(false);
+    } else {
+      localStorage.setItem('color-theme', 'dark');
+      document.documentElement.classList.add('dark');
+      setIsDarkMode(true);
+    }
+  }
+
+  useEffect(()=>{
+    window.electron.ipcRenderer.on('toggle-theme', () => {
+      toggleTheme();
+    });
+  },[])
 
   return (
-    <ModalWrapper title="Preferences" onClose={onClose}>
-      <div className="text-xs flex flex-col gap-5 p-5">
-        <div className="flex flex-col items-start gap-2">
-          <p>
-            <b>Root Directory</b>
-          </p>
-
-          <span className="flex items-center gap-2">
-            <GoFileDirectory size={18} />
-            <span className="break-all">{rootDir}</span>
-          </span>
+    <ModalWrapper title={`v${configs.version} Preferences`} onClose={onClose}>
+      <div className="text-xs flex flex-col gap-5 p-3 pb-5">
+          <button
+            className="flex items-center gap-2 font-bold"
+            title={isDarkMode ? 'Light Mode' : 'Dark Mode'}
+            onClick={toggleTheme}
+          >
+            {isDarkMode ? <GoSun size={18} /> : <GoMoon size={18} />}
+            Toggle Theme
+          </button>
 
           <button
+            className="flex items-center gap-2 font-bold"
             onClick={handleChangeDir}
-            className="p-2 w-full rounded-md mt-5 bg-gray-100 hover:bg-gray-200 dark:bg-[#121212] dark:hover:bg-[#121212]"
           >
-            Change
+              <GoFileDirectory size={18} />
+              {rootDir}
           </button>
-        </div>
       </div>
     </ModalWrapper>
   );

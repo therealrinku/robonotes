@@ -1,25 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import EmptySvg from '../assets/images/empty.svg';
 import useNotes from '../hooks/useNotes';
-import {
-  GoAlertFill,
-  GoIssueClosed,
-  GoSidebarCollapse,
-  GoSidebarExpand,
-} from 'react-icons/go';
+import { GoAlertFill, GoIssueClosed } from 'react-icons/go';
 
-interface EditorProps {
-  isSidebarOpen: boolean;
-  toggleSidebar: () => void;
-}
-
-export default function Editor({ isSidebarOpen, toggleSidebar }: EditorProps) {
+export default function Editor() {
   const {
     notes,
     selectedNoteName,
     handleRenameNote,
     handleSaveNote,
-    selectedNoteContent,
+    selectedNoteContent
   } = useNotes();
 
   const [description, setDescription] = useState('');
@@ -146,14 +136,6 @@ export default function Editor({ isSidebarOpen, toggleSidebar }: EditorProps) {
           />
 
           <div className="w-full py-1 flex items-center gap-4 text-xs justify-end pr-5">
-            <button className="self-start mr-auto pl-2" onClick={toggleSidebar}>
-              {isSidebarOpen ? (
-                <GoSidebarCollapse size={15} />
-              ) : (
-                <GoSidebarExpand size={15} />
-              )}
-            </button>
-
             <p>
               <span className="font-bold">{description.length}</span> characters
             </p>
