@@ -9,7 +9,6 @@ import { PiNoteFill, PiNoteLight } from 'react-icons/pi';
 import PreferencesModal from './PreferencesModal';
 import useNotes from '../hooks/useNotes';
 import useDir from '../hooks/useDir';
-import { configs } from '../utils/configs';
 
 interface NoteItemProps {
   noteName: string;
@@ -64,12 +63,8 @@ export default function Sidebar() {
 
   return (
     <Fragment>
-      <div className="relative bg-gray-100 dark:bg-[#121212] w-[25%] min-w-[200px] max-w-[500px] min-h-screen flex flex-col items-center gap-5 py-5">
+      <div className="relative bg-gray-100 dark:bg-[#121212] w-full min-h-screen flex flex-col items-center gap-5 py-5">
         <div className="absolute bottom-1 right-2 flex items-center justify-center gap-4 w-full">
-          <p className="text-xs font-bold ml-auto">
-            robonotes v{configs.version}
-          </p>
-
           <button
             className="ml-auto"
             title="Preferences (Ctrl + Y)"
@@ -85,7 +80,7 @@ export default function Sidebar() {
               <GoSearch className="absolute ml-2 " color="gray" />
               <input
                 title="Search with note name or by tag name, #tagname, note name"
-                className="w-full text-xs bg-gray-200 dark:bg-[#303030] p-2 rounded pl-8 outline-blue-600"
+                className="w-full text-xs bg-gray-200 dark:bg-[#303030] p-2 rounded pl-8 outline-none"
                 placeholder="Search notes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -102,7 +97,7 @@ export default function Sidebar() {
           </div>
         </div>
 
-        <div className="w-full pb-5 flex flex-col gap-3 border-gray-200 dark:border-gray-700 border-t overflow-y-auto max-h-[85vh] px-3 pt-3">
+        <div className="w-full pb-5 flex flex-col border-gray-200 dark:border-gray-700 border-t overflow-y-auto max-h-[85vh]">
           {filteredNotes.length > 0 ? (
             filteredNotes.map((noteName: string, index) => {
               return <NoteItem key={noteName} noteName={noteName} />;
@@ -143,6 +138,7 @@ export function NoteItem({ noteName }: NoteItemProps) {
     selectedNoteName,
     handleCloseNote,
     handleDeleteNote,
+    selectedNoteContent
   } = useNotes();
 
   const [isHovered, setIsHovered] = useState(false);
@@ -161,15 +157,10 @@ export function NoteItem({ noteName }: NoteItemProps) {
         onClick={handleClickNoteItem}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="relative h-full p-2 w-full text-xs bg-gray-200 dark:bg-[#303030] outline-1  w-full rounded"
+        className="relative h-full w-full text-xs outline-1 w-full border-b border-gray-200 dark:border-gray-700 p-3"
       >
-        <div className="flex flex-row items-center gap-2" title={noteName}>
-          {selectedNoteName === noteName ? (
-            <PiNoteFill size={18} />
-          ) : (
-            <PiNoteLight size={18} />
-          )}
-          <p className={`truncate max-w-[75%]`}>{noteName}</p>
+        <div className="flex text-left flex-col items-start gap-2">
+          <p className={`text-md font-bold`}>{noteName}</p>
         </div>
 
         {isHovered && (

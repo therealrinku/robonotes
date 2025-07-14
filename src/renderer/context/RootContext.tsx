@@ -43,18 +43,6 @@ export function RootContextProvider({ children }: PropsWithChildren) {
     window.electron.ipcRenderer.on('load-directory', (arg) => {
       const castedArg = arg as string[];
       setNotes(castedArg || []);
-
-      const lastOpenedNote = window.localStorage.getItem('lastOpenedNote');
-      if (lastOpenedNote) {
-        const lastOpenedNoteIndex = castedArg.findIndex(
-          (note) => note === lastOpenedNote,
-        );
-        setSelectedNoteIndex(lastOpenedNoteIndex);
-        window.electron.ipcRenderer.sendMessage('read-note', [
-          rootDir,
-          lastOpenedNote,
-        ]);
-      }
     });
 
     // validate if root dir is actually a valid directory in the filesystem
@@ -91,13 +79,6 @@ export function RootContextProvider({ children }: PropsWithChildren) {
       localStorage.getItem('rootDir'),
     );
   }, []);
-
-  useEffect(() => {
-    const selectedNote = notes[selectedNoteIndex];
-    if (selectedNote) {
-      window.localStorage.setItem('lastOpenedNote', selectedNote);
-    }
-  }, [selectedNoteIndex, notes]);
 
   return (
     <RootContext.Provider

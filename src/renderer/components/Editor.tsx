@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import EmptySvg from '../assets/images/empty.svg';
 import useNotes from '../hooks/useNotes';
-import { GoAlertFill, GoIssueClosed } from 'react-icons/go';
+import { GoAlertFill, GoIssueClosed, GoTriangleLeft } from 'react-icons/go';
 
 export default function Editor() {
   const {
@@ -9,6 +9,7 @@ export default function Editor() {
     selectedNoteName,
     handleRenameNote,
     handleSaveNote,
+    handleCloseNote,
     selectedNoteContent
   } = useNotes();
 
@@ -104,26 +105,29 @@ export default function Editor() {
 
   return (
     <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#1e1e1e]">
+      <button className="px-4 outline-none py-5 flex items-center text-xs" onClick={handleCloseNote}>
+         <GoTriangleLeft size={18}/>
+         Back
+      </button>
+
       <div className="relative w-full text-sm">
         <div className="flex flex-col h-[100vh] overflow-y-auto">
-          <div className="">
-            <input
-              type="text"
-              placeholder="Title..."
-              className={`p-3 py-[22px] outline-none font-bold text-lg w-[85%] ml-3 bg-inherit ${!isUpdatedTitleValid && 'text-red-500'}`}
-              value={title}
-              onChange={(e) => {
-                setTitle(e.target.value);
-                handleAutoSaveTitle(e.target.value);
-              }}
-              autoCorrect="off"
-              autoComplete="off"
-              spellCheck="false"
-            />
-          </div>
+          <input
+             type="text"
+             placeholder="Title..."
+             className={`px-3 pb-3 outline-none font-bold text-xl w-[85%] ml-3 bg-inherit ${!isUpdatedTitleValid && 'text-red-500'}`}
+             value={title}
+             onChange={(e) => {
+               setTitle(e.target.value);
+               handleAutoSaveTitle(e.target.value);
+             }}
+             autoCorrect="off"
+             autoComplete="off"
+             spellCheck="false"
+          />
 
           <textarea
-            className="w-full outline-none h-full py-3 border-b border-t border-gray-200 dark:border-gray-700 px-6 bg-inherit"
+            className="w-full outline-none h-full px-6 bg-inherit"
             placeholder="My important note..."
             value={description}
             autoCorrect="off"
