@@ -64,7 +64,7 @@ export default function Sidebar() {
 
   return (
     <Fragment>
-      <div className="relative bg-gray-100 dark:bg-[#121212] w-[25%] min-w-[250px] max-w-[500px] min-h-screen flex flex-col items-center gap-5 py-5">
+      <div className="relative bg-gray-100 dark:bg-[#121212] w-[25%] min-w-[200px] max-w-[500px] min-h-screen flex flex-col items-center gap-5 py-5">
         <div className="absolute bottom-1 right-2 flex items-center justify-center gap-4 w-full">
           <p className="text-xs font-bold ml-auto">
             robonotes v{configs.version}
