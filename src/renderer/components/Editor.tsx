@@ -53,10 +53,7 @@ export default function Editor() {
   useEffect(() => {
     document.addEventListener('keydown', handleSaveOnCtrlS);
 
-    return () => {
-      haveUnsavedChanges && handleSaveNote(description);
-      document.removeEventListener('keydown', handleSaveOnCtrlS);
-    };
+    return () => document.removeEventListener('keydown', handleSaveOnCtrlS);
   }, []);
 
   // auto save description
