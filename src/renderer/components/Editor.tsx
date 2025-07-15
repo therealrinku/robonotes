@@ -102,7 +102,7 @@ export default function Editor() {
 
   return (
     <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#1e1e1e]">
-      <button className="px-4 outline-none py-5 flex items-center text-xs" onClick={handleCloseNote}>
+      <button className="px-4 outline-none pt-5 pb-3 flex items-center text-xs" onClick={handleCloseNote}>
          <GoTriangleLeft size={18}/>
          Back
       </button>
@@ -136,7 +136,7 @@ export default function Editor() {
             }}
           />
 
-          <div className="w-full py-1 flex items-center gap-4 text-xs justify-end pr-5">
+          <div className="w-full py-1 flex items-center gap-4 text-xs justify-end pr-3 fixed bottom-0 bg-gray-200">
             <p>
               <span className="font-bold">{description.length}</span> characters
             </p>
@@ -144,11 +144,11 @@ export default function Editor() {
               <span className="font-bold">{wordCount}</span> words
             </p>
 
-            <span title={haveUnsavedChanges ? "Unsaved Changes" : "Saved"} className="flex items-center gap-1">
+            <span title={haveUnsavedChanges ? "Unsaved Changes" : "Saved"} className="flex items-center gap-1 w-10">
               {!haveUnsavedChanges ? (
-                <GoIssueClosed size={15} />
+                "Saved"
               ) : (
-                <GoAlertFill size={15} className="text-red-600" />
+                "Unsaved"
               )}
             </span>
           </div>
