@@ -136,7 +136,7 @@ export default function Editor() {
             }}
           />
 
-          <div className="w-full py-1 flex items-center gap-4 text-xs justify-end pr-3 fixed bottom-0 bg-gray-200">
+          <div className="w-full py-1 flex items-center gap-4 text-xs justify-end pr-3 fixed bottom-0 bg-gray-200 dark:bg-[#1e1e1e]">
             <p>
               <span className="font-bold">{description.length}</span> characters
             </p>
