@@ -16,8 +16,6 @@ export default function InitialSetup() {
         return <SecondCard />;
       case 3:
         return <ThirdCard />;
-      case 4:
-        return <FourthCard />;
       default:
         return null;
     }
@@ -37,7 +35,7 @@ export default function InitialSetup() {
           </button>
         )} */}
 
-        {step < 4 && (
+        {step < 3 && (
           <button
             onClick={() => setStep((prev) => prev + 1)}
             className="mt-5 text-xs bg-gray-200 dark:bg-[#252526] hover:bg-gray-300 py-2 px-5 rounded"
@@ -54,7 +52,7 @@ function FirstCard() {
   return (
     <div className="flex text-sm flex-col items-center gap-2">
       <img src={SimpleUiSvg} alt="Simple UI" className="w-72 h-72" />
-      <p className="font-bold">Simple and Intiutive UI</p>
+      <p className="font-bold">Simple and minimalistic UI</p>
       <p>Clutter free and minimal UI for peace of mind</p>
     </div>
   );
@@ -65,25 +63,12 @@ function SecondCard() {
     <div className="flex text-sm flex-col items-center gap-2">
       <img src={PrivacySvg} alt="Simple UI" className="w-72 h-72" />
       <p className="font-bold">Privacy Focused</p>
-      <p>We save your files locally, no cloud sync no bullshit!</p>
+      <p>We save your files locally, no cloud sync!</p>
     </div>
   );
 }
 
 function ThirdCard() {
-  return (
-    <div className="flex text-sm flex-col items-center gap-2">
-      <img src={HashtagSvg} alt="Simple UI" className="w-72 h-72" />
-      <p className="font-bold">Hashtags based</p>
-      <p className="text-center">
-        No crazy nested folder structure, <br />
-        just a bunch of hashtags for categorizing notes.
-      </p>
-    </div>
-  );
-}
-
-function FourthCard() {
   const { rootDir, handleChangeDir } = useDir();
 
   return (
@@ -91,8 +76,8 @@ function FourthCard() {
       <img src={FileSvg} alt="Simple UI" className="w-72 h-72" />
       <p className="font-bold">Select your folder</p>
       <p className="text-center">
-        Select the folder where you want to save all of your notes. <br />
-        This can be changed later!
+        Select the folder where you want <br/> to save all of your notes. 
+        <p className="italic text-xs mt-3 font-bold">This can be changed later!</p>
       </p>
 
       <div className="flex flex-row items-center gap-2">
