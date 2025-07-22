@@ -14,9 +14,9 @@
 
 ## Headshots
 
-![image](https://github.com/therealrinku/robonotes/assets/76877078/e90f4d34-f72d-4b8e-a359-d2ff82d67fe3)
+<img width="617" height="738" alt="Screenshot 2025-07-22 at 22 11 07" src="https://github.com/user-attachments/assets/80aa52f0-f56c-4a9d-9083-4437c4d2bc0a" />
+<img width="617" height="738" alt="Screenshot 2025-07-22 at 22 11 14" src="https://github.com/user-attachments/assets/23ffea0f-6c9d-4459-bc27-91f1688b048a" />
 
-![Screenshot from 2024-06-29 18-50-55](https://github.com/therealrinku/robonotes/assets/76877078/278a9354-9b0e-4534-ba3a-8479069235be)
 
 [Download now](https://github.com/therealrinku/robonotes/releases)
 
