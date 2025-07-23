@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import EmptySvg from '../assets/images/empty.svg';
 import useNotes from '../hooks/useNotes';
 import { GoAlertFill, GoIssueClosed, GoTriangleLeft } from 'react-icons/go';
@@ -7,7 +7,7 @@ import { GoAlertFill, GoIssueClosed, GoTriangleLeft } from 'react-icons/go';
 export default function Editor() {
   const { notes, handleUpdateNote } = useNotes();
   const params = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const note = notes.find(note=>note.id === Number(params.id));
 
@@ -46,7 +46,7 @@ export default function Editor() {
 
   return (
     <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#1e1e1e]">
-      <button className="px-4 outline-none pt-5 pb-3 flex items-center text-xs" onClick={()=>history.push(-1)}>
+      <button className="px-4 outline-none pt-5 pb-3 flex items-center text-xs" onClick={()=>navigate(-1)}>
          <GoTriangleLeft size={18}/>
          Back
       </button>

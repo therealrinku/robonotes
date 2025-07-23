@@ -59,10 +59,10 @@ function SetupApp() {
     return <Loading />;
   } else if (rootDir) {
     return (
-      <>
+      <Routes>
         <Route path="/" Component={Home} />
         <Route path="/note/:id" Component={Editor} />
-      </>
+      </Routes>
     )
   } else {
     return <InitialSetup />;

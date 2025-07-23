@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   GoPlusCircle,
   GoSearch,
@@ -7,7 +7,7 @@ import {
   GoTrash,
 } from 'react-icons/go';
 import { PiNoteFill, PiNoteLight } from 'react-icons/pi';
-import PreferencesModal from './PreferencesModal';
+import PreferencesModal from '../components/PreferencesModal';
 import useNotes from '../hooks/useNotes';
 import useDir from '../hooks/useDir';
 
@@ -137,14 +137,14 @@ export default function Home() {
 
 export function NoteItem({ note }: NoteItemProps) {
   const { handleDeleteNote } = useNotes();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <Fragment>
       <button
-        onClick={()=> history.push(`/note/${note.id})`}
+        onClick={()=> navigate(`/note/${note.id}`)}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className="relative h-full w-full text-xs outline-1 w-full border-b border-gray-200 dark:border-gray-700 p-3"

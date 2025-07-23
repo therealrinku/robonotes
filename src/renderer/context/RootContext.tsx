@@ -30,7 +30,7 @@ export const RootContext = createContext<RootContextProps>({
 });
 
 export function RootContextProvider({ children }: PropsWithChildren) {
-  const [rootDir, setRootDir] = useState<string | null>(null);
+  const [rootDir, setRootDir] = useState<string | undefined>(localStorage.getItem("rootDir"));
   const [notes, setNotes] = useState<NoteModel[]>([]);
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export function RootContextProvider({ children }: PropsWithChildren) {
   },[])
 
   return (
-    <RootContext.Provider value={{ notes, setNotes }}>
+    <RootContext.Provider value={{ notes, setNotes, rootDir, setRootDir }}>
       {children}
     </RootContext.Provider>
   );

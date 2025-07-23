@@ -3,7 +3,6 @@ import { RootContext } from '../context/RootContext';
 
 export default function useNotes() {
   const { notes, setNotes } = useContext(RootContext);
-  const selectedNoteName = notes[selectedNoteIndex];
 
   function handleCreateNewNote() {
     const title = notes.length === 0 ? 'Untitled Note' : `Untitled Note (${notes.length})`;

@@ -1,4 +1,5 @@
 const sqlite3 = require('sqlite3').verbose();
+import { openSync } from 'fs';
 
 export class RobonoteActions {
     constructor(){
@@ -6,7 +7,13 @@ export class RobonoteActions {
     }
 
     async init(filepath){
-        this.db = new sqlite3.Database(filepath);
+        try{
+            console.log(filepath)
+            this.db = new sqlite3.Database(`${filepath}/robonotes.db`);
+        } catch(err){
+            openSync(`${filepath}/robonotes.db`);
+            this.db = new sqlite3.Database(`${filepath}/robonotes.db`);
+        }
 
         await new Promise((resolve, reject) => {
             this.db.run(`
