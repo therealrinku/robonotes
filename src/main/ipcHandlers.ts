@@ -13,7 +13,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   });
 
   ipcMain.on('open-root-dir-selector', async (event, _) => {
-    //@ts-ignore
+    //@ts-expect-error
     const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, { properties: ['openDirectory'] });
 
     if (canceled || !filePaths[0]) {
