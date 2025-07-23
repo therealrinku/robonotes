@@ -1,12 +1,13 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import InitialSetup from './pages/InitialSetup';
-import Home from './pages/Home';
 import './App.css';
 import { RootContextProvider } from './context/RootContext';
 import useDir from './hooks/useDir';
 import Loading from './components/Loading';
-import Editor from './components/Editor';
+
+import InitialSetup from './pages/InitialSetup';
+import Home from './pages/Home';
+import Editor from './pages/Editor';
 
 export default function App() {
   return (
