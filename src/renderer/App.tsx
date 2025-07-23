@@ -1,11 +1,12 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import InitialSetup from './pages/InitialSetup';
 import Home from './pages/Home';
 import './App.css';
 import { RootContextProvider } from './context/RootContext';
 import useDir from './hooks/useDir';
-import { useEffect, useState } from 'react';
 import Loading from './components/Loading';
+import Editor from './components/Editor';
 
 export default function App() {
   return (
@@ -56,7 +57,12 @@ function SetupApp() {
   if (showLoading) {
     return <Loading />;
   } else if (rootDir) {
-    return <Home />;
+    return (
+      <>
+        <Route path="/" Component={Home} />
+        <Route path="/note/:id" Component={Editor} />
+      </>
+    )
   } else {
     return <InitialSetup />;
   }

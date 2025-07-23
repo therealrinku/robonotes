@@ -8,18 +8,18 @@ import {
 } from 'react';
 
 interface NoteModel {
-  [noteName: string]: string;
+  id: number;
+  title: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface RootContextProps {
-  notes: string[];
+  notes: NoteModel[];
   rootDir: string;
-  setNotes: Dispatch<SetStateAction<string[]>>;
+  setNotes: Dispatch<SetStateAction<NoteModel[]>>;
   setRootDir: Dispatch<SetStateAction<string>>;
-  selectedNoteIndex: number;
-  setSelectedNoteIndex: Dispatch<SetStateAction<number>>;
-  openedNotes: NoteModel;
-  setOpenedNotes: Dispatch<SetStateAction<NoteModel>>;
 }
 
 export const RootContext = createContext<RootContextProps>({
@@ -27,21 +27,15 @@ export const RootContext = createContext<RootContextProps>({
   rootDir: '',
   setNotes: () => {},
   setRootDir: () => {},
-  selectedNoteIndex: -1,
-  setSelectedNoteIndex: () => {},
-  openedNotes: {},
-  setOpenedNotes: () => {},
 });
 
 export function RootContextProvider({ children }: PropsWithChildren) {
-  const [rootDir, setRootDir] = useState<string>('');
-  const [notes, setNotes] = useState<Array<string>>([]);
-  const [openedNotes, setOpenedNotes] = useState<NoteModel>({}); //cache
-  const [selectedNoteIndex, setSelectedNoteIndex] = useState<number>(-1);
+  const [rootDir, setRootDir] = useState<string | null>(null);
+  const [notes, setNotes] = useState<NoteModel[]>([]);
 
   useEffect(() => {
-    window.electron.ipcRenderer.on('load-directory', (arg) => {
-      const castedArg = arg as string[];
+    window.electron.ipcRenderer.on('load-notes', (arg) => {
+      const castedArg = arg as NoteModel[];
       setNotes(castedArg || []);
     });
 
@@ -57,23 +51,10 @@ export function RootContextProvider({ children }: PropsWithChildren) {
       },
     );
 
-    window.electron.ipcRenderer.sendMessage('load-directory', rootDir);
+    window.electron.ipcRenderer.sendMessage('load-notes', rootDir);
   }, [rootDir]);
 
   useEffect(() => {
-    window.electron.ipcRenderer.on('read-note', (arg) => {
-      type noteObject = { noteName: string; content: string };
-
-      const castedArg = arg as noteObject;
-
-      setOpenedNotes((prev) => {
-        return {
-          ...prev,
-          [castedArg.noteName]: castedArg.content,
-        };
-      });
-    });
-
     window.electron.ipcRenderer.sendMessage(
       'check-if-root-dir-exists',
       localStorage.getItem('rootDir'),
@@ -81,18 +62,7 @@ export function RootContextProvider({ children }: PropsWithChildren) {
   }, []);
 
   return (
-    <RootContext.Provider
-      value={{
-        rootDir,
-        setRootDir,
-        notes,
-        setNotes,
-        selectedNoteIndex,
-        setSelectedNoteIndex,
-        openedNotes,
-        setOpenedNotes,
-      }}
-    >
+    <RootContext.Provider value={{ notes, setNotes }}>
       {children}
     </RootContext.Provider>
   );

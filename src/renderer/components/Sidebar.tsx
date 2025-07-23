@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   GoPlusCircle,
   GoSearch,
@@ -14,7 +15,7 @@ interface NoteItemProps {
   noteName: string;
 }
 
-export default function Sidebar() {
+export default function NotesList() {
   const [showPreferencesModal, setShowPreferencesModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -33,7 +34,6 @@ export default function Sidebar() {
     });
 
     document.addEventListener('keydown', handleShortcuts);
-
     return () => document.removeEventListener('keydown', handleShortcuts);
   }, []);
 
@@ -46,17 +46,16 @@ export default function Sidebar() {
       return notes;
     }
 
-    return notes.filter((noteName) => {
+    return notes.filter((note) => {
       const allQueries = searchQuery.split(',').map((item) => item.trim());
 
       return allQueries.every((query) => {
-        /* TODO: needs update */
-        // if (query.startsWith('#')) {
-        //   const tagToMatch = query.slice(1);
-        //   return thisNoteTags.some((tag) => tag === tagToMatch);
-        // } else {
-        return noteName.toLowerCase().includes(query.toLowerCase());
-        // }
+        if (query.startsWith('#')) {
+          const tagToMatch = query.slice(1);
+          return note.description.includes(...tagToMatch);
+        } else {
+          return note.title.toLowerCase().includes(query.toLowerCase());
+        }
       });
     });
   }, [searchQuery, notes]);
@@ -132,35 +131,23 @@ export default function Sidebar() {
   );
 }
 
-export function NoteItem({ noteName }: NoteItemProps) {
-  const {
-    handleOpenNote,
-    selectedNoteName,
-    handleCloseNote,
-    handleDeleteNote,
-    selectedNoteContent
-  } = useNotes();
+export function NoteItem({ note }: NoteItemProps) {
+  const { handleDeleteNote } = useNotes();
+  const history = useHistory();
 
   const [isHovered, setIsHovered] = useState(false);
-
-  function handleClickNoteItem() {
-    if (selectedNoteName === noteName) {
-      handleCloseNote();
-    } else {
-      handleOpenNote(noteName);
-    }
-  }
 
   return (
     <Fragment>
       <button
-        onClick={handleClickNoteItem}
+        onClick={()=> history.push(`/note/${note.id})`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className="relative h-full w-full text-xs outline-1 w-full border-b border-gray-200 dark:border-gray-700 p-3"
       >
         <div className="flex text-left flex-col items-start gap-2">
-          <p className={`text-md font-bold`}>{noteName}</p>
+          <p className={`text-md font-bold`}>{note.title}</p>
+          <p class="text-gray-400 truncate">{note.content}</p>
         </div>
 
         {isHovered && (
@@ -168,7 +155,7 @@ export function NoteItem({ noteName }: NoteItemProps) {
             className="absolute top-3 right-2"
             onClick={(e) => {
               e.stopPropagation();
-              handleDeleteNote(noteName);
+              handleDeleteNote(note.id);
             }}
           >
             <GoTrash color="red" size={13} />

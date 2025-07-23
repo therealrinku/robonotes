@@ -2,105 +2,46 @@ import { useContext } from 'react';
 import { RootContext } from '../context/RootContext';
 
 export default function useNotes() {
-  const {
-    notes,
-    setNotes,
-    selectedNoteIndex,
-    setSelectedNoteIndex,
-    rootDir,
-    openedNotes,
-    setOpenedNotes,
-  } = useContext(RootContext);
+  const { notes, setNotes } = useContext(RootContext);
   const selectedNoteName = notes[selectedNoteIndex];
 
-  function handleOpenNote(noteName: string) {
-    const noteIndex = notes.findIndex((nn) => nn === noteName);
-    setSelectedNoteIndex(noteIndex);
-
-    if (!openedNotes[noteName]) {
-      window.electron.ipcRenderer.sendMessage('read-note', [rootDir, noteName]);
-    }
-  }
-
   function handleCreateNewNote() {
-    let newNoteTitle =
-      notes.length === 0 ? 'Untitled Note' : `Untitled Note (${notes.length})`;
+    const title = notes.length === 0 ? 'Untitled Note' : `Untitled Note (${notes.length})`;
 
-    window.electron.ipcRenderer.sendMessage('create-note', [
-      rootDir,
-      newNoteTitle,
-    ]);
+    window.electron.ipcRenderer.sendMessage('upsert-note', [null, title, '']);
 
-    setNotes((prev) => [...prev, newNoteTitle]);
-    setSelectedNoteIndex(notes.length);
+    window.electron.ipcRenderer.on('upsert-note', updatedNoteItem => {
+      setNotes(prev=>[...prev, updatedNoteItem]);
+    })
   }
 
-  function handleRenameNote(
-    noteIndex: number,
-    oldName: string,
-    newName: string,
+  function handleUpdateNote(
+    id: number,
+    title: string,
     description: string,
   ) {
-    if (notes.includes(newName)) {
-      return;
-    }
+    window.electron.ipcRenderer.sendMessage('upsert-note', [id, title, description]);
 
-    window.electron.ipcRenderer.sendMessage('rename-note', [
-      rootDir,
-      oldName,
-      newName,
-    ]);
-
-    const updatedNotes = [...notes];
-    updatedNotes[noteIndex] = newName;
-    setNotes(updatedNotes);
-
-    const updatedOpenedNotes = { ...openedNotes };
-    delete updatedOpenedNotes[oldName];
-    updatedOpenedNotes[newName] = description;
-    setOpenedNotes(updatedOpenedNotes);
+    window.electron.ipcRenderer.on('upsert-note', updatedNoteItem => {
+      const updatedNotes = [...notes];
+      const noteIndex = notes.findIndex(note=> note.id === id);
+      updatedNotes[noteIndex] = updatedNoteItem;
+      setNotes(updatedNotes);
+    })
   }
 
-  function handleDeleteNote(noteName: string) {
-    const confirmed = confirm(`Are you sure want to delete ${noteName}? `);
-
+  function handleDeleteNote(id:number, title: string) {
+    const confirmed = confirm(`Are you sure want to delete ${title}? `);
     if (!confirmed) {
       return;
     }
 
-    window.electron.ipcRenderer.sendMessage('delete-note', [rootDir, noteName]);
-    setNotes((prev) => prev.filter((item) => item !== noteName));
-    setSelectedNoteIndex(-1);
-  }
+    window.electron.ipcRenderer.sendMessage('delete-note', [id]);
 
-  function handleCloseNote() {
-    setSelectedNoteIndex(-1);
-  }
-
-  function handleSaveNote(noteDescription: string) {
-    window.electron.ipcRenderer.sendMessage('save-note', [
-      rootDir,
-      selectedNoteName,
-      noteDescription,
-    ]);
-
-    setOpenedNotes((prev) => {
-      return {
-        ...prev,
-        [selectedNoteName]: noteDescription,
-      };
+    window.electron.ipcRenderer.on('delete-note', ()=>{
+      setNotes((prev) => prev.filter((note) => note.id !== id));
     });
   }
 
-  return {
-    notes,
-    selectedNoteName,
-    selectedNoteContent: openedNotes[selectedNoteName],
-    handleRenameNote,
-    handleDeleteNote,
-    handleOpenNote,
-    handleCreateNewNote,
-    handleCloseNote,
-    handleSaveNote,
-  };
+  return { notes, handleUpdateNote, handleDeleteNote, handleCreateNewNote };
 }

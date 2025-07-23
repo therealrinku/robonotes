@@ -4,12 +4,10 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
 export type Channels =
   | 'open-root-dir-selector'
+  | 'load-notes'
   | 'save-note'
-  | 'load-directory'
-  | 'create-note'
-  | 'read-note'
+  | 'upsert-note'
   | 'delete-note'
-  | 'rename-note'
   | 'open-preferences'
   | 'toggle-theme'
   | 'check-if-root-dir-exists'

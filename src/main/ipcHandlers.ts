@@ -7,6 +7,9 @@ import {
   writeFileSync,
   existsSync,
 } from 'fs';
+import { RobonoteActions } from "./actions.ts";
+
+const actions = new RobonoteActions();
 
 export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
   ipcMain.on('check-if-root-dir-exists', async (event, args) => {
@@ -29,52 +32,33 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
     event.reply('open-root-dir-selector', filePaths[0]);
   });
 
-  ipcMain.on('read-note', async (event, args) => {
-    const [rootDir, noteName] = args;
-
-    const content = readFileSync(`${rootDir}/${noteName}.txt`, 'utf-8');
-    const finalContent = { noteName, content };
-    event.reply('read-note', finalContent);
+  ipcMain.on('delete-note', async (event, id) => {
+    try {
+      await actions.deleteNote(id);
+      event.reply('delete-note');
+    } catch(err){
+      event.reply("error-happened", { message: err.message });
+    }
   });
 
-  ipcMain.on('rename-note', async (event, args) => {
-    const [rootDir, noteName, newNoteName] = args;
+  ipcMain.on('upsert-note', async (event, args) => {
+    const [id, title, description] = args;
 
-    renameSync(`${rootDir}/${noteName}.txt`, `${rootDir}/${newNoteName}.txt`);
-    event.reply('rename-note', { success: true });
+    try {
+      const updatedNote = await actions.upsertNote(id, title, description);
+      event.reply('upsert-note', { updatedNote });
+    } catch(err){
+      event.reply("error-happened", { message: err.message });
+    }
   });
 
-  ipcMain.on('delete-note', async (event, args) => {
-    const [rootDir, noteName] = args;
-
-    unlinkSync(`${rootDir}/${noteName}.txt`);
-    event.reply('delete-note', { success: true });
-  });
-
-  ipcMain.on('save-note', async (event, args) => {
-    const [rootDir, noteName, content] = args;
-
-    writeFileSync(`${rootDir}/${noteName}.txt`, content);
-    event.reply('open-root-dir-selector', { success: true });
-  });
-
-  ipcMain.on('load-directory', async (event, dir) => {
-    const allFiles: string[] = [];
-
-    const files = readdirSync(dir);
-    files.forEach((file) => {
-      if (file.endsWith('.txt')) {
-        allFiles.push(file.replace('.txt', ''));
-      }
-    });
-
-    event.reply('load-directory', allFiles);
-  });
-
-  ipcMain.on('create-note', async (event, args) => {
-    const [rootDir, noteName] = args;
-
-    writeFileSync(`${rootDir}/${noteName}.txt`, '');
-    event.reply('create-note', 'success');
+  ipcMain.on('load-notes', async (event, dir) => {
+    try {
+      await actions.init(dir);
+      const notes = await actions.getNotes();
+      event.reply('load-notes', notes);
+    } catch(err){
+      event.reply("error-happened", { message: err.message });
+    }
   });
 }

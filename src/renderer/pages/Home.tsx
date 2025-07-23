@@ -1,13 +1,171 @@
-import Editor from '../components/Editor';
-import Sidebar from '../components/Sidebar';
-import { useState } from 'react';
-import useNotes from '../hooks/useNotes.tsx';
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import {
+  GoPlusCircle,
+  GoSearch,
+  GoGear,
+  GoTrash,
+} from 'react-icons/go';
+import { PiNoteFill, PiNoteLight } from 'react-icons/pi';
+import PreferencesModal from './PreferencesModal';
+import useNotes from '../hooks/useNotes';
+import useDir from '../hooks/useDir';
+
+interface NoteItemProps {
+  id: number;
+  title: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+}
 
 export default function Home() {
-  const { selectedNoteName } = useNotes();
+  const [showPreferencesModal, setShowPreferencesModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const { notes, handleCreateNewNote } = useNotes();
+  const { handleChangeDir } = useDir();
+
+  function handleShortcuts(e: KeyboardEvent) {
+    // if (e.ctrlKey && e.key === 'n') {
+    //   handleCreateNewNote();
+    // }
+  }
+
+  useEffect(() => {
+    window.electron.ipcRenderer.on('open-preferences', () => {
+      setShowPreferencesModal(true);
+    });
+
+    document.addEventListener('keydown', handleShortcuts);
+    return () => document.removeEventListener('keydown', handleShortcuts);
+  }, []);
+
+  const filteredNotes = useMemo(() => {
+    if (
+      !Array.isArray(notes) ||
+      notes.length == 0 ||
+      searchQuery.trim().length === 0
+    ) {
+      return notes;
+    }
+
+    return notes.filter((note) => {
+      const allQueries = searchQuery.split(',').map((item) => item.trim());
+
+      return allQueries.every((query) => {
+        if (query.startsWith('#')) {
+          const tagToMatch = query.slice(1);
+          return note.description.includes(...tagToMatch);
+        } else {
+          return note.title.toLowerCase().includes(query.toLowerCase());
+        }
+      });
+    });
+  }, [searchQuery, notes]);
+
   return (
-    <div className="flex flex-row overflow-x-hidden dark:text-white">
-      { selectedNoteName ? <Editor /> : <Sidebar /> }
-    </div>
+    <Fragment>
+      <div className="relative bg-gray-100 dark:bg-[#121212] w-full min-h-screen flex flex-col items-center gap-5 py-5">
+        <div className="absolute bottom-1 right-2 flex items-center justify-center gap-4 w-full">
+          <button
+            className="ml-auto"
+            title="Preferences (Ctrl + Y)"
+            onClick={() => setShowPreferencesModal(true)}
+          >
+            <GoGear size={15} />
+          </button>
+        </div>
+
+        <div className="flex flex-col items-center gap-3 w-full px-3">
+          <div className=" w-full flex items-center gap-3 justify-between">
+            <div className="flex items-center w-full">
+              <GoSearch className="absolute ml-2 " color="gray" />
+              <input
+                title="Search with note name or by tag name, #tagname, note name"
+                className="w-full text-xs bg-gray-200 dark:bg-[#303030] p-2 rounded pl-8 outline-none"
+                placeholder="Search notes..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />{' '}
+            </div>
+
+            <button
+              title="Create New Note"
+              onClick={handleCreateNewNote}
+              className="text-lg flex items-center gap-1"
+            >
+              <GoPlusCircle />
+            </button>
+          </div>
+        </div>
+
+        <div className="w-full pb-5 flex flex-col border-gray-200 dark:border-gray-700 border-t overflow-y-auto max-h-[85vh]">
+          {filteredNotes.length > 0 ? (
+            filteredNotes.map((noteName: string, index) => {
+              return <NoteItem key={noteName} noteName={noteName} />;
+            })
+          ) : notes.length === 0 ? (
+            <div className="text-xs text-center h-[70vh] flex flex-col items-center justify-center">
+              <p>No notes found.</p>
+              <button
+                onClick={handleChangeDir}
+                className="mt-5 text-xs bg-gray-200 dark:bg-[#252526] py-2 px-5 rounded"
+              >
+                Change directory
+              </button>
+              <button
+                onClick={handleCreateNewNote}
+                className="mt-5 text-xs bg-gray-200 dark:bg-[#252526] py-2 px-5 rounded"
+              >
+                Create new note
+              </button>
+            </div>
+          ) : null}
+        </div>
+      </div>
+
+      {showPreferencesModal && (
+        <PreferencesModal
+          handleChangeDir={handleChangeDir}
+          onClose={() => setShowPreferencesModal(false)}
+        />
+      )}
+    </Fragment>
+  );
+}
+
+export function NoteItem({ note }: NoteItemProps) {
+  const { handleDeleteNote } = useNotes();
+  const history = useHistory();
+
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <Fragment>
+      <button
+        onClick={()=> history.push(`/note/${note.id})`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="relative h-full w-full text-xs outline-1 w-full border-b border-gray-200 dark:border-gray-700 p-3"
+      >
+        <div className="flex text-left flex-col items-start gap-2">
+          <p className={`text-md font-bold`}>{note.title}</p>
+          <p class="text-gray-400 truncate">{note.content}</p>
+        </div>
+
+        {isHovered && (
+          <button
+            className="absolute top-3 right-2"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDeleteNote(note.id);
+            }}
+          >
+            <GoTrash color="red" size={13} />
+          </button>
+        )}
+      </button>
+    </Fragment>
   );
 }
