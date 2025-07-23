@@ -12,7 +12,6 @@ export class RobonoteActions {
 			 id integer primary key autoincrement,
 			 title text,
 			 content text,
-			 tags varchar(200),
 			 created_at datetime default current_timestamp,
 			 updated_at datetime default current_timestamp)`
 		);
