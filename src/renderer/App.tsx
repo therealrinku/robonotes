@@ -15,6 +15,7 @@ export default function App() {
       <RootContextProvider>
         <Routes>
           <Route path="/" Component={SetupApp} />
+          <Route path="/note/:id" Component={Editor} />
         </Routes>
       </RootContextProvider>
     </Router>
@@ -58,12 +59,7 @@ function SetupApp() {
   if (showLoading) {
     return <Loading />;
   } else if (rootDir) {
-    return (
-      <Routes>
-        <Route path="/" Component={Home} />
-        <Route path="/note/:id" Component={Editor} />
-      </Routes>
-    )
+    return <Home/>;
   } else {
     return <InitialSetup />;
   }

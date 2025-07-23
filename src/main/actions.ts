@@ -48,40 +48,22 @@ export class RobonoteActions {
         if (id) {
             return new Promise((resolve, reject) => {
                 this.db.run(
-                    `update notes set title = ?, content = ?, updated_at = ? where id = ?`, 
-                    [title, content, currentTimestamp, id], 
-                    function (err) {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            this.db.get("SELECT * FROM notes WHERE id = ?", [id], (err, updatedRow) => {
-                                if (err) {
-                                    reject(err);
-                                } else {
-                                    resolve(updatedRow);
-                                }
-                            });
-                        }
+                    `update notes set title = ?, content = ?, updated_at = ? where id = ?` ,
+                    [title, content, currentTimestamp, id] ,
+                    (err, row, row1) => {
+                        if (err) reject(err);
+                        resolve({}) //FIXME
                     }
                 );
             });
         } else {
             return new Promise((resolve, reject) => {
-                this.db.run(
+                const res = this.db.run(
                     `insert into notes (title, content, updated_at, created_at) values(?, ?, ?, ?)`, 
                     [title, content, currentTimestamp, currentTimestamp], 
-                    function (err) {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            this.db.get("SELECT * FROM notes WHERE id = ?", [this.lastID], (err, newRow) => {
-                                if (err) {
-                                    reject(err);
-                                } else {
-                                    resolve(newRow);
-                                }
-                            });
-                        }
+                    (err) => {
+                        if (err) reject(err);
+                        resolve({}) //FIXME
                     }
                 );
             });

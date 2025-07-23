@@ -13,36 +13,25 @@ export default function Editor() {
 
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
+  const timeout0 = useRef<NodeJS.Timeout | null>(null);
 
   const wordCount = useMemo(() => content.split(/\s+/).filter((word) => word !== '').length, [content]);
   const haveUnsavedChanges = note.title !== title || note.content !== content;
   
-  function handleSaveOnCtrlS(e: KeyboardEvent) {
-    if (e.ctrlKey && e.key === 's' && haveUnsavedChanges) {
-      handleUpdateNote(note.id, note.title, note.content);
-    }
-  }
-
   useEffect(()=>{
     // auto save
-    const timeout0 = useRef<NodeJS.Timeout | null>(null);
-    function handleAutoSaveDescription(_description: string) {
+    (function handleAutoSaveDescription(_description: string) {
       if (haveUnsavedChanges) {
         if (timeout0.current) {
           clearTimeout(timeout0.current);
         }
 
         timeout0.current = setTimeout(() => {
-          haveUnsavedChanges && handleUpdateNote(note.id, note.title, note.content);
+          handleUpdateNote(note.id, note.title, note.content);
         }, 1000);
       }
-    }
+    }())
   },[title, content])
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleSaveOnCtrlS);
-    return () => document.removeEventListener('keydown', handleSaveOnCtrlS);
-  }, []);
 
   return (
     <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#1e1e1e]">
@@ -56,7 +45,7 @@ export default function Editor() {
           <input
              type="text"
              placeholder="Title..."
-             className={`px-3 pb-3 outline-none font-bold text-xl w-[85%] ml-3 bg-inherit ${!isUpdatedTitleValid && 'text-red-500'}`}
+             className="px-3 pb-3 outline-none font-bold text-xl w-[85%] ml-3 bg-inherit"
              value={title}
              onChange={(e) => setTitle(e.target.value)}
              autoCorrect="off"

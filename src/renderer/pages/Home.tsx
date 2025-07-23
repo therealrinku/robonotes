@@ -102,8 +102,8 @@ export default function Home() {
 
         <div className="w-full pb-5 flex flex-col border-gray-200 dark:border-gray-700 border-t overflow-y-auto max-h-[85vh]">
           {filteredNotes.length > 0 ? (
-            filteredNotes.map((noteName: string, index) => {
-              return <NoteItem key={noteName} noteName={noteName} />;
+            filteredNotes.map((note) => {
+              return <NoteItem key={note.id} note={note} />;
             })
           ) : notes.length === 0 ? (
             <div className="text-xs text-center h-[70vh] flex flex-col items-center justify-center">
@@ -159,7 +159,7 @@ export function NoteItem({ note }: NoteItemProps) {
             className="absolute top-3 right-2"
             onClick={(e) => {
               e.stopPropagation();
-              handleDeleteNote(note.id);
+              handleDeleteNote(note.id, note.title);
             }}
           >
             <GoTrash color="red" size={13} />
