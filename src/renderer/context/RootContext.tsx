@@ -39,7 +39,6 @@ export function RootContextProvider({ children }: PropsWithChildren) {
       setNotes(castedArg || []);
     });
 
-    // validate if root dir is actually a valid directory in the filesystem
     window.electron.ipcRenderer.on(
       'check-if-root-dir-exists',
       (isValidRootDir) => {
@@ -52,14 +51,18 @@ export function RootContextProvider({ children }: PropsWithChildren) {
     );
 
     window.electron.ipcRenderer.sendMessage('load-notes', rootDir);
-  }, [rootDir]);
 
-  useEffect(() => {
     window.electron.ipcRenderer.sendMessage(
       'check-if-root-dir-exists',
       localStorage.getItem('rootDir'),
     );
-  }, []);
+  }, [rootDir]);
+
+  useEffect(()=>{
+    window.electron.ipcRenderer.on('error-happened', err => {
+      alert(err.message);
+    })
+  },[])
 
   return (
     <RootContext.Provider value={{ notes, setNotes }}>
