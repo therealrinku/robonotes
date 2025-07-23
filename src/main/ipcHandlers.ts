@@ -1,12 +1,5 @@
 import { dialog, ipcMain } from 'electron';
-import {
-  readFileSync,
-  readdirSync,
-  renameSync,
-  unlinkSync,
-  writeFileSync,
-  existsSync,
-} from 'fs';
+import { existsSync } from 'fs';
 import { RobonoteActions } from "./actions.ts";
 
 const actions = new RobonoteActions();
@@ -21,9 +14,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
 
   ipcMain.on('open-root-dir-selector', async (event, _) => {
     //@ts-ignore
-    const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
-      properties: ['openDirectory'],
-    });
+    const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, { properties: ['openDirectory'] });
 
     if (canceled || !filePaths[0]) {
       return;
