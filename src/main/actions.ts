@@ -44,26 +44,35 @@ export class RobonoteActions {
 
     upsertNote(id, title, content){
         const currentTimestamp = new Date().toISOString();
+        const thisDb = this.db;
 
         if (id) {
             return new Promise((resolve, reject) => {
-                this.db.run(
+                thisDb.run(
                     `update notes set title = ?, content = ?, updated_at = ? where id = ?` ,
                     [title, content, currentTimestamp, id] ,
-                    (err, row, row1) => {
+                    function (err) {
                         if (err) reject(err);
-                        resolve({}) //FIXME
+
+                        thisDb.get(`select * from notes where id = ?`, [id], (err, row) => {
+                            if(!err) reject(err);
+                            resolve(row);
+                        });
                     }
                 );
             });
         } else {
             return new Promise((resolve, reject) => {
-                const res = this.db.run(
+                thisDb.run(
                     `insert into notes (title, content, updated_at, created_at) values(?, ?, ?, ?)`, 
                     [title, content, currentTimestamp, currentTimestamp], 
-                    (err) => {
+                    function (err) {
                         if (err) reject(err);
-                        resolve({}) //FIXME
+
+                        thisDb.get(`select * from notes where id = ?`, [this.lastID], (err, row) => {
+                            if(!err) reject(err);
+                            resolve(row);
+                        });
                     }
                 );
             });

@@ -151,7 +151,7 @@ export function NoteItem({ note }: NoteItemProps) {
       >
         <div className="flex text-left flex-col items-start gap-2">
           <p className={`text-md font-bold`}>{note.title}</p>
-          <p class="text-gray-400 truncate">{note.content}</p>
+          <p class="text-gray-400 max-w-full truncate">{note.content}</p>
         </div>
 
         {isHovered && (

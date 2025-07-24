@@ -20,17 +20,14 @@ export default function Editor() {
   
   useEffect(()=>{
     // auto save
-    (function handleAutoSaveDescription(_description: string) {
-      if (haveUnsavedChanges) {
-        if (timeout0.current) {
-          clearTimeout(timeout0.current);
-        }
-
-        timeout0.current = setTimeout(() => {
-          handleUpdateNote(note.id, note.title, note.content);
-        }, 1000);
+    if (haveUnsavedChanges) {
+      if (timeout0.current) {
+        clearTimeout(timeout0.current);
       }
-    }())
+      timeout0.current = setTimeout(() => {
+        handleUpdateNote(note.id, title, content);
+      }, 1000);
+    }
   },[title, content])
 
   return (
