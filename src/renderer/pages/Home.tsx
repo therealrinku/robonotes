@@ -102,7 +102,7 @@ export default function Home() {
 
         <div className="w-full pb-5 flex flex-col border-gray-200 dark:border-gray-700 border-t overflow-y-auto max-h-[85vh]">
           {filteredNotes.length > 0 ? (
-            filteredNotes.map((note) => {
+            filteredNotes.sort((note1, note2) => new Date(note2.updatedAt).getTime() - new Date(note1.updatedAt).getTime()).map((note) => {
               return <NoteItem key={note.id} note={note} />;
             })
           ) : notes.length === 0 ? (
@@ -151,7 +151,10 @@ export function NoteItem({ note }: NoteItemProps) {
       >
         <div className="flex text-left flex-col items-start gap-2">
           <p className={`text-md font-bold`}>{note.title}</p>
-          {note.content.trim() && <p class="text-gray-400 max-w-full truncate">{note.content}</p>}
+          {note.content.trim() ?
+            <p className="text-gray-400 max-w-full truncate">{note.content}</p> :
+            <p className="text-gray-400 max-w-full truncate italic">(no content)</p>
+          }
         </div>
       </button>
     </Fragment>
