@@ -56,7 +56,7 @@ export default function Home() {
       return allQueries.every((query) => {
         if (query.startsWith('#')) {
           const tagToMatch = query.slice(1);
-          return note.description.includes(...tagToMatch);
+          return note.content.includes(tagToMatch);
         } else {
           return note.title.toLowerCase().includes(query.toLowerCase());
         }
