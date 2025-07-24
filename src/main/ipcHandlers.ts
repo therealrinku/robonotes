@@ -37,7 +37,7 @@ export function registerIpcHandlers(mainWindow: Electron.BrowserWindow | null) {
 
     try {
       const updatedNote = await actions.upsertNote(id, title, description);
-      event.reply('upsert-note', { updatedNote });
+      event.reply('upsert-note', updatedNote);
     } catch(err){
       event.reply("error-happened", { message: err.message });
     }

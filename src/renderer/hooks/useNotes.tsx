@@ -9,7 +9,7 @@ export default function useNotes() {
 
     window.electron.ipcRenderer.sendMessage('upsert-note', [null, title, '']);
 
-    window.electron.ipcRenderer.on('upsert-note', updatedNoteItem => {
+    window.electron.ipcRenderer.once('upsert-note', updatedNoteItem => {
       setNotes(prev=>[...prev, updatedNoteItem]);
     })
   }
@@ -21,7 +21,7 @@ export default function useNotes() {
   ) {
     window.electron.ipcRenderer.sendMessage('upsert-note', [id, title, description]);
 
-    window.electron.ipcRenderer.on('upsert-note', updatedNoteItem => {
+    window.electron.ipcRenderer.once('upsert-note', updatedNoteItem => {
       const updatedNotes = [...notes];
       const noteIndex = notes.findIndex(note=> note.id === id);
       updatedNotes[noteIndex] = updatedNoteItem;
@@ -35,7 +35,7 @@ export default function useNotes() {
       return;
     }
 
-    window.electron.ipcRenderer.sendMessage('delete-note', [id]);
+    window.electron.ipcRenderer.sendMessage('delete-note', id);
 
     window.electron.ipcRenderer.on('delete-note', ()=>{
       setNotes((prev) => prev.filter((note) => note.id !== id));

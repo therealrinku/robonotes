@@ -147,24 +147,12 @@ export function NoteItem({ note }: NoteItemProps) {
         onClick={()=> navigate(`/note/${note.id}`)}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="relative h-full w-full text-xs outline-1 w-full border-b border-gray-200 dark:border-gray-700 p-3"
+        className="h-full w-full text-xs outline-1 w-full border-b border-gray-200 dark:border-gray-700 p-3 hover:bg-gray-200 dark:bg-gray-600"
       >
         <div className="flex text-left flex-col items-start gap-2">
           <p className={`text-md font-bold`}>{note.title}</p>
-          <p class="text-gray-400 max-w-full truncate">{note.content}</p>
+          {note.content.trim() && <p class="text-gray-400 max-w-full truncate">{note.content}</p>}
         </div>
-
-        {isHovered && (
-          <button
-            className="absolute top-3 right-2"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDeleteNote(note.id, note.title);
-            }}
-          >
-            <GoTrash color="red" size={13} />
-          </button>
-        )}
       </button>
     </Fragment>
   );

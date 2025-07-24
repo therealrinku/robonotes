@@ -55,7 +55,7 @@ export class RobonoteActions {
                         if (err) reject(err);
 
                         thisDb.get(`select * from notes where id = ?`, [id], (err, row) => {
-                            if(!err) reject(err);
+                            if(err) reject(err);
                             resolve(row);
                         });
                     }
@@ -70,7 +70,7 @@ export class RobonoteActions {
                         if (err) reject(err);
 
                         thisDb.get(`select * from notes where id = ?`, [this.lastID], (err, row) => {
-                            if(!err) reject(err);
+                            if(err) reject(err);
                             resolve(row);
                         });
                     }
