@@ -102,7 +102,7 @@ export default function Home() {
 
         <div className="w-full pb-5 flex flex-col border-gray-200 dark:border-gray-700 border-t overflow-y-auto max-h-[85vh]">
           {filteredNotes.length > 0 ? (
-            filteredNotes.sort((note1, note2) => new Date(note2.updatedAt).getTime() - new Date(note1.updatedAt).getTime()).map((note) => {
+            filteredNotes.sort((note1, note2) => new Date(note2.updated_at).getTime() - new Date(note1.updated_at).getTime()).map((note) => {
               return <NoteItem key={note.id} note={note} />;
             })
           ) : notes.length === 0 ? (
