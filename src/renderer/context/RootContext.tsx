@@ -30,7 +30,7 @@ export const RootContext = createContext<RootContextProps>({
 });
 
 export function RootContextProvider({ children }: PropsWithChildren) {
-  const [rootDir, setRootDir] = useState<string | undefined>(localStorage.getItem("rootDir"));
+  const [rootDir, setRootDir] = useState<string | null>(localStorage.getItem("rootDir") ?? null);
   const [notes, setNotes] = useState<NoteModel[]>([]);
 
   useEffect(() => {
@@ -43,19 +43,15 @@ export function RootContextProvider({ children }: PropsWithChildren) {
       'check-if-root-dir-exists',
       (isValidRootDir) => {
         if (!isValidRootDir) {
-          setRootDir('');
+          setRootDir(null);
         } else {
-          setRootDir(localStorage.getItem('rootDir') || '');
+          setRootDir(localStorage.getItem('rootDir') ?? null);
         }
       },
     );
 
     window.electron.ipcRenderer.sendMessage('load-notes', rootDir);
-
-    window.electron.ipcRenderer.sendMessage(
-      'check-if-root-dir-exists',
-      localStorage.getItem('rootDir'),
-    );
+    window.electron.ipcRenderer.sendMessage('check-if-root-dir-exists', localStorage.getItem('rootDir'));
   }, [rootDir]);
 
   useEffect(()=>{

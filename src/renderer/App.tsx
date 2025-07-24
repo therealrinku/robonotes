@@ -10,22 +10,8 @@ import Home from './pages/Home';
 import Editor from './pages/Editor';
 
 export default function App() {
-  return (
-    <Router>
-      <RootContextProvider>
-        <Routes>
-          <Route path="/" Component={SetupApp} />
-          <Route path="/note/:id" Component={Editor} />
-        </Routes>
-      </RootContextProvider>
-    </Router>
-  );
-}
-
-function SetupApp() {
-  const { rootDir } = useDir();
-
   const [showLoading, setShowLoading] = useState(true);
+  const rootDir = localStorage.getItem('rootDir');
 
   // show loading animation for 2 seconds
   useEffect(() => {
@@ -56,11 +42,23 @@ function SetupApp() {
     }
   }
 
-  if (showLoading) {
-    return <Loading />;
-  } else if (rootDir) {
-    return <Home/>;
-  } else {
-    return <InitialSetup />;
+  if(showLoading){
+    return <Loading/>;
   }
+  
+  return (
+    <Router>
+      <RootContextProvider>
+        <Routes>
+          {rootDir ?
+            <>
+              <Route path="/" Component={Home} />
+              <Route path="/note/:id" Component={Editor} />
+            </> :
+              <Route path="/" component={InitialSetup}/>
+          }
+        </Routes>
+      </RootContextProvider>
+    </Router>
+  );
 }
