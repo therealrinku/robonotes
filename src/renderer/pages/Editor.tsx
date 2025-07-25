@@ -32,23 +32,25 @@ export default function Editor() {
 
   return (
     <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#1e1e1e]">
-      <button className="px-4 outline-none pt-5 pb-3 flex items-center text-xs" onClick={()=>navigate(-1)}>
-         <GoTriangleLeft size={18}/>
-         Back
-      </button>
 
-      <div className="relative w-full text-sm">
+      <div className="relative w-full text-sm mt-5">
         <div className="flex flex-col h-[100vh] overflow-y-auto">
-          <input
-             type="text"
-             placeholder="Title..."
-             className="px-3 pb-3 outline-none font-bold text-xl w-[85%] ml-3 bg-inherit"
-             value={title}
-             onChange={(e) => setTitle(e.target.value)}
-             autoCorrect="off"
-             autoComplete="off"
-             spellCheck="false"
-          />
+          <div className="flex pl-3 items-center pb-3 gap-1">
+            <button className="outline-none flex items-center text-xs" onClick={()=>navigate(-1)}>
+              <GoTriangleLeft size={20}/>
+            </button>
+
+            <input
+               type="text"
+               placeholder="Title..."
+               className="pr-3 outline-none font-bold text-xl bg-inherit w-full truncate"
+               value={title}
+               onChange={(e) => setTitle(e.target.value)}
+               autoCorrect="off"
+               autoComplete="off"
+               spellCheck="false"
+            />
+          </div>
 
           <textarea
             className="w-full outline-none h-full px-6 bg-inherit"
@@ -67,7 +69,7 @@ export default function Editor() {
             <p>
               <span className="font-bold">{wordCount}</span> words
             </p>
-            <p className={`${haveUnsavedChanges ? "bg-red-500" : "bg-green-500"} h-3 w-3 rounded-full`}></p>
+            <p className={`${haveUnsavedChanges ? "bg-red-500" : "bg-green-500"} h-2 w-2 rounded-full`}></p>
           </div>
         </div>
       </div>
