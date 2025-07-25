@@ -150,11 +150,8 @@ export function NoteItem({ note }: NoteItemProps) {
         className="h-full w-full text-xs outline-1 w-full border-b border-gray-200 dark:border-gray-700 p-3 hover:bg-gray-200 dark:bg-gray-600"
       >
         <div className="flex text-left flex-col items-start gap-2">
-          <p className={`text-md font-bold`}>{note.title}</p>
-          {note.content.trim() ?
-            <p className="text-gray-400 max-w-full truncate">{note.content}</p> :
-            <p className="text-gray-400 max-w-full truncate italic">(no content)</p>
-          }
+          <p className={`text-md font-bold ${!note.title.trim() && "italic"}`}>{note.title.trim() || "(no title)"}</p>
+          <p className={`text-gray-400 max-w-full truncate ${!note.content.trim() && "italic"}`}>{note.content.trim() || "(no content)"}</p>
         </div>
       </button>
     </Fragment>

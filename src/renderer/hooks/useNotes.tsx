@@ -5,9 +5,7 @@ export default function useNotes() {
   const { notes, setNotes } = useContext(RootContext);
 
   function handleCreateNewNote() {
-    const title = notes.length === 0 ? 'Untitled Note' : `Untitled Note (${notes.length})`;
-
-    window.electron.ipcRenderer.sendMessage('upsert-note', [null, title, '']);
+    window.electron.ipcRenderer.sendMessage('upsert-note', [null, '', '']);
 
     window.electron.ipcRenderer.once('upsert-note', updatedNoteItem => {
       setNotes(prev=>[...prev, updatedNoteItem]);
