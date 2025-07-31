@@ -13,7 +13,6 @@ import useDir from '../hooks/useDir';
 
 interface NoteItemProps {
   id: number;
-  title: string;
   content: string;
   created_at: string;
   updated_at: string;
@@ -56,9 +55,9 @@ export default function Home() {
       return allQueries.every((query) => {
         if (query.startsWith('#')) {
           const tagToMatch = query.slice(1);
-          return note.content.includes(tagToMatch);
+          return note.content.toLowerCase().includes(tagToMatch);
         } else {
-          return note.title.toLowerCase().includes(query.toLowerCase());
+          return note.content.toLowerCase().includes(query.toLowerCase());
         }
       });
     });
@@ -82,7 +81,7 @@ export default function Home() {
             <div className="flex items-center w-full">
               <GoSearch className="absolute ml-2 " color="gray" />
               <input
-                title="Search with note name or by tag name, #tagname, note name"
+                title="Search with note content or by tag name, #tagname, note content"
                 className="w-full text-xs bg-gray-200 dark:bg-[#303030] p-2 rounded pl-8 outline-none"
                 placeholder="Search notes..."
                 value={searchQuery}
@@ -150,8 +149,7 @@ export function NoteItem({ note }: NoteItemProps) {
         className="h-full w-full text-xs outline-1 w-full border-b border-gray-200 dark:border-gray-700 p-3 hover:bg-gray-200 dark:bg-gray-600"
       >
         <div className="flex text-left flex-col items-start gap-2">
-          <p className={`text-md font-bold max-w-full truncate ${!note.title.trim() && "italic"}`}>{note.title.trim() || "(no title)"}</p>
-          <p className={`text-gray-400 max-w-full truncate ${!note.content.trim() && "italic"}`}>{note.content.trim() || "(no content)"}</p>
+          <p className={`max-w-full truncate ${!note.content.trim() && "italic"}`}>{note.content.trim() || "(no content)"}</p>
         </div>
       </button>
     </Fragment>

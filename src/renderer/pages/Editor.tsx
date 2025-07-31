@@ -11,12 +11,11 @@ export default function Editor() {
 
   const note = notes.find(note=>note.id === Number(params.id));
 
-  const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
   const timeout0 = useRef<NodeJS.Timeout | null>(null);
 
   const wordCount = useMemo(() => content.split(/\s+/).filter((word) => word !== '').length, [content]);
-  const haveUnsavedChanges = note.title !== title || note.content !== content;
+  const haveUnsavedChanges = note.content !== content;
   
   useEffect(()=>{
     // auto save
@@ -25,32 +24,19 @@ export default function Editor() {
         clearTimeout(timeout0.current);
       }
       timeout0.current = setTimeout(() => {
-        handleUpdateNote(note.id, title, content);
+        handleUpdateNote(note.id, content);
       }, 1000);
     }
-  },[title, content])
+  },[content])
 
   return (
     <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#1e1e1e]">
 
       <div className="relative w-full text-sm mt-5">
         <div className="flex flex-col h-[100vh] overflow-y-auto">
-          <div className="flex pl-3 items-center pb-3 gap-1">
-            <button className="outline-none flex items-center text-xs" onClick={()=>navigate(-1)}>
-              <GoTriangleLeft size={20}/>
-            </button>
-
-            <input
-               type="text"
-               placeholder="Title..."
-               className="pr-3 outline-none font-bold text-xl bg-inherit w-full truncate"
-               value={title}
-               onChange={(e) => setTitle(e.target.value)}
-               autoCorrect="off"
-               autoComplete="off"
-               spellCheck="false"
-            />
-          </div>
+          <button className="outline-none flex items-center text-xs" onClick={()=>navigate(-1)}>
+            <GoTriangleLeft size={20}/>
+          </button>
 
           <textarea
             className="w-full outline-none h-full px-6 bg-inherit"

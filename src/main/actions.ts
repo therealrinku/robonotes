@@ -19,7 +19,6 @@ export class RobonoteActions {
             this.db.run(`
                 create table if not exists notes (
                     id integer primary key autoincrement,
-                    title text,
                     content text,
                     created_at datetime default current_timestamp,
                     updated_at datetime default current_timestamp
@@ -42,15 +41,15 @@ export class RobonoteActions {
         });
     }
 
-    upsertNote(id, title, content){
+    upsertNote(id, content){
         const currentTimestamp = new Date().toISOString();
         const thisDb = this.db;
 
         if (id) {
             return new Promise((resolve, reject) => {
                 thisDb.run(
-                    `update notes set title = ?, content = ?, updated_at = ? where id = ?` ,
-                    [title, content, currentTimestamp, id] ,
+                    `update notes set content = ?, updated_at = ? where id = ?` ,
+                    [content, currentTimestamp, id] ,
                     function (err) {
                         if (err) reject(err);
 
@@ -64,8 +63,8 @@ export class RobonoteActions {
         } else {
             return new Promise((resolve, reject) => {
                 thisDb.run(
-                    `insert into notes (title, content, updated_at, created_at) values(?, ?, ?, ?)`, 
-                    [title, content, currentTimestamp, currentTimestamp], 
+                    `insert into notes (content, updated_at, created_at) values(?, ?, ?)`, 
+                    [content, currentTimestamp, currentTimestamp], 
                     function (err) {
                         if (err) reject(err);
 

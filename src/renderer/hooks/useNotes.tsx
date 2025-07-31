@@ -12,12 +12,8 @@ export default function useNotes() {
     })
   }
 
-  function handleUpdateNote(
-    id: number,
-    title: string,
-    description: string,
-  ) {
-    window.electron.ipcRenderer.sendMessage('upsert-note', [id, title, description]);
+  function handleUpdateNote(id: number, content: string) {
+    window.electron.ipcRenderer.sendMessage('upsert-note', [id, content]);
 
     window.electron.ipcRenderer.once('upsert-note', updatedNoteItem => {
       const updatedNotes = [...notes];
@@ -27,8 +23,8 @@ export default function useNotes() {
     })
   }
 
-  function handleDeleteNote(id:number, title: string) {
-    const confirmed = confirm(`Are you sure want to delete ${title}? `);
+  function handleDeleteNote(id:number) {
+    const confirmed = confirm(`Are you sure want to delete this note? `);
     if (!confirmed) {
       return;
     }
