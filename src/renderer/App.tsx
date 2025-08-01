@@ -2,7 +2,6 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import './App.css';
 import { RootContextProvider } from './context/RootContext';
-import useDir from './hooks/useDir';
 import Loading from './components/Loading';
 
 import InitialSetup from './pages/InitialSetup';
@@ -55,7 +54,7 @@ export default function App() {
               <Route path="/" Component={Home} />
               <Route path="/note/:id" Component={Editor} />
             </> :
-              <Route path="/" component={InitialSetup}/>
+              <Route path="/" Component={InitialSetup}/>
           }
         </Routes>
       </RootContextProvider>

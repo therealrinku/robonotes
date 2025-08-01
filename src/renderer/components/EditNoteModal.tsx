@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import ModalWrapper from './ModalWrapper';
 import { GoNote, GoPencil, GoTag, GoTrash } from 'react-icons/go';
-import useNotes from '../hooks/useNotes';
 
 interface Props {
   onClose: () => void;
@@ -14,10 +13,7 @@ export default function EditNoteModal({
   onClose,
   initialText,
   onRename,
-  noteName,
 }: Props) {
-  const { handleDeleteNote } = useNotes();
-
   const [text, setText] = useState(initialText || '');
   return (
     <ModalWrapper title="Edit Note" onClose={onClose}>
@@ -40,9 +36,7 @@ export default function EditNoteModal({
           </button>
           <button
             title="Delete Note"
-            onClick={() => {
-              handleDeleteNote(noteName);
-            }}
+            onClick={() => { }}
             className="absolute right-0 border-l dark:border-gray-700 h-full px-2 text-red-500"
           >
             <GoTrash size={13} />
