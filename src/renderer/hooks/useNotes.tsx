@@ -8,6 +8,7 @@ export default function useNotes() {
     window.electron.ipcRenderer.sendMessage('upsert-note', [null, '', '']);
 
     window.electron.ipcRenderer.once('upsert-note', updatedNoteItem => {
+      //@ts-expect-error
       setNotes(prev=>[...prev, updatedNoteItem]);
     })
   }
@@ -18,6 +19,8 @@ export default function useNotes() {
     window.electron.ipcRenderer.once('upsert-note', updatedNoteItem => {
       const updatedNotes = [...notes];
       const noteIndex = notes.findIndex(note=> note.id === id);
+
+      //@ts-expect-error
       updatedNotes[noteIndex] = updatedNoteItem;
       setNotes(updatedNotes);
     })

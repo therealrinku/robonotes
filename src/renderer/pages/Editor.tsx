@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useNotes from '../hooks/useNotes';
-import { GoTriangleLeft } from 'react-icons/go';
+import { GoTrash, GoTriangleLeft } from 'react-icons/go';
 
 export default function Editor() {
-  const { notes, handleUpdateNote } = useNotes();
+  const { notes, handleUpdateNote, handleDeleteNote } = useNotes();
   const params = useParams();
   const navigate = useNavigate();
 
@@ -39,9 +39,18 @@ export default function Editor() {
 
       <div className="relative w-full text-sm">
         <div className="flex flex-col h-[100vh] overflow-y-auto">
-          <button className="border-b outline-none px-3 py-2 flex items-center text-xs" onClick={() => navigate(-1)}>
-            <GoTriangleLeft size={20} /> back
-          </button>
+          <div className='border-b px-3 py-2 flex items-center justify-between text-xs'>
+            <button className="outline-none flex items-center gap-1" onClick={() => navigate(-1)}>
+              <GoTriangleLeft size={20} /> back
+            </button>
+
+            <button className='outline-none' onClick={() => {
+              setTimeout(() => navigate(-1), 500);
+              handleDeleteNote(note.id);
+            }}>
+              <GoTrash size={15} color={'red'} />
+            </button>
+          </div>
 
           <textarea
             className="w-full outline-none h-[90vh] px-6 pt-2 bg-inherit"
