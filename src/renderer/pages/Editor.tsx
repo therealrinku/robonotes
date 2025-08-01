@@ -15,7 +15,7 @@ export default function Editor() {
   const timeout0 = useRef<NodeJS.Timeout | null>(null);
 
   const wordCount = useMemo(() => content.split(/\s+/).filter((word) => word !== '').length, [content]);
-  const tagsCount = useMemo(() => content.split(" ").filter(word => word.includes("#")).length ,[content]);
+  const tagsCount = useMemo(() => content.split(/\s+|\n+/).filter(word => word.startsWith("#")).length ,[content]);
   
   const haveUnsavedChanges = note.content !== content;
   

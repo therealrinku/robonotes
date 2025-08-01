@@ -54,8 +54,8 @@ export default function Home() {
 
       return allQueries.every((query) => {
         if (query.startsWith('#')) {
-          const tagToMatch = query.slice(1);
-          return note.content.toLowerCase().includes(tagToMatch);
+          const allTags = note.content.split(/\s+|\n+/).filter(word => word.startsWith("#"));
+          return allTags.includes(query);
         } else {
           return note.content.toLowerCase().includes(query.toLowerCase());
         }
