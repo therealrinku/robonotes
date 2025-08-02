@@ -12,6 +12,8 @@
 
 🔥 Local only: all your files are stored locally, you are the owner of your notes
 
+🔥 Manage and organize your notes with tags with powerful tag search feature
+
 ## Headshots
 
 <img width="617" height="738" alt="Screenshot 2025-07-22 at 22 11 07" src="https://github.com/user-attachments/assets/80aa52f0-f56c-4a9d-9083-4437c4d2bc0a" />
