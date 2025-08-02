@@ -4,6 +4,7 @@ import {
   GoPlusCircle,
   GoSearch,
   GoGear,
+  GoTag,
 } from 'react-icons/go';
 import PreferencesModal from '../components/PreferencesModal';
 import useNotes from '../hooks/useNotes';
@@ -135,6 +136,8 @@ export default function Home() {
 export function NoteItem({ note }: { note: NoteItemProps }) {
   const navigate = useNavigate();
 
+  const tags = note.content.split(/\s+|\n+/).filter(word => word.startsWith("#"));
+
   return (
     <Fragment>
       <button
@@ -143,6 +146,16 @@ export function NoteItem({ note }: { note: NoteItemProps }) {
       >
         <div className="flex text-left flex-col items-start gap-2">
           <p className={`max-w-full truncate ${!note.content.trim() && "italic"}`}>{note.content.trim() || "(no content)"}</p>
+
+          <div className='flex items-center gap-2 text-[10px]'>
+            {tags.slice(0, 3).map((tag, idx) => {
+              return (
+                <span className='bg-gray-300 px-2 py-1 flex items-center gap-1' key={tag + idx}> <GoTag /> {tag.slice(1)}</span>
+              )
+            })}
+
+            {tags.length > 3 && <span className='bg-gray-300 px-2 py-1'> +{tags.slice(3).length}</span>}
+          </div>
         </div>
       </button>
     </Fragment>
