@@ -145,7 +145,7 @@ export function NoteItem({ note }: { note: NoteItemProps }) {
         className="h-full w-full text-xs outline-1 w-full border-b border-gray-200 dark:border-gray-700 p-3 hover:bg-gray-200 dark:hover:bg-gray-900 dark:text-white"
       >
         <div className="flex text-left flex-col items-start gap-2">
-          <p className={`max-w-full truncate ${!note.content.trim() && "italic"}`}>{note.content.trim() || "(no content)"}</p>
+          <p className={`max-w-full line-clamp-2 ${!note.content.trim() && "italic"}`}>{note.content.trim() || "(no content)"}</p>
 
           <div className='flex items-center gap-2 text-[10px]'>
             {tags.slice(0, 3).map((tag, idx) => {
