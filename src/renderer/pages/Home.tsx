@@ -64,10 +64,10 @@ export default function Home() {
 
   return (
     <Fragment>
-      <div className="relative bg-gray-100 dark:bg-[#121212] w-full min-h-screen flex flex-col items-center gap-5 py-5">
+      <div className="relative bg-white dark:bg-[#121212] w-full min-h-screen flex flex-col items-center gap-5 py-5">
         <div className="absolute bottom-1 right-2 flex items-center justify-center gap-4 w-full">
           <button
-            className="ml-auto"
+            className="ml-auto dark:text-white"
             title="Preferences (Ctrl + Y)"
             onClick={() => setShowPreferencesModal(true)}
           >
@@ -93,7 +93,7 @@ export default function Home() {
               onClick={handleCreateNewNote}
               className="text-lg flex items-center gap-1"
             >
-              <GoPlusCircle />
+              <GoPlusCircle className='dark:text-white'/>
             </button>
           </div>
         </div>
@@ -142,7 +142,7 @@ export function NoteItem({ note }: { note: NoteItemProps }) {
     <Fragment>
       <button
         onClick={() => navigate(`/note/${note.id}`)}
-        className="h-full w-full text-xs outline-1 w-full border-b border-gray-200 dark:border-gray-700 p-3 hover:bg-gray-200 dark:bg-gray-600"
+        className="h-full w-full text-xs outline-1 w-full border-b border-gray-200 dark:border-gray-700 p-3 hover:bg-gray-200 dark:hover:bg-gray-900 dark:text-white"
       >
         <div className="flex text-left flex-col items-start gap-2">
           <p className={`max-w-full truncate ${!note.content.trim() && "italic"}`}>{note.content.trim() || "(no content)"}</p>
@@ -150,11 +150,11 @@ export function NoteItem({ note }: { note: NoteItemProps }) {
           <div className='flex items-center gap-2 text-[10px]'>
             {tags.slice(0, 3).map((tag, idx) => {
               return (
-                <span className='bg-gray-300 px-2 py-1 flex items-center gap-1' key={tag + idx}> <GoTag /> {tag.slice(1)}</span>
+                <span className='bg-gray-300 dark:bg-inherit dark:border px-2 py-1 flex items-center gap-1' key={tag + idx}> <GoTag /> {tag.slice(1)}</span>
               )
             })}
 
-            {tags.length > 3 && <span className='bg-gray-300 px-2 py-1'> +{tags.slice(3).length}</span>}
+            {tags.length > 3 && <span className='bg-gray-300 px-2 py-1 dark:bg-inherit dark:border'> +{tags.slice(3).length}</span>}
           </div>
         </div>
       </button>
