@@ -59,7 +59,7 @@ export default function Editor() {
             onChange={(e) => setContent(e.target.value)}
           />
 
-          <div className="w-full py-1 flex items-center gap-4 text-xs justify-end pr-3 fixed bottom-0 bg-gray-100 dark:bg-inherit dark:border-t dark:border-gray-700 dark:text-white">
+          <div className="w-full py-1 flex items-center gap-4 text-xs justify-end pr-3 fixed bottom-0 bg-gray-100 bg-inherit border-t dark:border-gray-700 dark:text-white">
             <p>
               <span className="font-bold">{content.length}</span> characters
             </p>
