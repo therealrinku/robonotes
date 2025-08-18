@@ -39,15 +39,12 @@ export default function Editor() {
 
       <div className="relative w-full text-sm">
         <div className="flex flex-col h-[100vh] overflow-y-auto">
-          <div className='border-b px-3 py-2 flex items-center justify-between text-xs'>
+          <div className='border-b dark:border-gray-700 px-3 py-2 flex items-center justify-between text-xs'>
             <button className="dark:text-white outline-none flex items-center gap-1" onClick={() => navigate(-1)}>
               <GoTriangleLeft size={20} /> back
             </button>
 
-            <button className='outline-none' onClick={() => {
-              setTimeout(() => navigate(-1), 500);
-              handleDeleteNote(note.id);
-            }}>
+            <button className='outline-none' onClick={() => handleDeleteNote(note.id)}>
               <GoTrash size={15} color={'red'} />
             </button>
           </div>
@@ -62,7 +59,7 @@ export default function Editor() {
             onChange={(e) => setContent(e.target.value)}
           />
 
-          <div className="w-full py-1 flex items-center gap-4 text-xs justify-end pr-3 fixed bottom-0 bg-gray-100 dark:bg-inherit dark:border-t dark:text-white">
+          <div className="w-full py-1 flex items-center gap-4 text-xs justify-end pr-3 fixed bottom-0 bg-gray-100 dark:bg-inherit dark:border-t dark:border-gray-700 dark:text-white">
             <p>
               <span className="font-bold">{content.length}</span> characters
             </p>

@@ -1,7 +1,9 @@
 import { useContext } from 'react';
 import { RootContext } from '../context/RootContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function useNotes() {
+  const navigate = useNavigate();
   const { notes, setNotes } = useContext(RootContext);
 
   function handleCreateNewNote() {
@@ -10,6 +12,8 @@ export default function useNotes() {
     window.electron.ipcRenderer.once('upsert-note', updatedNoteItem => {
       //@ts-expect-error
       setNotes(prev=>[...prev, updatedNoteItem]);
+      //@ts-expect-error
+      navigate(`note/${updatedNoteItem.id}`);
     })
   }
 
@@ -36,6 +40,7 @@ export default function useNotes() {
 
     window.electron.ipcRenderer.on('delete-note', ()=>{
       setNotes((prev) => prev.filter((note) => note.id !== id));
+      navigate(-1);
     });
   }
 
