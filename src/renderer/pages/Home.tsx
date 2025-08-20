@@ -111,12 +111,6 @@ export default function Home() {
               >
                 Change directory
               </button>
-              <button
-                onClick={handleCreateNewNote}
-                className="mt-5 text-xs bg-gray-200 dark:bg-[#252526] py-2 px-5 rounded"
-              >
-                Create new note
-              </button>
             </div>
           ) : null}
         </div>
