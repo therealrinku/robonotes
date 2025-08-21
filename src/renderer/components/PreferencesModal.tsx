@@ -11,7 +11,7 @@ interface Props {
 
 export default function PreferencesModal({ onClose, handleChangeDir }: Props) {
   const { rootDir } = useDir();
-  
+
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem('color-theme') === 'dark',
   );
@@ -28,31 +28,43 @@ export default function PreferencesModal({ onClose, handleChangeDir }: Props) {
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     window.electron.ipcRenderer.on('toggle-theme', () => {
       toggleTheme();
     });
-  },[])
+  }, [])
 
   return (
-    <ModalWrapper title={`v${configs.version} Preferences`} onClose={onClose}>
-      <div className="text-xs flex flex-col gap-5 p-3 pb-5">
-          <button
-            className="flex items-center gap-2 font-bold"
-            title={isDarkMode ? 'Light Mode' : 'Dark Mode'}
-            onClick={toggleTheme}
-          >
-            {isDarkMode ? <GoSun size={18} /> : <GoMoon size={18} />}
-            Toggle Theme
-          </button>
+    <ModalWrapper title={`Preferences`} onClose={onClose}>
+      <div className="text-xs flex flex-col gap-7 px-3 pb-5">
+        <div className='flex flex-col gap-2'>
+          <b>Theme</b>
+
+          <div className='flex flex-row gap-2 items-center justify-center'>
+            <button onClick={toggleTheme} className={`flex flex-col items-center  gap-3 p-5 w-[49%] rounded ${isDarkMode && "bg-green-900"}`}>
+              <GoMoon size={18} />
+              <p>Dark Mode</p>
+            </button>
+            <button onClick={toggleTheme} className={`flex flex-col items-center  gap-3 p-5 w-[49%] rounded ${!isDarkMode && "bg-green-900 text-white"}`}>
+              <GoSun size={18} />
+              <p>Light Mode</p>
+            </button>
+          </div>
+        </div>
+
+        <div className='flex flex-col gap-3'>
+          <b>Root Directory</b>
 
           <button
             className="flex items-center gap-2 font-bold"
             onClick={handleChangeDir}
           >
-              <GoFileDirectory size={18} />
-              {rootDir}
+            <GoFileDirectory size={18} />
+            {rootDir}
           </button>
+        </div>
+
+        <p className='fixed bottom-1'>robonotes v{configs.version}</p>
       </div>
     </ModalWrapper>
   );
