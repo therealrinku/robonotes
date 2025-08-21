@@ -80,7 +80,7 @@ export default function Home() {
               <GoSearch className="absolute ml-2 " color="gray" />
               <input
                 title="Search with note content or by tag name, #tagname, note content"
-                className="w-full text-xs bg-gray-200 dark:bg-[#303030] p-2 rounded pl-8 outline-none"
+                className="w-full text-xs bg-gray-200 dark:bg-[#303030] p-2 rounded pl-8 outline-none dark:text-white"
                 placeholder="Search notes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
