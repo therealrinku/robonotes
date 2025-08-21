@@ -81,7 +81,7 @@ export default function Home() {
               <input
                 title="Search with note content or by tag name, #tagname, note content"
                 className="w-full text-xs bg-gray-200 dark:bg-[#303030] p-2 rounded pl-8 outline-none dark:text-white"
-                placeholder="Search notes..."
+                placeholder="Search by content or tag; title, #tag1, #tag2"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />{' '}
