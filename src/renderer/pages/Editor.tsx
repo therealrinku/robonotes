@@ -39,7 +39,7 @@ export default function Editor() {
 
       <div className="relative w-full text-sm">
         <div className="flex flex-col h-[100vh] overflow-y-auto">
-          <div className='border-b dark:border-gray-700 px-3 py-2 flex items-center justify-between text-xs'>
+          <div className='border-b dark:border-gray-700 px-3 py-1 flex items-center justify-between text-xs'>
             <button className="dark:text-white outline-none flex items-center gap-1" onClick={() => navigate(-1)}>
               <GoTriangleLeft size={20} /> back
             </button>
@@ -50,7 +50,7 @@ export default function Editor() {
           </div>
 
           <textarea
-            className="w-full outline-none h-[90vh] px-6 pt-2 bg-inherit dark:text-white"
+            className="w-full outline-none h-[91vh] px-6 pt-1 bg-inherit dark:text-white"
             placeholder="My important note..."
             value={content}
             autoCorrect="off"
