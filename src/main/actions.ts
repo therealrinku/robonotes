@@ -12,7 +12,7 @@ export class RobonoteActions {
     try {
       this.db = new sqlite3.Database(dbPath);
     } catch (err) {
-      openSync(dbPath, "r");
+      await openSync(dbPath, "r");
       this.db = new sqlite3.Database(dbPath);
     }
 
