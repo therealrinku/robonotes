@@ -1,5 +1,4 @@
 const sqlite3 = require('sqlite3').verbose();
-import { openSync } from 'fs';
 
 export class RobonoteActions {
   constructor() {
@@ -7,26 +6,28 @@ export class RobonoteActions {
   }
 
   async init(rootDir) {
-    const dbPath = `${rootDir}/robonotes.db`;
-
-    try {
-      this.db = new sqlite3.Database(dbPath);
-    } catch (err) {
-      await openSync(dbPath, "r");
-      this.db = new sqlite3.Database(dbPath);
+    if (!rootDir) {
+      return;
     }
 
+    const dbPath = `${rootDir}/robonotes.db`;
+
+    this.db = new sqlite3.Database(dbPath);
+
     await new Promise((resolve, reject) => {
-      this.db.run(`
+      this.db.run(
+        `
                 create table if not exists notes (
                     id integer primary key autoincrement,
                     content text,
                     created_at datetime default current_timestamp,
                     updated_at datetime default current_timestamp
-                )`, (err) => {
-        if (err) reject(err);
-        else resolve();
-      });
+                )`,
+        (err) => {
+          if (err) reject(err);
+          else resolve();
+        },
+      );
     });
   }
 
@@ -51,14 +52,14 @@ export class RobonoteActions {
         thisDb.run(
           `update notes set content = ?, updated_at = ? where id = ?`,
           [content, currentTimestamp, id],
-          function(err) {
+          function (err) {
             if (err) reject(err);
 
             thisDb.get(`select * from notes where id = ?`, [id], (err, row) => {
               if (err) reject(err);
               resolve(row);
             });
-          }
+          },
         );
       });
     } else {
@@ -66,14 +67,18 @@ export class RobonoteActions {
         thisDb.run(
           `insert into notes (content, updated_at, created_at) values(?, ?, ?)`,
           [content, currentTimestamp, currentTimestamp],
-          function(err) {
+          function (err) {
             if (err) reject(err);
 
-            thisDb.get(`select * from notes where id = ?`, [this.lastID], (err, row) => {
-              if (err) reject(err);
-              resolve(row);
-            });
-          }
+            thisDb.get(
+              `select * from notes where id = ?`,
+              [this.lastID],
+              (err, row) => {
+                if (err) reject(err);
+                resolve(row);
+              },
+            );
+          },
         );
       });
     }
@@ -81,14 +86,10 @@ export class RobonoteActions {
 
   deleteNote(id) {
     return new Promise((resolve, reject) => {
-      this.db.run(
-        `delete from notes where id = ?`,
-        [id],
-        function(err) {
-          if (err) reject(err);
-          else resolve();
-        }
-      );
+      this.db.run(`delete from notes where id = ?`, [id], function (err) {
+        if (err) reject(err);
+        else resolve();
+      });
     });
   }
 }
