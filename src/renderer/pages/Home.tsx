@@ -1,11 +1,8 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  GoPlusCircle,
-  GoSearch,
-  GoGear,
-} from 'react-icons/go';
+import { GoPlusCircle, GoSearch, GoGear } from 'react-icons/go';
 import PreferencesModal from '../components/PreferencesModal';
+import SearchModal from '../components/SearchModal.tsx';
 import useNotes from '../hooks/useNotes';
 import useDir from '../hooks/useDir';
 
@@ -18,7 +15,6 @@ interface NoteItemProps {
 
 export default function Home() {
   const [showPreferencesModal, setShowPreferencesModal] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
 
   const { notes, handleCreateNewNote } = useNotes();
   const { handleChangeDir } = useDir();
@@ -38,29 +34,6 @@ export default function Home() {
     return () => document.removeEventListener('keydown', handleShortcuts);
   }, []);
 
-  const filteredNotes = useMemo(() => {
-    if (
-      !Array.isArray(notes) ||
-      notes.length == 0 ||
-      searchQuery.trim().length === 0
-    ) {
-      return notes;
-    }
-
-    return notes.filter((note) => {
-      const allQueries = searchQuery.split(',').map((item) => item.trim());
-
-      return allQueries.every((query) => {
-        if (query.startsWith('#')) {
-          const allTags = note.content.split(/\s+|\n+/).filter(word => word.startsWith("#"));
-          return allTags.includes(query);
-        } else {
-          return note.content.toLowerCase().includes(query.toLowerCase());
-        }
-      });
-    });
-  }, [searchQuery, notes]);
-
   return (
     <Fragment>
       <div className="relative bg-white dark:bg-[#121212] w-full min-h-screen flex flex-col items-center gap-5 py-5">
@@ -74,34 +47,19 @@ export default function Home() {
           </button>
         </div>
 
-        <div className="flex flex-col items-center gap-3 w-full px-3">
-          <div className=" w-full flex items-center gap-3 justify-between">
-            <div className="flex items-center w-full">
-              <GoSearch className="absolute ml-2 " color="gray" />
-              <input
-                title="Search with note content or by tag name, #tagname, note content"
-                className="w-full text-xs bg-gray-200 dark:bg-[#303030] p-2 rounded pl-8 outline-none dark:text-white"
-                placeholder="Search by content or tag; title, #tag1, #tag2"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />{' '}
-            </div>
-
-            <button
-              title="Create New Note"
-              onClick={handleCreateNewNote}
-              className="text-lg flex items-center gap-1"
-            >
-              <GoPlusCircle className='dark:text-white' />
-            </button>
-          </div>
-        </div>
+        <SearchModal />
 
         <div className="w-full pb-5 flex flex-col border-gray-200 dark:border-gray-700 border-t overflow-y-auto max-h-[85vh]">
-          {filteredNotes.length > 0 ? (
-            filteredNotes.sort((note1, note2) => new Date(note2.updated_at).getTime() - new Date(note1.updated_at).getTime()).map((note) => {
-              return <NoteItem key={note.id} note={note} />;
-            })
+          {notes.length > 0 ? (
+            notes
+              .sort(
+                (note1, note2) =>
+                  new Date(note2.updated_at).getTime() -
+                  new Date(note1.updated_at).getTime(),
+              )
+              .map((note) => {
+                return <NoteItem key={note.id} note={note} />;
+              })
           ) : notes.length === 0 ? (
             <div className="text-xs text-center h-[70vh] flex flex-col items-center justify-center">
               <p>No notes found.</p>
@@ -136,7 +94,11 @@ export function NoteItem({ note }: { note: NoteItemProps }) {
         className="h-full w-full text-xs outline-1 w-full border-b border-gray-200 dark:border-gray-700 px-4 py-4 hover:bg-gray-200 dark:hover:bg-gray-900 dark:text-white"
       >
         <div className="flex text-left flex-col items-start gap-2">
-          <p className={`max-w-full line-clamp-1 ${!note.content.trim() && "italic"}`}>{note.content.trim() || "(no content)"}</p>
+          <p
+            className={`max-w-full line-clamp-1 ${!note.content.trim() && 'italic'}`}
+          >
+            {note.content.trim() || '(no content)'}
+          </p>
         </div>
       </button>
     </Fragment>

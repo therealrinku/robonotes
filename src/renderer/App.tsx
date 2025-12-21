@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import { RootContextProvider } from './context/RootContext';
 import Loading from './components/Loading';
-
-import InitialSetup from './pages/InitialSetup';
 import Home from './pages/Home';
 import Editor from './pages/Editor';
 
@@ -41,23 +39,13 @@ export default function App() {
     }
   }
 
-  if(showLoading){
-    return <Loading/>;
+  if (showLoading) {
+    return <Loading />;
   }
 
   return (
-    <Router>
-      <RootContextProvider>
-        <Routes>
-          {rootDir ?
-            <>
-              <Route path="/" Component={Home} />
-              <Route path="/note/:id" Component={Editor} />
-            </> :
-              <Route path="/" Component={InitialSetup}/>
-          }
-        </Routes>
-      </RootContextProvider>
-    </Router>
+    <RootContextProvider>
+      <Editor />
+    </RootContextProvider>
   );
 }
