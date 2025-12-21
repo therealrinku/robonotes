@@ -128,34 +128,30 @@ export default function Toolbar() {
         </div>
       </div>
 
-      {searchQuery.trim().length === 0 &&
-        isFocused &&
-        recentNotes.length > 0 && (
-          <div className="absolute mt-8 w-[60%] text-xs dark:text-white z-50 max-h-[500px]">
-            <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col gap-3">
-              <h4 className="text-gray-500 px-3">Recently opened</h4>
-              {recentNotes.map((note) => {
-                return (
-                  <button
-                    onClick={() => {
-                      setOpenNote(note);
-                      setSearchQuery('');
-                    }}
-                    key={note.id}
-                    className="truncate max-w-full text-left px-3"
-                  >
-                    {note.content || '(no content)'}
-                  </button>
-                );
-              })}
-            </div>
+      <div className="absolute mt-8 w-[60%] text-xs dark:text-white z-90 max-h-[500px]">
+        {searchQuery.length === 0 && isFocused && recentNotes.length > 0 && (
+          <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col">
+            <h4 className="text-gray-500 px-3 pb-2">Recently opened</h4>
+            {recentNotes.map((note) => {
+              return (
+                <button
+                  onClick={() => {
+                    setOpenNote(note);
+                    setSearchQuery('');
+                  }}
+                  key={note.id}
+                  className="truncate max-w-full text-left px-3 hover:bg-gray-700 py-2"
+                >
+                  {note.content || '(no content)'}
+                </button>
+              );
+            })}
           </div>
         )}
 
-      <div className="absolute mt-8 w-[60%] text-xs dark:text-white z-50 max-h-[500px] overflow-y-auto">
         {searchQuery.length > 0 && filteredNotes.length > 0 ? (
-          <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col gap-3">
-            <h4 className="text-gray-500 px-3">Results</h4>
+          <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col">
+            <h4 className="text-gray-500 px-3 pb-2">Results</h4>
             {filteredNotes.map((note) => {
               return (
                 <button
@@ -164,7 +160,7 @@ export default function Toolbar() {
                     setSearchQuery('');
                   }}
                   key={note.id}
-                  className="truncate max-w-full text-left px-3"
+                  className="truncate max-w-full text-left px-3 hover:bg-gray-700 py-2"
                 >
                   {note.content || '(no content)'}
                 </button>
