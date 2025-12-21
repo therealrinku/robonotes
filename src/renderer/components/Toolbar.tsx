@@ -14,7 +14,14 @@ export default function Toolbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
 
-  const { notes, handleCreateNewNote, handleDeleteNote, openNote } = useNotes();
+  const {
+    notes,
+    setOpenNote,
+    handleCreateNewNote,
+    handleDeleteNote,
+    openNote,
+    recentNotesId,
+  } = useNotes();
 
   const charCount = openNote?.content?.length;
 
@@ -29,13 +36,15 @@ export default function Toolbar() {
     [openNote?.content],
   );
 
+  const recentNotes = notes.filter((note) => recentNotesId.includes(note.id));
+
   const filteredNotes = useMemo(() => {
-    if (
-      !Array.isArray(notes) ||
-      notes.length == 0 ||
-      searchQuery.trim().length === 0
-    ) {
+    if (notes.length == 0 || searchQuery.trim().length === 0) {
       return notes;
+    }
+
+    if (notes.length > 0 && searchQuery.trim() === '') {
+      return notes.filter((note) => note.content.trim() === '');
     }
 
     return notes.filter((note) => {
@@ -119,16 +128,31 @@ export default function Toolbar() {
         </div>
       </div>
 
-      {searchQuery.trim().length === 0 && isFocused && (
-        <div className="absolute mt-8 w-[60%] text-xs dark:text-white z-50">
-          <div className="bg-gray-200 dark:bg-[#1e1e1e] px-3 py-2 border-gray-200 dark:border-gray-700 border-t ">
-            <h4 className="text-gray-500">Recently opened</h4>
-            <p>Note1</p>
+      {searchQuery.trim().length === 0 &&
+        isFocused &&
+        recentNotes.length > 0 && (
+          <div className="absolute mt-8 w-[60%] text-xs dark:text-white z-50 max-h-[500px]">
+            <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col gap-3">
+              <h4 className="text-gray-500 px-3">Recently opened</h4>
+              {recentNotes.map((note) => {
+                return (
+                  <button
+                    onClick={() => {
+                      setOpenNote(note);
+                      setSearchQuery('');
+                    }}
+                    key={note.id}
+                    className="truncate max-w-full text-left px-3"
+                  >
+                    {note.content || '(no content)'}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <div className="absolute mt-8 w-[60%] text-xs dark:text-white z-50">
+      <div className="absolute mt-8 w-[60%] text-xs dark:text-white z-50 max-h-[500px] overflow-y-auto">
         {searchQuery.length > 0 && filteredNotes.length > 0 ? (
           <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col gap-3">
             <h4 className="text-gray-500 px-3">Results</h4>
@@ -136,13 +160,13 @@ export default function Toolbar() {
               return (
                 <button
                   onClick={() => {
-                    onSelectNote?.(note.id);
+                    setOpenNote(note);
                     setSearchQuery('');
                   }}
                   key={note.id}
                   className="truncate max-w-full text-left px-3"
                 >
-                  {note.content}
+                  {note.content || '(no content)'}
                 </button>
               );
             })}

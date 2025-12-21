@@ -2,7 +2,14 @@ import { useContext } from 'react';
 import { RootContext } from '../context/RootContext';
 
 export default function useNotes() {
-  const { notes, setNotes, openNote, setOpenNote } = useContext(RootContext);
+  const {
+    notes,
+    setNotes,
+    openNote,
+    setOpenNote,
+    recentNotesId,
+    setRecentNotesId,
+  } = useContext(RootContext);
 
   function handleCreateNewNote() {
     window.electron.ipcRenderer.sendMessage('upsert-note', [null, '', '']);
@@ -42,6 +49,7 @@ export default function useNotes() {
     window.electron.ipcRenderer.on('delete-note', () => {
       setNotes((prev) => prev.filter((note) => note.id !== id));
       setOpenNote(null);
+      setRecentNotesId((prev) => prev.filter((noteId) => noteId! == id));
     });
   }
 
@@ -52,5 +60,6 @@ export default function useNotes() {
     handleCreateNewNote,
     openNote,
     setOpenNote,
+    recentNotesId,
   };
 }

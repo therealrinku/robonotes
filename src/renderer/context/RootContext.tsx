@@ -34,10 +34,22 @@ export function RootContextProvider({ children }: PropsWithChildren) {
   );
   const [notes, setNotes] = useState<NoteModel[]>([]);
   const [openNote, setOpenNote] = useState<NoteModel | null>(null);
+  const [recentNotesId, setRecentNotesId] = useState([]);
 
   useEffect(() => {
     if (openNote) {
       localStorage.setItem('openNoteId', openNote.id);
+
+      // add to recents
+      // if it's there remove it and unshift
+      // if it's not there pop last item and unshift
+      const filtered = recentNotesId.filter((noteId) => noteId !== openNote.id);
+      if (filtered.length !== recentNotesId.length) {
+        filtered.pop();
+      }
+      filtered.unshift(openNote.id);
+      setRecentNotesId(filtered);
+      localStorage.setItem('recents', JSON.stringify(filtered));
     }
   }, [openNote]);
 
@@ -70,6 +82,12 @@ export function RootContextProvider({ children }: PropsWithChildren) {
   }, [rootDir]);
 
   useEffect(() => {
+    const recents = localStorage.getItem('recents');
+    const recents_ = recents ? JSON.parse(recents) : [];
+    if (Array.isArray(recents)) {
+      setRecentNotesId(recents_);
+    }
+
     window.electron.ipcRenderer.on('error-happened', (err) => {
       alert(err.message);
     });
@@ -77,7 +95,16 @@ export function RootContextProvider({ children }: PropsWithChildren) {
 
   return (
     <RootContext.Provider
-      value={{ notes, setNotes, rootDir, setRootDir, openNote, setOpenNote }}
+      value={{
+        notes,
+        setNotes,
+        rootDir,
+        setRootDir,
+        openNote,
+        setOpenNote,
+        recentNotesId,
+        setRecentNotesId,
+      }}
     >
       {children}
     </RootContext.Provider>
