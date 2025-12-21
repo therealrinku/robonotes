@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { RootContext } from '../context/RootContext';
 
 export default function useNotes() {
-  const { notes, setNotes } = useContext(RootContext);
+  const { notes, setNotes, openNote, setOpenNote } = useContext(RootContext);
 
   function handleCreateNewNote() {
     window.electron.ipcRenderer.sendMessage('upsert-note', [null, '', '']);
@@ -10,6 +10,7 @@ export default function useNotes() {
     window.electron.ipcRenderer.once('upsert-note', (updatedNoteItem) => {
       //@ts-expect-error
       setNotes((prev) => [...prev, updatedNoteItem]);
+      setOpenNote(updatedNoteItem);
     });
   }
 
@@ -23,6 +24,10 @@ export default function useNotes() {
       //@ts-expect-error
       updatedNotes[noteIndex] = updatedNoteItem;
       setNotes(updatedNotes);
+
+      if (updatedNoteItem.id === openNote?.id) {
+        setOpenNote(updatedNoteItem);
+      }
     });
   }
 
@@ -36,8 +41,16 @@ export default function useNotes() {
 
     window.electron.ipcRenderer.on('delete-note', () => {
       setNotes((prev) => prev.filter((note) => note.id !== id));
+      setOpenNote(null);
     });
   }
 
-  return { notes, handleUpdateNote, handleDeleteNote, handleCreateNewNote };
+  return {
+    notes,
+    handleUpdateNote,
+    handleDeleteNote,
+    handleCreateNewNote,
+    openNote,
+    setOpenNote,
+  };
 }
