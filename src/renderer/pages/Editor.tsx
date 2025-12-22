@@ -29,7 +29,7 @@ export default function Editor() {
 
       timeout0.current = setTimeout(() => {
         handleUpdateNote(openNote.id, content);
-      }, 1000);
+      }, 500);
     }
   }, [content]);
 
@@ -40,6 +40,7 @@ export default function Editor() {
       <div className="flex flex-col h-[100vh] overflow-y-auto border-t dark:border-gray-700 mt-3">
         {openNote ? (
           <textarea
+            id="editor"
             className="w-full outline-none h-full px-3 pt-1 bg-inherit dark:text-white"
             placeholder="My important note..."
             value={content}

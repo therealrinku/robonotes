@@ -38,6 +38,26 @@ export default function Toolbar() {
 
   const recentNotes = notes.filter((note) => recentNotesId.includes(note.id));
 
+  const foundInNote = useMemo(() => {
+    if (!openNote) return false;
+    if (!searchQuery || searchQuery.trim() === '') return false;
+
+    let startIndex = 0;
+    const matches = [];
+
+    while (true) {
+      const index = openNote.content.indexOf(searchQuery, startIndex);
+
+      if (index === -1) break;
+      const textBefore = openNote.content.substring(0, index);
+      const lineNumber = textBefore.split('\n').length;
+      matches.push({ index, lineNumber });
+      startIndex = index + searchQuery.length;
+    }
+
+    return matches;
+  }, [openNote, searchQuery]);
+
   const filteredNotes = useMemo(() => {
     if (notes.length == 0 || searchQuery.trim().length === 0) {
       return notes;
@@ -128,7 +148,7 @@ export default function Toolbar() {
         </div>
       </div>
 
-      <div className="absolute mt-8 w-[60%] text-xs dark:text-white z-90 max-h-[500px]">
+      <div className="absolute mt-8 w-[60%] text-xs dark:text-white z-90 max-h-[500px] overflow-y-auto">
         {searchQuery.length === 0 && isFocused && recentNotes.length > 0 && (
           <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col">
             <h4 className="text-gray-500 px-3 pb-2">Recently opened</h4>
@@ -149,9 +169,63 @@ export default function Toolbar() {
           </div>
         )}
 
+        {foundInNote.length > 0 && (
+          <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col">
+            <h4 className="text-gray-500 px-3 pb-2">Found in this note</h4>
+            {foundInNote.map((match) => {
+              return (
+                <button
+                  onClick={() => {
+                    const textarea = document.getElementById('editor');
+                    if (!textarea) return;
+                    textarea.setSelectionRange(
+                      match.index,
+                      match.index + searchQuery.length,
+                    );
+                    textarea.focus();
+
+                    const selectionStart = textarea.selectionStart;
+
+                    // Create a temporary, hidden element to measure text height
+                    const div = document.createElement('div');
+                    div.style.visibility = 'hidden';
+                    div.style.position = 'absolute';
+                    div.style.whiteSpace = 'pre-wrap';
+                    // It's crucial to copy all relevant styling for accurate measurement
+                    div.style.font = window.getComputedStyle(textarea).font;
+                    div.style.width = window.getComputedStyle(textarea).width;
+                    div.style.height = 'auto'; // Let height be determined by content
+
+                    // Text up to the selection start
+                    const textBeforeSelection = textarea.value.substring(
+                      0,
+                      selectionStart,
+                    );
+                    div.textContent = textBeforeSelection;
+
+                    // Append to body to get computed dimensions
+                    document.body.appendChild(div);
+                    const selectionBottom = div.offsetHeight; // The pixel height before the selection starts
+                    document.body.removeChild(div); // Clean up the temporary element
+
+                    // Scroll to the calculated position
+                    // We subtract a small amount to make sure the selection is fully visible, not just the very top
+                    textarea.scrollTop =
+                      selectionBottom - textarea.clientHeight / 2;
+                  }}
+                  key={match.index}
+                  className="truncate max-w-full text-left px-3 hover:bg-gray-700 py-2"
+                >
+                  {searchQuery} at {match.lineNumber}:{match.index}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {searchQuery.length > 0 && filteredNotes.length > 0 ? (
           <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col">
-            <h4 className="text-gray-500 px-3 pb-2">Results</h4>
+            <h4 className="text-gray-500 px-3 pb-2">Notes</h4>
             {filteredNotes.map((note) => {
               return (
                 <button
