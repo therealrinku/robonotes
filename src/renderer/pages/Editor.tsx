@@ -41,7 +41,7 @@ export default function Editor() {
         {openNote ? (
           <textarea
             id="editor"
-            className="w-full outline-none h-full px-3 pt-1 bg-inherit dark:text-white"
+            className="w-full outline-none h-[90vh] px-3 pt-1 bg-inherit dark:text-white"
             placeholder="My important note..."
             value={content}
             autoCorrect="off"
