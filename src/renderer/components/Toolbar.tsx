@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import {
-  GoStack,
+  GoBold,
   GoTag,
   GoTypography,
   GoTrash,
@@ -117,13 +117,13 @@ export default function Toolbar() {
                 className="flex items-center gap-2 px-3 border-r dark:border-gray-700 h-full"
                 title={`${charCount} characters`}
               >
-                <span className="font-bold">{charCount}</span> <GoTypography />
+                <span className="font-bold">{charCount}</span> <GoBold/>
               </div>
               <div
                 className="flex items-center gap-2 px-3 dark:border-gray-700 h-full"
                 title={`${wordCount} words`}
               >
-                <span className="font-bold">{wordCount}</span> <GoStack />
+                <span className="font-bold">{wordCount}</span> <GoTypography />
               </div>
               <div
                 className="flex items-center gap-2 px-3 border-l dark:border-gray-700 h-full"
@@ -132,6 +132,7 @@ export default function Toolbar() {
                 <span className="font-bold">{tagsCount}</span> <GoTag />
               </div>
               <button
+                title="Delete this note"
                 onClick={() => handleDeleteNote(openNote.id)}
                 className="px-3 hover:bg-red-900 h-full dark:border-gray-700 border-l"
               >
@@ -140,6 +141,7 @@ export default function Toolbar() {
             </>
           )}
           <button
+            title="Add new note"
             onClick={handleCreateNewNote}
             className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900"
           >
