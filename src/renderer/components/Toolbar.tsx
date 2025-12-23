@@ -107,12 +107,6 @@ export default function Toolbar() {
                 <GoX />
               </button>
             )}
-            <button
-              onClick={handleCreateNewNote}
-              className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900"
-            >
-              <GoPlus />
-            </button>
           </div>
         </div>
 
@@ -137,13 +131,19 @@ export default function Toolbar() {
               >
                 <span className="font-bold">{tagsCount}</span> <GoTag />
               </div>
+              <button
+                onClick={() => handleDeleteNote(openNote.id)}
+                className="px-3 hover:bg-red-900 h-full dark:border-gray-700 border-l"
+              >
+                <GoTrash size={11} />
+              </button>
             </>
           )}
           <button
-            onClick={() => handleDeleteNote(openNote?.id)}
-            className="px-3 hover:bg-red-900 h-full dark:border-gray-700 border-l"
+            onClick={handleCreateNewNote}
+            className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900"
           >
-            <GoTrash size={11} />
+            <GoPlus size={14}/>
           </button>
         </div>
       </div>
