@@ -83,6 +83,40 @@ export default function Toolbar() {
     });
   }, [searchQuery, notes]);
 
+  function goToFoundText(match) {
+    const textarea = document.getElementById('editor');
+    if (!textarea) return;
+
+    textarea.setSelectionRange(match.index, match.index + searchQuery.length);
+    textarea.focus();
+
+    const { selectionStart } = textarea;
+
+    // Create a temporary, hidden element to measure text height
+    const div = document.createElement('div');
+
+    div.style.visibility = 'hidden';
+    div.style.position = 'absolute';
+    div.style.whiteSpace = 'pre-wrap';
+    // It's crucial to copy all relevant styling for accurate measurement
+    div.style.font = window.getComputedStyle(textarea).font;
+    div.style.width = window.getComputedStyle(textarea).width;
+    div.style.height = 'auto'; // Let height be determined by content
+
+    // Text up to the selection start
+    const textBeforeSelection = textarea.value.substring(0, selectionStart);
+    div.textContent = textBeforeSelection;
+
+    // Append to body to get computed dimensions
+    document.body.appendChild(div);
+    const selectionBottom = div.offsetHeight; // The pixel height before the selection starts
+    document.body.removeChild(div); // Clean up the temporary element
+
+    // Scroll to the calculated position
+    // We subtract a small amount to make sure the selection is fully visible, not just the very top
+    textarea.scrollTop = selectionBottom - textarea.clientHeight / 2;
+  }
+
   return (
     <div className="flex flex-col items-center gap-3 w-full">
       <div className="flex items-center justify-between gap-2 w-[60%]">
@@ -117,7 +151,7 @@ export default function Toolbar() {
                 className="flex items-center gap-2 px-3 border-r dark:border-gray-700 h-full"
                 title={`${charCount} characters`}
               >
-                <span className="font-bold">{charCount}</span> <GoBold/>
+                <span className="font-bold">{charCount}</span> <GoBold />
               </div>
               <div
                 className="flex items-center gap-2 px-3 dark:border-gray-700 h-full"
@@ -145,7 +179,7 @@ export default function Toolbar() {
             onClick={handleCreateNewNote}
             className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900"
           >
-            <GoPlus size={14}/>
+            <GoPlus size={14} />
           </button>
         </div>
       </div>
@@ -177,44 +211,7 @@ export default function Toolbar() {
             {foundInNote.map((match) => {
               return (
                 <button
-                  onClick={() => {
-                    const textarea = document.getElementById('editor');
-                    if (!textarea) return;
-                    textarea.setSelectionRange(
-                      match.index,
-                      match.index + searchQuery.length,
-                    );
-                    textarea.focus();
-
-                    const selectionStart = textarea.selectionStart;
-
-                    // Create a temporary, hidden element to measure text height
-                    const div = document.createElement('div');
-                    div.style.visibility = 'hidden';
-                    div.style.position = 'absolute';
-                    div.style.whiteSpace = 'pre-wrap';
-                    // It's crucial to copy all relevant styling for accurate measurement
-                    div.style.font = window.getComputedStyle(textarea).font;
-                    div.style.width = window.getComputedStyle(textarea).width;
-                    div.style.height = 'auto'; // Let height be determined by content
-
-                    // Text up to the selection start
-                    const textBeforeSelection = textarea.value.substring(
-                      0,
-                      selectionStart,
-                    );
-                    div.textContent = textBeforeSelection;
-
-                    // Append to body to get computed dimensions
-                    document.body.appendChild(div);
-                    const selectionBottom = div.offsetHeight; // The pixel height before the selection starts
-                    document.body.removeChild(div); // Clean up the temporary element
-
-                    // Scroll to the calculated position
-                    // We subtract a small amount to make sure the selection is fully visible, not just the very top
-                    textarea.scrollTop =
-                      selectionBottom - textarea.clientHeight / 2;
-                  }}
+                  onClick={() => goToFoundText(match)}
                   key={match.index}
                   className="truncate max-w-full text-left px-3 hover:bg-gray-700 py-2"
                 >
