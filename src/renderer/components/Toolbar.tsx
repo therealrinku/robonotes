@@ -98,7 +98,7 @@ export default function Toolbar() {
             onBlur={() => setIsFocused(false)}
           />
 
-          <div class="flex items-center text-white h-full">
+          <div className="flex items-center text-white h-full">
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
