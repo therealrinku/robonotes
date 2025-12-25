@@ -119,13 +119,13 @@ export default function Toolbar() {
 
   return (
     <div className="flex flex-col items-center gap-3 w-full">
-      <div className="flex items-center justify-between gap-2 w-[60%]">
+      <div className="flex items-center justify-between gap-2 w-[55%]">
         <div className="flex items-center bg-gray-200 dark:bg-[#1e1e1e] h-8 w-full">
           <GoSearch className="absolute ml-2 " color="gray" />
           <input
-            title="Search with note content or by tag name, #tagname, note content"
+            title="Search for note content or other notes"
             className="w-full text-xs bg-gray-200 dark:bg-[#1e1e1e] px-2 pl-8 outline-none dark:text-white h-full"
-            placeholder="Search note."
+            placeholder="Search..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setIsFocused(true)}
@@ -184,7 +184,7 @@ export default function Toolbar() {
         </div>
       </div>
 
-      <div className="absolute mt-8 w-[60%] text-xs dark:text-white z-90 max-h-[500px] overflow-y-auto">
+      <div className="absolute mt-8 w-[55%] text-xs dark:text-white z-90 max-h-[500px] overflow-y-auto">
         {searchQuery.length === 0 && isFocused && recentNotes.length > 0 && (
           <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col">
             <h4 className="text-gray-500 px-3 pb-2">Recently opened</h4>
