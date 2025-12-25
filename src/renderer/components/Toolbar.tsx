@@ -149,21 +149,30 @@ export default function Toolbar() {
             <>
               <div
                 className="flex items-center gap-2 px-3 border-r dark:border-gray-700 h-full"
-                title={`${charCount} characters`}
+                title="Total number of characters"
               >
-                <span className="font-bold">{charCount}</span> <GoBold />
+                <span className="font-bold">
+                  {new Intl.NumberFormat('en-US').format(charCount)}
+                </span>{' '}
+                <GoBold />
               </div>
               <div
                 className="flex items-center gap-2 px-3 dark:border-gray-700 h-full"
-                title={`${wordCount} words`}
+                title="Total number of words"
               >
-                <span className="font-bold">{wordCount}</span> <GoTypography />
+                <span className="font-bold">
+                  {new Intl.NumberFormat('en-US').format(wordCount)}
+                </span>{' '}
+                <GoTypography />
               </div>
               <div
                 className="flex items-center gap-2 px-3 border-l dark:border-gray-700 h-full"
-                title={`${tagsCount} tags`}
+                title="Total number of tags"
               >
-                <span className="font-bold">{tagsCount}</span> <GoTag />
+                <span className="font-bold">
+                  {new Intl.NumberFormat('en-US').format(tagsCount)}
+                </span>{' '}
+                <GoTag />
               </div>
               <button
                 title="Delete this note"
