@@ -120,7 +120,7 @@ export default function Toolbar() {
   return (
     <div className="flex flex-col items-center gap-3 w-full">
       <div className="flex items-center justify-between gap-2 w-[55%]">
-        <div className="flex items-center bg-gray-200 dark:bg-[#1e1e1e] h-8 w-full">
+        <div className="flex items-center bg-gray-200 dark:bg-[#1e1e1e] h-7 w-full">
           <GoSearch className="absolute ml-2 " color="gray" />
           <input
             title="Search for note content or other notes"
@@ -144,7 +144,7 @@ export default function Toolbar() {
           </div>
         </div>
 
-        <div className="flex items-center  text-xs justify-end bg-gray-100 dark:bg-[#1e1e1e] dark:text-white h-8">
+        <div className="flex items-center  text-xs justify-end bg-gray-100 dark:bg-[#1e1e1e] dark:text-white h-7">
           {openNote && (
             <>
               <div
@@ -184,10 +184,10 @@ export default function Toolbar() {
         </div>
       </div>
 
-      <div className="absolute mt-8 w-[55%] text-xs dark:text-white z-90 max-h-[500px] overflow-y-auto">
+      <div className="absolute mt-7 w-[55%] text-xs dark:text-white z-90 max-h-[500px] overflow-y-auto">
         {searchQuery.length === 0 && isFocused && recentNotes.length > 0 && (
           <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col">
-            <h4 className="text-gray-500 px-3 pb-2">Recently opened</h4>
+            <h4 className="text-gray-500 px-3 pb-1">Recently opened</h4>
             {recentNotes.map((note) => {
               return (
                 <button
@@ -196,7 +196,7 @@ export default function Toolbar() {
                     setSearchQuery('');
                   }}
                   key={note.id}
-                  className="truncate max-w-full text-left px-3 hover:bg-gray-700 py-2"
+                  className="truncate max-w-full text-left px-3 hover:bg-gray-700 py-1"
                 >
                   {note.content || '(no content)'}
                 </button>
@@ -207,13 +207,13 @@ export default function Toolbar() {
 
         {foundInNote.length > 0 && (
           <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col">
-            <h4 className="text-gray-500 px-3 pb-2">Found in this note</h4>
+            <h4 className="text-gray-500 px-3 pb-1">Found in this note</h4>
             {foundInNote.map((match) => {
               return (
                 <button
                   onClick={() => goToFoundText(match)}
                   key={match.index}
-                  className="truncate max-w-full text-left px-3 hover:bg-gray-700 py-2"
+                  className="truncate max-w-full text-left px-3 hover:bg-gray-700 py-1"
                 >
                   {searchQuery} at {match.lineNumber}:{match.index}
                 </button>
@@ -224,7 +224,7 @@ export default function Toolbar() {
 
         {searchQuery.length > 0 && filteredNotes.length > 0 ? (
           <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col">
-            <h4 className="text-gray-500 px-3 pb-2">Notes</h4>
+            <h4 className="text-gray-500 px-3 pb-1">Notes</h4>
             {filteredNotes.map((note) => {
               return (
                 <button
@@ -233,7 +233,7 @@ export default function Toolbar() {
                     setSearchQuery('');
                   }}
                   key={note.id}
-                  className="truncate max-w-full text-left px-3 hover:bg-gray-700 py-2"
+                  className="truncate max-w-full text-left px-3 hover:bg-gray-700 py-1"
                 >
                   {note.content || '(no content)'}
                 </button>
