@@ -11,12 +11,10 @@ import {
 import useNotes from '../hooks/useNotes';
 
 export default function Toolbar() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isFocused, setIsFocused] = useState(false);
+  const [showSearchModal, setShowSearchModal] = useState(false);
 
   const {
     notes,
-    setOpenNote,
     handleCreateNewNote,
     handleDeleteNote,
     openNote,
@@ -35,6 +33,78 @@ export default function Toolbar() {
         .length,
     [openNote?.content],
   );
+
+  if (showSearchModal) {
+    return <SearchModal onClose={() => setShowSearchModal(false)} />;
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-3 w-full">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center  text-xs justify-end bg-gray-100 dark:bg-[#1e1e1e] dark:text-white h-7">
+          {openNote && (
+            <>
+              <div
+                className="flex items-center gap-2 px-3 border-r dark:border-gray-700 h-full"
+                title="Total number of characters"
+              >
+                <span className="font-bold">
+                  {new Intl.NumberFormat('en-US').format(charCount)}
+                </span>{' '}
+                <GoBold />
+              </div>
+              <div
+                className="flex items-center gap-2 px-3 dark:border-gray-700 h-full"
+                title="Total number of words"
+              >
+                <span className="font-bold">
+                  {new Intl.NumberFormat('en-US').format(wordCount)}
+                </span>{' '}
+                <GoTypography />
+              </div>
+              <div
+                className="flex items-center gap-2 px-3 border-l dark:border-gray-700 h-full"
+                title="Total number of tags"
+              >
+                <span className="font-bold">
+                  {new Intl.NumberFormat('en-US').format(tagsCount)}
+                </span>{' '}
+                <GoTag />
+              </div>
+              <button
+                title="Delete this note"
+                onClick={() => handleDeleteNote(openNote.id)}
+                className="px-3 hover:bg-red-900 h-full dark:border-gray-700 border-l"
+              >
+                <GoTrash size={11} />
+              </button>
+            </>
+          )}
+          <button
+            title="Add new note"
+            onClick={handleCreateNewNote}
+            className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900"
+          >
+            <GoPlus size={14} />
+          </button>
+          <button
+            title="Search"
+            onClick={() => setShowSearchModal(true)}
+            className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900 flex items-center gap-2"
+          >
+            <GoSearch size={14} /> <span>Search</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SearchModal({ onClose }: { onClose: () => void }) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
+
+  const { notes, recentNotesId, openNote, setOpenNote } = useNotes();
 
   const recentNotes = notes.filter((note) => recentNotesId.includes(note.id));
 
@@ -118,77 +188,31 @@ export default function Toolbar() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-3 w-full">
-      <div className="flex items-center justify-between gap-2 w-[55%]">
-        <div className="flex items-center bg-gray-200 dark:bg-[#1e1e1e] h-7 w-full">
-          <GoSearch className="absolute ml-2 " color="gray" />
-          <input
-            title="Search for note content or other notes"
-            className="w-full text-xs bg-gray-200 dark:bg-[#1e1e1e] px-2 pl-8 outline-none dark:text-white h-full"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-          />
+    <div className="flex w-[55%] justify-center mx-auto">
+      <div className="flex items-center bg-gray-200 dark:bg-[#1e1e1e] h-7 w-full">
+        <GoSearch className="absolute ml-2 " color="gray" />
+        <input
+          title="Search for note content or other notes"
+          className="w-full text-xs bg-gray-200 dark:bg-[#1e1e1e] px-2 pl-8 outline-none dark:text-white h-full"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+        />
 
-          <div className="flex items-center text-white h-full">
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="px-3 h-full"
-              >
-                <GoX />
-              </button>
-            )}
-          </div>
-        </div>
-
-        <div className="flex items-center  text-xs justify-end bg-gray-100 dark:bg-[#1e1e1e] dark:text-white h-7">
-          {openNote && (
-            <>
-              <div
-                className="flex items-center gap-2 px-3 border-r dark:border-gray-700 h-full"
-                title="Total number of characters"
-              >
-                <span className="font-bold">
-                  {new Intl.NumberFormat('en-US').format(charCount)}
-                </span>{' '}
-                <GoBold />
-              </div>
-              <div
-                className="flex items-center gap-2 px-3 dark:border-gray-700 h-full"
-                title="Total number of words"
-              >
-                <span className="font-bold">
-                  {new Intl.NumberFormat('en-US').format(wordCount)}
-                </span>{' '}
-                <GoTypography />
-              </div>
-              <div
-                className="flex items-center gap-2 px-3 border-l dark:border-gray-700 h-full"
-                title="Total number of tags"
-              >
-                <span className="font-bold">
-                  {new Intl.NumberFormat('en-US').format(tagsCount)}
-                </span>{' '}
-                <GoTag />
-              </div>
-              <button
-                title="Delete this note"
-                onClick={() => handleDeleteNote(openNote.id)}
-                className="px-3 hover:bg-red-900 h-full dark:border-gray-700 border-l"
-              >
-                <GoTrash size={11} />
-              </button>
-            </>
-          )}
+        <div className="flex items-center text-white h-full">
           <button
-            title="Add new note"
-            onClick={handleCreateNewNote}
-            className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900"
+            onClick={() => {
+              if (searchQuery) {
+                setSearchQuery('');
+              } else {
+                onClose();
+              }
+            }}
+            className="px-3 h-full"
           >
-            <GoPlus size={14} />
+            <GoX />
           </button>
         </div>
       </div>
@@ -202,7 +226,7 @@ export default function Toolbar() {
                 <button
                   onClick={() => {
                     setOpenNote(note);
-                    setSearchQuery('');
+                    onClose();
                   }}
                   key={note.id}
                   className="truncate max-w-full text-left px-3 hover:bg-gray-700 py-1"
@@ -239,7 +263,7 @@ export default function Toolbar() {
                 <button
                   onClick={() => {
                     setOpenNote(note);
-                    setSearchQuery('');
+                    onClose();
                   }}
                   key={note.id}
                   className="truncate max-w-full text-left px-3 hover:bg-gray-700 py-1"
