@@ -223,7 +223,7 @@ function SearchModal({ onClose }: { onClose: () => void }) {
       </div>
 
       <div className="absolute mt-7 w-[55%] text-xs dark:text-white z-90 max-h-[500px] overflow-y-auto">
-        {searchQuery.length === 0 && isFocused && recentNotes.length > 0 && (
+        {searchQuery.length === 0 && recentNotes.length > 0 && (
           <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col">
             <h4 className="text-gray-500 px-3 pb-1">Recently opened</h4>
             {recentNotes.map((note) => {
