@@ -1,9 +1,10 @@
-import {
+import React, {
   Dispatch,
   PropsWithChildren,
   SetStateAction,
   createContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 
@@ -14,64 +15,78 @@ interface NoteModel {
   updated_at: string;
 }
 
-interface RootContextProps {
+export interface RootContextType {
   notes: NoteModel[];
-  rootDir: string;
+  rootDir: string | null;
   setNotes: Dispatch<SetStateAction<NoteModel[]>>;
-  setRootDir: Dispatch<SetStateAction<string>>;
+  setRootDir: Dispatch<SetStateAction<string | null>>;
+  openNote: NoteModel | null;
+  setOpenNote: Dispatch<SetStateAction<NoteModel | null>>;
+  recentNotesId: number[];
+  setRecentNotesId: Dispatch<SetStateAction<number[]>>;
 }
 
-export const RootContext = createContext<RootContextProps>({
+const noop = (() => {}) as unknown as Dispatch<SetStateAction<unknown>>;
+
+export const RootContext = createContext<RootContextType>({
   notes: [],
-  rootDir: '',
-  setNotes: () => {},
-  setRootDir: () => {},
+  rootDir: null,
+  setNotes: noop as Dispatch<SetStateAction<NoteModel[]>>,
+  setRootDir: noop as Dispatch<SetStateAction<string | null>>,
+  openNote: null,
+  setOpenNote: noop as Dispatch<SetStateAction<NoteModel | null>>,
+  recentNotesId: [],
+  setRecentNotesId: noop as Dispatch<SetStateAction<number[]>>,
 });
 
-export function RootContextProvider({ children }: PropsWithChildren) {
+export function RootContextProvider({ children }: PropsWithChildren<{}>) {
   const [rootDir, setRootDir] = useState<string | null>(
     localStorage.getItem('rootDir') ?? null,
   );
   const [notes, setNotes] = useState<NoteModel[]>([]);
   const [openNote, setOpenNote] = useState<NoteModel | null>(null);
-  const [recentNotesId, setRecentNotesId] = useState([]);
+  const [recentNotesId, setRecentNotesId] = useState<number[]>([]);
 
   useEffect(() => {
-    if (openNote) {
-      localStorage.setItem('openNoteId', openNote.id);
+    if (!openNote) return;
 
-      // add to recents
-      // if it's there remove it and unshift
-      // if it's not there pop last item and unshift
-      const filtered = recentNotesId.filter((noteId) => noteId !== openNote.id);
-      if (filtered.length !== recentNotesId.length) {
-        filtered.pop();
-      }
+    localStorage.setItem('openNoteId', openNote.id.toString());
+
+    setRecentNotesId((prev) => {
+      const filtered = prev.filter((noteId) => noteId !== openNote.id);
       filtered.unshift(openNote.id);
-      setRecentNotesId(filtered);
-      localStorage.setItem('recents', JSON.stringify(filtered));
-    }
+
+      const trimmed = filtered.slice(0, 10);
+      localStorage.setItem('recents', JSON.stringify(trimmed));
+      return trimmed;
+    });
   }, [openNote]);
 
   useEffect(() => {
-    window.electron.ipcRenderer.on('load-notes', (arg) => {
-      const castedArg = arg as NoteModel[];
-      setNotes(castedArg || []);
+    const loadNotesHandler = (arg: unknown) => {
+      const castedArg = arg as unknown as NoteModel[] | undefined;
+      setNotes(castedArg ?? []);
 
-      const openNoteId = localStorage.getItem('openNoteId');
-      const openNote_ = castedArg.find((note) => note.id == openNoteId); //shallow compare with '=='
-      if (openNote_) setOpenNote(openNote_);
-    });
+      const openNoteId = localStorage.getItem('openNoteId') ?? '';
+      const lastOpenNote = (castedArg ?? []).find(
+        (note) => note.id.toString() === openNoteId,
+      );
+      if (lastOpenNote) setOpenNote(lastOpenNote);
+    };
 
+    const checkRootHandler = (isValidRootDir: unknown) => {
+      const isValid = Boolean(isValidRootDir);
+      if (!isValid) {
+        setRootDir(null);
+      } else {
+        setRootDir(localStorage.getItem('rootDir') ?? null);
+      }
+    };
+
+    window.electron.ipcRenderer.on('load-notes', loadNotesHandler);
     window.electron.ipcRenderer.on(
       'check-if-root-dir-exists',
-      (isValidRootDir) => {
-        if (!isValidRootDir) {
-          setRootDir(null);
-        } else {
-          setRootDir(localStorage.getItem('rootDir') ?? null);
-        }
-      },
+      checkRootHandler,
     );
 
     window.electron.ipcRenderer.sendMessage('load-notes', rootDir);
@@ -82,31 +97,50 @@ export function RootContextProvider({ children }: PropsWithChildren) {
   }, [rootDir]);
 
   useEffect(() => {
-    const recents = localStorage.getItem('recents');
-    const recents_ = recents ? JSON.parse(recents) : [];
-    if (Array.isArray(recents)) {
-      setRecentNotesId(recents_);
+    const lastRecentsJSON = localStorage.getItem('recents');
+    const lastRecents = lastRecentsJSON ? JSON.parse(lastRecentsJSON) : [];
+
+    if (Array.isArray(lastRecents)) {
+      const numeric = lastRecents
+        .map((v: unknown) => Number(v))
+        .filter((n) => !Number.isNaN(n));
+
+      setRecentNotesId(numeric);
     }
 
-    window.electron.ipcRenderer.on('error-happened', (err) => {
-      alert(err.message);
-    });
+    const errorHandler = (err: unknown) => {
+      const msg = (err && (err as any).message) || String(err);
+      // eslint-disable-next-line no-alert
+      alert(msg);
+    };
+
+    window.electron.ipcRenderer.on('error-happened', errorHandler);
   }, []);
 
+  const contextValue = useMemo<RootContextType>(
+    () => ({
+      notes,
+      setNotes,
+      rootDir,
+      setRootDir,
+      openNote,
+      setOpenNote,
+      recentNotesId,
+      setRecentNotesId,
+    }),
+    [
+      notes,
+      setNotes,
+      rootDir,
+      setRootDir,
+      openNote,
+      setOpenNote,
+      recentNotesId,
+      setRecentNotesId,
+    ],
+  );
+
   return (
-    <RootContext.Provider
-      value={{
-        notes,
-        setNotes,
-        rootDir,
-        setRootDir,
-        openNote,
-        setOpenNote,
-        recentNotesId,
-        setRecentNotesId,
-      }}
-    >
-      {children}
-    </RootContext.Provider>
+    <RootContext.Provider value={contextValue}>{children}</RootContext.Provider>
   );
 }

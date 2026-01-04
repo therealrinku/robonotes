@@ -28,7 +28,7 @@ export default function ModalWrapper({ title, children, onClose }: Props) {
         <div className="flex flex-row items-center justify-between bg-gray-100 dark:bg-[#121212] w-full h-10 px-3 rounded-tl rounded-tr dark:text-white">
           <p className="text-sm font-bold">{title}</p>
 
-          <button onClick={onClose}>
+          <button type="button" onClick={onClose}>
             <GoX size={20} />
           </button>
         </div>

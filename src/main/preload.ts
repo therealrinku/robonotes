@@ -11,6 +11,7 @@ export type Channels =
   | 'open-preferences'
   | 'toggle-theme'
   | 'check-if-root-dir-exists'
+  | 'error-happened';
 
 const electronHandler = {
   ipcRenderer: {
