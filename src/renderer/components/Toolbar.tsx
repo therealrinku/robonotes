@@ -10,112 +10,16 @@ import {
 } from 'react-icons/go';
 import useNotes from '../hooks/useNotes';
 
-export default function Toolbar() {
-  const [showSearchModal, setShowSearchModal] = useState(false);
-
-  const {
-    notes,
-    handleCreateNewNote,
-    handleDeleteNote,
-    openNote,
-    recentNotesId,
-  } = useNotes();
-
-  const charCount = openNote?.content?.length;
-
-  const wordCount = useMemo(
-    () => openNote?.content?.split(/\s+/).filter((word) => word !== '').length,
-    [openNote?.content],
-  );
-  const tagsCount = useMemo(
-    () =>
-      openNote?.content?.split(/\s+|\n+/).filter((word) => word.startsWith('#'))
-        .length,
-    [openNote?.content],
-  );
-
-  if (showSearchModal) {
-    return <SearchModal onClose={() => setShowSearchModal(false)} />;
-  }
-
-  return (
-    <div className="flex flex-col items-center gap-3 w-full">
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center text-xs">
-          {openNote && (
-            <div className="flex items-center bg-gray-100 dark:bg-[#1e1e1e] dark:text-white h-7">
-              <div
-                className="flex items-center gap-2 px-3 border-r dark:border-gray-700 h-full"
-                title="Total number of characters"
-              >
-                <span className="font-bold">
-                  {new Intl.NumberFormat('en-US').format(charCount)}
-                </span>{' '}
-                <GoBold />
-              </div>
-              <div
-                className="flex items-center gap-2 px-3 dark:border-gray-700 h-full"
-                title="Total number of words"
-              >
-                <span className="font-bold">
-                  {new Intl.NumberFormat('en-US').format(wordCount)}
-                </span>{' '}
-                <GoTypography />
-              </div>
-              <div
-                className="flex items-center gap-2 px-3 border-l dark:border-gray-700 h-full"
-                title="Total number of tags"
-              >
-                <span className="font-bold">
-                  {new Intl.NumberFormat('en-US').format(tagsCount)}
-                </span>{' '}
-                <GoTag />
-              </div>
-            </div>
-          )}
-
-          <div className="flex items-center bg-gray-100 dark:bg-[#1e1e1e] dark:text-white h-7 mx-5">
-            {openNote && (
-              <button
-                title="Delete this note"
-                onClick={() => handleDeleteNote(openNote.id)}
-                className="px-3 hover:bg-red-900 h-full dark:border-gray-700 border-l"
-              >
-                <GoTrash size={11} />
-              </button>
-            )}
-            <button
-              title="Add new note"
-              onClick={handleCreateNewNote}
-              className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900"
-            >
-              <GoPlus size={14} />
-            </button>
-            <button
-              title="Search"
-              onClick={() => setShowSearchModal(true)}
-              className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900"
-            >
-              <GoSearch size={14} />
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function SearchModal({ onClose }: { onClose: () => void }) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [isFocused, setIsFocused] = useState(false);
 
   const { notes, recentNotesId, openNote, setOpenNote } = useNotes();
 
   const recentNotes = notes.filter((note) => recentNotesId.includes(note.id));
 
   const foundInNote = useMemo(() => {
-    if (!openNote) return false;
-    if (!searchQuery || searchQuery.trim() === '') return false;
+    if (!openNote) return [];
+    if (!searchQuery || searchQuery.trim() === '') return [];
 
     let startIndex = 0;
     const matches = [];
@@ -134,7 +38,7 @@ function SearchModal({ onClose }: { onClose: () => void }) {
   }, [openNote, searchQuery]);
 
   const filteredNotes = useMemo(() => {
-    if (notes.length == 0 || searchQuery.trim().length === 0) {
+    if (notes.length === 0 || searchQuery.trim().length === 0) {
       return notes;
     }
 
@@ -151,15 +55,15 @@ function SearchModal({ onClose }: { onClose: () => void }) {
             .split(/\s+|\n+/)
             .filter((word) => word.startsWith('#'));
           return allTags.includes(query);
-        } else {
-          return note.content.toLowerCase().includes(query.toLowerCase());
         }
+
+        return note.content.toLowerCase().includes(query.toLowerCase());
       });
     });
   }, [searchQuery, notes]);
 
-  function goToFoundText(match) {
-    const textarea = document.getElementById('editor');
+  function goToFoundText(match: { index: number }) {
+    const textarea = document.getElementById('editor') as HTMLTextAreaElement;
     if (!textarea) return;
 
     textarea.setSelectionRange(match.index, match.index + searchQuery.length);
@@ -184,12 +88,21 @@ function SearchModal({ onClose }: { onClose: () => void }) {
 
     // Append to body to get computed dimensions
     document.body.appendChild(div);
-    const selectionBottom = div.offsetHeight; // The pixel height before the selection starts
+    // The pixel height before the selection starts
+    const selectionBottom = div.offsetHeight;
     document.body.removeChild(div); // Clean up the temporary element
 
     // Scroll to the calculated position
     // We subtract a small amount to make sure the selection is fully visible, not just the very top
     textarea.scrollTop = selectionBottom - textarea.clientHeight / 2;
+  }
+
+  function handleClearSearch() {
+    if (searchQuery) {
+      setSearchQuery('');
+    } else {
+      onClose();
+    }
   }
 
   return (
@@ -202,21 +115,10 @@ function SearchModal({ onClose }: { onClose: () => void }) {
           placeholder="Search..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
         />
 
         <div className="flex items-center text-white h-full">
-          <button
-            onClick={() => {
-              if (searchQuery) {
-                setSearchQuery('');
-              } else {
-                onClose();
-              }
-            }}
-            className="px-3 h-full"
-          >
+          <button onClick={handleClearSearch} className="px-3 h-full">
             <GoX />
           </button>
         </div>
@@ -285,6 +187,98 @@ function SearchModal({ onClose }: { onClose: () => void }) {
             </div>
           )
         )}
+      </div>
+    </div>
+  );
+}
+
+export default function Toolbar() {
+  const [showSearchModal, setShowSearchModal] = useState(false);
+
+  const { handleCreateNewNote, handleDeleteNote, openNote } = useNotes();
+
+  const charCount = openNote?.content?.length || 0;
+
+  const wordCount = useMemo(
+    () =>
+      openNote?.content?.split(/\s+/).filter((word) => word !== '').length || 0,
+    [openNote?.content],
+  );
+  const tagsCount = useMemo(
+    () =>
+      openNote?.content?.split(/\s+|\n+/).filter((word) => word.startsWith('#'))
+        .length || 0,
+    [openNote?.content],
+  );
+
+  if (showSearchModal) {
+    return <SearchModal onClose={() => setShowSearchModal(false)} />;
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-3 w-full">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center text-xs">
+          {openNote && (
+            <div className="flex items-center bg-gray-100 dark:bg-[#1e1e1e] dark:text-white h-7">
+              <div
+                className="flex items-center gap-2 px-3 border-r dark:border-gray-700 h-full"
+                title="Total number of characters"
+              >
+                <span className="font-bold">
+                  {new Intl.NumberFormat('en-US').format(charCount)}
+                </span>{' '}
+                <GoBold />
+              </div>
+              <div
+                className="flex items-center gap-2 px-3 dark:border-gray-700 h-full"
+                title="Total number of words"
+              >
+                <span className="font-bold">
+                  {new Intl.NumberFormat('en-US').format(wordCount)}
+                </span>{' '}
+                <GoTypography />
+              </div>
+              <div
+                className="flex items-center gap-2 px-3 border-l dark:border-gray-700 h-full"
+                title="Total number of tags"
+              >
+                <span className="font-bold">
+                  {new Intl.NumberFormat('en-US').format(tagsCount)}
+                </span>{' '}
+                <GoTag />
+              </div>
+            </div>
+          )}
+
+          <div className="flex items-center bg-gray-100 dark:bg-[#1e1e1e] dark:text-white h-7 mx-5">
+            {openNote && (
+              <button
+                title="Delete this note"
+                onClick={() => handleDeleteNote(openNote.id)}
+                className="px-3 hover:bg-red-900 h-full dark:border-gray-700 border-l"
+              >
+                <GoTrash size={11} />
+              </button>
+            )}
+
+            <button
+              title="Add new note"
+              onClick={handleCreateNewNote}
+              className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900"
+            >
+              <GoPlus size={14} />
+            </button>
+
+            <button
+              title="Search"
+              onClick={() => setShowSearchModal(true)}
+              className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900"
+            >
+              <GoSearch size={14} />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
