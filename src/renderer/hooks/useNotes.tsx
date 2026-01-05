@@ -1,6 +1,13 @@
 import { useContext } from 'react';
 import { RootContext } from '../context/RootContext';
 
+interface NoteModel {
+  id: number;
+  content: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export default function useNotes() {
   const {
     notes,
@@ -15,9 +22,8 @@ export default function useNotes() {
     window.electron.ipcRenderer.sendMessage('upsert-note', [null, '', '']);
 
     window.electron.ipcRenderer.once('upsert-note', (updatedNoteItem) => {
-      //@ts-expect-error
-      setNotes((prev) => [...prev, updatedNoteItem]);
-      setOpenNote(updatedNoteItem);
+      setNotes((prev) => [...prev, updatedNoteItem as NoteModel]);
+      setOpenNote(updatedNoteItem as NoteModel);
     });
   }
 
@@ -28,12 +34,11 @@ export default function useNotes() {
       const updatedNotes = [...notes];
       const noteIndex = notes.findIndex((note) => note.id === id);
 
-      //@ts-expect-error
-      updatedNotes[noteIndex] = updatedNoteItem;
+      updatedNotes[noteIndex] = updatedNoteItem as NoteModel;
       setNotes(updatedNotes);
 
-      if (updatedNoteItem.id === openNote?.id) {
-        setOpenNote(updatedNoteItem);
+      if ((updatedNoteItem as NoteModel).id === openNote?.id) {
+        setOpenNote(updatedNoteItem as NoteModel);
       }
     });
   }
@@ -49,7 +54,7 @@ export default function useNotes() {
     window.electron.ipcRenderer.on('delete-note', () => {
       setNotes((prev) => prev.filter((note) => note.id !== id));
       setOpenNote(null);
-      setRecentNotesId((prev) => prev.filter((noteId) => noteId! == id));
+      setRecentNotesId((prev) => prev.filter((noteId) => noteId! === id));
     });
   }
 

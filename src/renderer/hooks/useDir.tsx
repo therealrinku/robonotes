@@ -6,8 +6,7 @@ export default function useDir() {
 
   function handleChangeDir() {
     window.electron.ipcRenderer.once('open-root-dir-selector', (arg) => {
-      const path = String(arg);
-      window.localStorage.setItem('rootDir', path);
+      window.localStorage.setItem('rootDir', String(arg));
       setRootDir(String(arg));
     });
 
