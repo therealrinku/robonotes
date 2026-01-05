@@ -1,8 +1,7 @@
+import { useState } from 'react';
 import SimpleUiSvg from '../assets/images/simple-ui.svg';
 import PrivacySvg from '../assets/images/privacy.svg';
 import FileSvg from '../assets/images/file.svg';
-import HashtagSvg from '../assets/images/hashtags.svg';
-import { useState } from 'react';
 import useDir from '../hooks/useDir';
 
 export default function InitialSetup() {
@@ -76,8 +75,10 @@ function ThirdCard() {
       <img src={FileSvg} alt="Simple UI" className="w-72 h-72" />
       <p className="font-bold">Select your folder</p>
       <p className="text-center">
-        Select the folder where you want <br/> to save all of your notes. 
-        <p className="italic text-xs mt-3 font-bold">This can be changed later!</p>
+        Select the folder where you want <br /> to save all of your notes.
+        <p className="italic text-xs mt-3 font-bold">
+          This can be changed later!
+        </p>
       </p>
 
       <div className="flex flex-row items-center gap-2">

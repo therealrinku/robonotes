@@ -1,6 +1,6 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GoPlusCircle, GoSearch, GoGear } from 'react-icons/go';
+import { GoGear } from 'react-icons/go';
 import PreferencesModal from '../components/PreferencesModal';
 import SearchModal from '../components/SearchModal.tsx';
 import useNotes from '../hooks/useNotes';
@@ -16,10 +16,10 @@ interface NoteItemProps {
 export default function Home() {
   const [showPreferencesModal, setShowPreferencesModal] = useState(false);
 
-  const { notes, handleCreateNewNote } = useNotes();
+  const { notes } = useNotes();
   const { handleChangeDir } = useDir();
 
-  function handleShortcuts(e: KeyboardEvent) {
+  function handleShortcuts() {
     // if (e.ctrlKey && e.key === 'n') {
     //   handleCreateNewNote();
     // }

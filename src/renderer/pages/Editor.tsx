@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { GoLog } from 'react-icons/go';
 import useNotes from '../hooks/useNotes';
-import { GoLog, GoTriangleLeft } from 'react-icons/go';
 import Toolbar from '../components/Toolbar';
 
 export default function Editor() {
-  const { notes, handleUpdateNote, handleDeleteNote, openNote, setOpenNote } =
-    useNotes();
+  const { handleUpdateNote, openNote } = useNotes();
 
   const [content, setContent] = useState('');
   const timeout0 = useRef<NodeJS.Timeout | null>(null);
@@ -46,7 +45,6 @@ export default function Editor() {
             value={content}
             autoCorrect="off"
             spellCheck="false"
-            autoFocus={true}
             onChange={(e) => setContent(e.target.value)}
           />
         ) : (
