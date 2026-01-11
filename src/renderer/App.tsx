@@ -11,26 +11,19 @@ export default function App() {
     if (localStorage.getItem('color-theme') === 'dark') {
       localStorage.setItem('color-theme', 'light');
       document.documentElement.classList.remove('dark');
-    } else {
-      localStorage.setItem('color-theme', 'dark');
-      document.documentElement.classList.add('dark');
+      return;
     }
+    localStorage.setItem('color-theme', 'dark');
+    document.documentElement.classList.add('dark');
   }
 
-  // show loading animation for 2 seconds
   useEffect(() => {
-    setTimeout(() => {
-      setShowLoading(false);
-    }, 2000);
-  }, []);
+    setTimeout(() => setShowLoading(false), 2000);
 
-  useEffect(() => {
-    // load-theme
     if (localStorage.getItem('color-theme') === 'dark') {
       document.documentElement.classList.add('dark');
     }
 
-    // change-theme from menubar
     window.electron.ipcRenderer.on('toggle-theme', () => {
       toggleTheme();
     });
