@@ -18,6 +18,8 @@
 
 <img width="1433" height="865" alt="Screenshot 2026-01-13 at 21 35 55" src="https://github.com/user-attachments/assets/4de51a1c-89e2-4140-940f-c76fb26b96b1" />
 
+<img width="1433" height="865" alt="Screenshot 2026-01-13 at 21 38 54" src="https://github.com/user-attachments/assets/1fa4fbd5-fd0b-4e6c-8c59-b6ece6f26db5" />
+
 
 ## Technologies Used
 <img src="https://img.shields.io/badge/electron-000000?style=for-the-badge&logo=electron&logoColor=white"/>
