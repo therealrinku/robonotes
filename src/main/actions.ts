@@ -1,6 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 
-export class RobonoteActions {
+export default class RobonoteActions {
   constructor() {
     this.db = null;
   }
