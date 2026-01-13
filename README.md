@@ -16,11 +16,7 @@
 
 ## Headshots
 
-<img width="617" height="738" alt="Screenshot 2025-07-22 at 22 11 07" src="https://github.com/user-attachments/assets/80aa52f0-f56c-4a9d-9083-4437c4d2bc0a" />
-<img width="617" height="738" alt="Screenshot 2025-07-22 at 22 11 14" src="https://github.com/user-attachments/assets/23ffea0f-6c9d-4459-bc27-91f1688b048a" />
-
-
-[Download now](https://github.com/therealrinku/robonotes/releases)
+<img width="1433" height="865" alt="Screenshot 2026-01-13 at 21 35 55" src="https://github.com/user-attachments/assets/4de51a1c-89e2-4140-940f-c76fb26b96b1" />
 
 
 ## Technologies Used
