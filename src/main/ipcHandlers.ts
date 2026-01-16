@@ -4,26 +4,6 @@ import RobonoteActions from './actions';
 const actions = new RobonoteActions();
 
 export default function registerIpcHandlers() {
-  // ipcMain.on('check-if-root-dir-exists', async (event, args) => {
-  //   const rootDir = args;
-
-  //   const isValidRootDir = existsSync(rootDir);
-  //   event.reply('check-if-root-dir-exists', isValidRootDir);
-  // });
-
-  // ipcMain.on('open-root-dir-selector', async (event, _) => {
-  //   // @ts-expect-error
-  //   const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
-  //     properties: ['openDirectory'],
-  //   });
-
-  //   if (canceled || !filePaths[0]) {
-  //     return;
-  //   }
-
-  //   event.reply('open-root-dir-selector', filePaths[0]);
-  // });
-
   ipcMain.on('delete-note', async (event, id) => {
     try {
       await actions.deleteNote(id);

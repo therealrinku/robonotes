@@ -17,9 +17,7 @@ interface NoteModel {
 
 export interface RootContextType {
   notes: NoteModel[];
-  rootDir: string | null;
   setNotes: Dispatch<SetStateAction<NoteModel[]>>;
-  setRootDir: Dispatch<SetStateAction<string | null>>;
   openNote: NoteModel | null;
   setOpenNote: Dispatch<SetStateAction<NoteModel | null>>;
   recentNotesId: number[];
@@ -30,9 +28,7 @@ const noop = (() => {}) as unknown as Dispatch<SetStateAction<unknown>>;
 
 export const RootContext = createContext<RootContextType>({
   notes: [],
-  rootDir: null,
   setNotes: noop as Dispatch<SetStateAction<NoteModel[]>>,
-  setRootDir: noop as Dispatch<SetStateAction<string | null>>,
   openNote: null,
   setOpenNote: noop as Dispatch<SetStateAction<NoteModel | null>>,
   recentNotesId: [],
@@ -40,9 +36,6 @@ export const RootContext = createContext<RootContextType>({
 });
 
 export function RootContextProvider({ children }: PropsWithChildren<{}>) {
-  const [rootDir, setRootDir] = useState<string | null>(
-    localStorage.getItem('rootDir') ?? null,
-  );
   const [notes, setNotes] = useState<NoteModel[]>([]);
   const [openNote, setOpenNote] = useState<NoteModel | null>(null);
   const [recentNotesId, setRecentNotesId] = useState<number[]>([]);
@@ -84,16 +77,8 @@ export function RootContextProvider({ children }: PropsWithChildren<{}>) {
     };
 
     window.electron.ipcRenderer.on('load-notes', loadNotesHandler);
-    window.electron.ipcRenderer.on(
-      'check-if-root-dir-exists',
-      checkRootHandler,
-    );
 
     window.electron.ipcRenderer.sendMessage('load-notes', rootDir);
-    window.electron.ipcRenderer.sendMessage(
-      'check-if-root-dir-exists',
-      localStorage.getItem('rootDir'),
-    );
   }, [rootDir]);
 
   useEffect(() => {
@@ -121,23 +106,12 @@ export function RootContextProvider({ children }: PropsWithChildren<{}>) {
     () => ({
       notes,
       setNotes,
-      rootDir,
-      setRootDir,
       openNote,
       setOpenNote,
       recentNotesId,
       setRecentNotesId,
     }),
-    [
-      notes,
-      setNotes,
-      rootDir,
-      setRootDir,
-      openNote,
-      setOpenNote,
-      recentNotesId,
-      setRecentNotesId,
-    ],
+    [notes, setNotes, openNote, setOpenNote, recentNotesId, setRecentNotesId],
   );
 
   return (
