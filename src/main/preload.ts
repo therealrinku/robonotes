@@ -4,7 +4,6 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
 export type Channels =
   | 'load-notes'
-  | 'save-note'
   | 'upsert-note'
   | 'delete-note'
   | 'open-preferences'
