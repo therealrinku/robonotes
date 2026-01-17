@@ -67,19 +67,10 @@ export function RootContextProvider({ children }: PropsWithChildren<{}>) {
       if (lastOpenNote) setOpenNote(lastOpenNote);
     };
 
-    const checkRootHandler = (isValidRootDir: unknown) => {
-      const isValid = Boolean(isValidRootDir);
-      if (!isValid) {
-        setRootDir(null);
-      } else {
-        setRootDir(localStorage.getItem('rootDir') ?? null);
-      }
-    };
-
     window.electron.ipcRenderer.on('load-notes', loadNotesHandler);
 
-    window.electron.ipcRenderer.sendMessage('load-notes', rootDir);
-  }, [rootDir]);
+    window.electron.ipcRenderer.sendMessage('load-notes');
+  }, []);
 
   useEffect(() => {
     const lastRecentsJSON = localStorage.getItem('recents');
