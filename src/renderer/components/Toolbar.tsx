@@ -23,11 +23,16 @@ function SearchModal({ onClose }: { onClose: () => void }) {
 
     let startIndex = 0;
     const matches = [];
+    let keepSearching = true;
 
-    while (true) {
+    while (keepSearching) {
       const index = openNote.content.indexOf(searchQuery, startIndex);
 
-      if (index === -1) break;
+      if (index === -1) {
+        keepSearching = false;
+        break;
+      }
+
       const textBefore = openNote.content.substring(0, index);
       const lineNumber = textBefore.split('\n').length;
       matches.push({ index, lineNumber });
