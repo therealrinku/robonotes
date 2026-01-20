@@ -105,9 +105,10 @@ function SearchModal({ onClose }: { onClose: () => void }) {
   function handleClearSearch() {
     if (searchQuery) {
       setSearchQuery('');
-    } else {
-      onClose();
+      return;
     }
+
+    onClose();
   }
 
   return (
