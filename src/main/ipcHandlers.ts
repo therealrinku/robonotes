@@ -1,11 +1,12 @@
-import { ipcMain, app } from 'electron';
+import { ipcMain } from 'electron';
 import RobonoteActions from './actions';
 
 const actions = new RobonoteActions();
 
-export default function registerIpcHandlers() {
+export default async function registerIpcHandlers() {
   ipcMain.on('delete-note', async (event, id) => {
     try {
+      await actions.init();
       await actions.deleteNote(id);
       event.reply('delete-note');
     } catch (err: any) {
@@ -17,6 +18,7 @@ export default function registerIpcHandlers() {
     const [id, description] = args;
 
     try {
+      await actions.init();
       const updatedNote = await actions.upsertNote(id, description);
       event.reply('upsert-note', updatedNote);
     } catch (err: any) {
@@ -26,10 +28,7 @@ export default function registerIpcHandlers() {
 
   ipcMain.on('load-notes', async (event) => {
     try {
-      // we use documents folder as directory to save notes
-      // no option to change it for now!!
-      const documentDir = app.getPath('documents');
-      await actions.init(documentDir);
+      await actions.init();
       const notes = await actions.getNotes();
       event.reply('load-notes', notes);
     } catch (err: any) {

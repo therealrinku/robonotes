@@ -1,3 +1,5 @@
+import { app } from 'electron';
+
 const sqlite3 = require('sqlite3').verbose();
 
 export default class RobonoteActions {
@@ -5,12 +7,8 @@ export default class RobonoteActions {
     this.db = null;
   }
 
-  async init(rootDir) {
-    if (!rootDir) {
-      return;
-    }
-
-    const dbPath = `${rootDir}/robonotes.db`;
+  async init() {
+    const dbPath = `${app.getPath('documents')}/robonotes.db`;
 
     this.db = new sqlite3.Database(dbPath);
 
