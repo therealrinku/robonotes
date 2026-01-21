@@ -257,8 +257,8 @@ export default function Toolbar() {
             </div>
           )}
 
-          <div className="flex items-center bg-gray-100 dark:bg-[#1e1e1e] dark:text-white h-7 mx-5">
-            {openNote && (
+          {openNote && (
+            <div className="flex items-center bg-gray-100 dark:bg-[#1e1e1e] dark:text-white h-7 mx-5">
               <button
                 title="Delete this note"
                 onClick={() => handleDeleteNote(openNote.id)}
@@ -266,24 +266,24 @@ export default function Toolbar() {
               >
                 <GoTrash size={11} />
               </button>
-            )}
 
-            <button
-              title="Add new note"
-              onClick={handleCreateNewNote}
-              className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900"
-            >
-              <GoPlus size={14} />
-            </button>
+              <button
+                title="Add new note"
+                onClick={handleCreateNewNote}
+                className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900"
+              >
+                <GoPlus size={14} />
+              </button>
 
-            <button
-              title="Search"
-              onClick={() => setShowSearchModal(true)}
-              className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900"
-            >
-              <GoSearch size={14} />
-            </button>
-          </div>
+              <button
+                title="Search"
+                onClick={() => setShowSearchModal(true)}
+                className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900"
+              >
+                <GoSearch size={14} />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

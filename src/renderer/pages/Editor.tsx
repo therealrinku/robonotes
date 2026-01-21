@@ -4,7 +4,7 @@ import useNotes from '../hooks/useNotes';
 import Toolbar from '../components/Toolbar';
 
 export default function Editor() {
-  const { handleUpdateNote, openNote } = useNotes();
+  const { handleUpdateNote, handleCreateNewNote, openNote } = useNotes();
 
   const [content, setContent] = useState('');
   const timeout0 = useRef<NodeJS.Timeout | null>(null);
@@ -51,6 +51,13 @@ export default function Editor() {
           <div className="flex flex-col h-[90vh] w-full items-center justify-center text-white text-sm gap-3">
             <GoLog color="white" size={25} />
             <p>No note opened.</p>
+
+            <button
+              className="border px-3 py-1 border-slate-600"
+              onClick={handleCreateNewNote}
+            >
+              Create new note
+            </button>
           </div>
         )}
       </div>
