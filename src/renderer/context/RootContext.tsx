@@ -56,23 +56,6 @@ export function RootContextProvider({ children }: PropsWithChildren<{}>) {
   }, [openNote]);
 
   useEffect(() => {
-    const loadNotesHandler = (arg: unknown) => {
-      const castedArg = arg as unknown as NoteModel[] | undefined;
-      setNotes(castedArg ?? []);
-
-      const openNoteId = localStorage.getItem('openNoteId') ?? '';
-      const lastOpenNote = (castedArg ?? []).find(
-        (note) => note.id.toString() === openNoteId,
-      );
-      if (lastOpenNote) setOpenNote(lastOpenNote);
-    };
-
-    window.electron.ipcRenderer.on('load-notes', loadNotesHandler);
-
-    window.electron.ipcRenderer.sendMessage('load-notes');
-  }, []);
-
-  useEffect(() => {
     const lastRecentsJSON = localStorage.getItem('recents');
     const lastRecents = lastRecentsJSON ? JSON.parse(lastRecentsJSON) : [];
 
@@ -84,6 +67,17 @@ export function RootContextProvider({ children }: PropsWithChildren<{}>) {
       setRecentNotesId(numeric);
     }
 
+    const loadNotesHandler = (arg: unknown) => {
+      const castedArg = arg as unknown as NoteModel[] | undefined;
+      setNotes(castedArg ?? []);
+
+      const openNoteId = localStorage.getItem('openNoteId') ?? '';
+      const lastOpenNote = (castedArg ?? []).find(
+        (note) => note.id.toString() === openNoteId,
+      );
+      if (lastOpenNote) setOpenNote(lastOpenNote);
+    };
+
     const errorHandler = (err: unknown) => {
       const msg = (err && (err as any).message) || String(err);
       // eslint-disable-next-line no-alert
@@ -91,6 +85,8 @@ export function RootContextProvider({ children }: PropsWithChildren<{}>) {
     };
 
     window.electron.ipcRenderer.on('error-happened', errorHandler);
+    window.electron.ipcRenderer.on('load-notes', loadNotesHandler);
+    window.electron.ipcRenderer.sendMessage('load-notes');
   }, []);
 
   const contextValue = useMemo<RootContextType>(
