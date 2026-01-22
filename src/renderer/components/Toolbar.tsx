@@ -201,7 +201,8 @@ function SearchModal({ onClose }: { onClose: () => void }) {
 export default function Toolbar() {
   const [showSearchModal, setShowSearchModal] = useState(false);
 
-  const { handleCreateNewNote, handleDeleteNote, openNote } = useNotes();
+  const { handleCreateNewNote, handleDeleteNote, handleCloseNote, openNote } =
+    useNotes();
 
   const charCount = openNote?.content?.length || 0;
 
@@ -259,6 +260,14 @@ export default function Toolbar() {
 
           {openNote && (
             <div className="flex items-center bg-gray-100 dark:bg-[#1e1e1e] dark:text-white h-7 mx-5">
+              <button
+                title="Close this note"
+                onClick={handleCloseNote}
+                className="px-3 hover:bg-red-900 h-full dark:border-gray-700 border-l"
+              >
+                <GoX size={13} />
+              </button>
+
               <button
                 title="Delete this note"
                 onClick={() => handleDeleteNote(openNote.id)}
