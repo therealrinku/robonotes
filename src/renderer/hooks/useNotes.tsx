@@ -58,12 +58,17 @@ export default function useNotes() {
     });
   }
 
+  function handleOpenNote(note: NoteModel) {
+    setOpenNote(note);
+  }
+
   function handleCloseNote() {
     setOpenNote(null);
   }
 
   return {
     notes,
+    handleOpenNote,
     handleCloseNote,
     handleUpdateNote,
     handleDeleteNote,

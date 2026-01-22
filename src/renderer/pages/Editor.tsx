@@ -4,7 +4,16 @@ import useNotes from '../hooks/useNotes';
 import Toolbar from '../components/Toolbar';
 
 export default function Editor() {
-  const { handleUpdateNote, handleCreateNewNote, openNote } = useNotes();
+  const {
+    handleOpenNote,
+    handleUpdateNote,
+    handleCreateNewNote,
+    openNote,
+    notes,
+    recentNotesId,
+  } = useNotes();
+
+  const recentNotes = notes.filter((note) => recentNotesId.includes(note.id));
 
   const [content, setContent] = useState('');
   const timeout0 = useRef<NodeJS.Timeout | null>(null);
@@ -58,6 +67,19 @@ export default function Editor() {
             >
               Create new note
             </button>
+
+            <p className="text-gray-400">Recent notes</p>
+            {recentNotes.map((recent) => {
+              return (
+                <button
+                  key={recent.id}
+                  className="underline truncate"
+                  onClick={() => handleOpenNote(recent)}
+                >
+                  {recent.content}
+                </button>
+              );
+            })}
           </div>
         )}
       </div>
