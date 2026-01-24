@@ -68,18 +68,22 @@ export default function Editor() {
               Create new note
             </button>
 
-            <p className="text-gray-400">Recent notes</p>
-            {recentNotes.map((recent) => {
-              return (
-                <button
-                  key={recent.id}
-                  className="underline truncate"
-                  onClick={() => handleOpenNote(recent)}
-                >
-                  {recent.content}
-                </button>
-              );
-            })}
+            {recentNotes.length > 0 && (
+              <>
+                <p className="text-gray-400">Recent notes</p>
+                {recentNotes.map((recent) => {
+                  return (
+                    <button
+                      key={recent.id}
+                      className="underline truncate"
+                      onClick={() => handleOpenNote(recent)}
+                    >
+                      {recent.content || '(no content)'}
+                    </button>
+                  );
+                })}
+              </>
+            )}
           </div>
         )}
       </div>
