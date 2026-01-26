@@ -9,99 +9,80 @@ interface Note {
 }
 
 export default class RobonoteActions {
-  private db: sqlite3.Database | null;
+  private db: sqlite3.Database | null = null;
 
   constructor() {
     this.db = null;
   }
 
+  private runQuery<T>(query: string, params: any[] = []): Promise<T> {
+    return new Promise((resolve, reject) => {
+      this.db!.all(query, params, (err: Error | null, result: T) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    });
+  }
+
+  private runUpdate(
+    query: string,
+    params: any[] = [],
+  ): Promise<sqlite3.RunResult> {
+    return new Promise((resolve, reject) => {
+      this.db!.run(query, params, function (err: Error | null) {
+        if (err) reject(err);
+        else resolve(this);
+      });
+    });
+  }
+
   async init(): Promise<void> {
     const dbPath = `${app.getPath('documents')}/robonotes.db`;
-
     this.db = new sqlite3.Database(dbPath);
 
-    await new Promise<void>((resolve, reject) => {
-      this.db!.run(
-        `
-        CREATE TABLE IF NOT EXISTS notes (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          content TEXT,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )`,
-        (err: Error | null) => {
-          if (err) reject(err);
-          else resolve();
-        },
-      );
-    });
+    const createTableQuery = `
+      CREATE TABLE IF NOT EXISTS notes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        content TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )`;
+
+    await this.runUpdate(createTableQuery);
   }
 
   getNotes(): Promise<Note[]> {
-    return new Promise((resolve, reject) => {
-      this.db!.all('SELECT * FROM notes', (err: Error | null, rows: Note[]) => {
-        if (!err) {
-          resolve(rows);
-        } else {
-          reject(err);
-        }
-      });
-    });
+    return this.runQuery<Note[]>('SELECT * FROM notes');
   }
 
-  upsertNote(id: number | null, content: string): Promise<Note> {
+  async upsertNote(id: number | null, content: string): Promise<Note> {
     const currentTimestamp = new Date().toISOString();
-    const thisDb = this.db!;
+    const queryParams = [content, currentTimestamp];
 
     if (id) {
-      return new Promise((resolve, reject) => {
-        thisDb.run(
-          `UPDATE notes SET content = ?, updated_at = ? WHERE id = ?`,
-          [content, currentTimestamp, id],
-          function (err: Error | null) {
-            if (err) {
-              reject(err);
-              return;
-            }
-
-            thisDb.get(`SELECT * FROM notes WHERE id = ?`, [id], (err: Error | null, row: Note) => {
-              if (err) reject(err);
-              else resolve(row);
-            });
-          },
-        );
-      });
+      await this.runUpdate(
+        'UPDATE notes SET content = ?, updated_at = ? WHERE id = ?',
+        [...queryParams, id],
+      );
+      const updatedNote = await this.runQuery<Note>(
+        'SELECT * FROM notes WHERE id = ?',
+        [id],
+      );
+      return updatedNote;
     } else {
-      return new Promise((resolve, reject) => {
-        thisDb.run(
-          `INSERT INTO notes (content, updated_at, created_at) VALUES(?, ?, ?)`,
-          [content, currentTimestamp, currentTimestamp],
-          function (this: sqlite3.RunResult, err: Error | null) {
-            if (err) {
-              reject(err);
-              return;
-            }
-
-            thisDb.get(
-              `SELECT * FROM notes WHERE id = ?`,
-              [this.lastID],
-              (err: Error | null, row: Note) => {
-                if (err) reject(err);
-                else resolve(row);
-              },
-            );
-          },
-        );
-      });
+      const res = await this.runUpdate(
+        'INSERT INTO notes (content, updated_at, created_at) VALUES(?, ?, ?)',
+        [...queryParams, currentTimestamp],
+      );
+      const newNote = await this.runQuery<Note>(
+        'SELECT * FROM notes WHERE id = ?',
+        [res.lastID],
+      );
+      return newNote;
     }
   }
 
-  deleteNote(id: number): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.db!.run(`DELETE FROM notes WHERE id = ?`, [id], function (err: Error | null) {
-        if (err) reject(err);
-        else resolve();
-      });
-    });
+  deleteNote(id: number): Promise<sqlite3.RunResult> {
+    return this.runUpdate('DELETE FROM notes WHERE id = ?', [id]);
   }
 }
