@@ -246,6 +246,7 @@ export default function Toolbar() {
                 </span>{' '}
                 <GoTypography />
               </div>
+
               <div
                 className="flex items-center gap-2 px-3 border-l dark:border-gray-700 h-full"
                 title="Total number of tags"
@@ -255,25 +256,25 @@ export default function Toolbar() {
                 </span>{' '}
                 <GoTag />
               </div>
+
+              <button
+                title="Close this note"
+                onClick={handleCloseNote}
+                className="px-3 h-full dark:border-gray-700 border-l"
+              >
+                <GoX size={13} />
+              </button>
             </div>
           )}
 
           {openNote && (
             <div className="flex items-center bg-gray-100 dark:bg-[#1e1e1e] dark:text-white h-7 mx-5">
               <button
-                title="Close this note"
-                onClick={handleCloseNote}
-                className="px-3 hover:bg-red-900 h-full dark:border-gray-700 border-l"
+                title="Search"
+                onClick={() => setShowSearchModal(true)}
+                className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900"
               >
-                <GoX size={13} />
-              </button>
-
-              <button
-                title="Delete this note"
-                onClick={() => handleDeleteNote(openNote.id)}
-                className="px-3 hover:bg-red-900 h-full dark:border-gray-700 border-l"
-              >
-                <GoTrash size={11} />
+                <GoSearch size={14} />
               </button>
 
               <button
@@ -285,11 +286,11 @@ export default function Toolbar() {
               </button>
 
               <button
-                title="Search"
-                onClick={() => setShowSearchModal(true)}
-                className="px-3 border-l h-full dark:border-gray-700 hover:bg-green-900"
+                title="Delete this note"
+                onClick={() => handleDeleteNote(openNote.id)}
+                className="px-3 hover:bg-red-900 h-full dark:border-gray-700 border-l"
               >
-                <GoSearch size={14} />
+                <GoTrash size={11} />
               </button>
             </div>
           )}
