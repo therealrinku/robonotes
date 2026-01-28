@@ -72,7 +72,7 @@ export default function Editor() {
                 </span>
               </p>
               <p className="flex items-center gap-2">
-                <span>Search</span>
+                <span>Search notes</span>
                 <span className="bg-gray-500 py-1 w-8 flex justify-center">
                   ⌘
                 </span>

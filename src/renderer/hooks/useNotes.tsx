@@ -18,8 +18,8 @@ export default function useNotes() {
     setRecentNotesId,
   } = useContext(RootContext);
 
-  function handleCreateNewNote() {
-    window.electron.ipcRenderer.sendMessage('upsert-note', [null, '']);
+  function handleCreateNewNote(content: string = '') {
+    window.electron.ipcRenderer.sendMessage('upsert-note', [null, content]);
 
     window.electron.ipcRenderer.once('upsert-note', (updatedNoteItem) => {
       setNotes((prev) => [...prev, updatedNoteItem as NoteModel]);

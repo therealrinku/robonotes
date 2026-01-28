@@ -5,7 +5,8 @@ import useNotes from '../hooks/useNotes';
 export default function SearchModal({ onClose }: { onClose: () => void }) {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { notes, recentNotesId, openNote, setOpenNote } = useNotes();
+  const { notes, recentNotesId, openNote, setOpenNote, handleCreateNewNote } =
+    useNotes();
 
   const recentNotes = notes.filter((note) => recentNotesId.includes(note.id));
 
@@ -188,8 +189,18 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
             </div>
           ) : (
             searchQuery.length > 0 && (
-              <div className="bg-gray-200 dark:bg-[#1e1e1e] py-5 border-gray-200 dark:border-gray-700 border-t text-center">
-                <p>No results found</p>
+              <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col">
+                <h4 className="text-gray-500 px-3 pb-1">No result found</h4>
+
+                <button
+                  onClick={() => {
+                    handleCreateNewNote(searchQuery);
+                    onClose();
+                  }}
+                  className="truncate max-w-full text-left px-3 hover:bg-gray-500 py-2"
+                >
+                  Create new note with {searchQuery}
+                </button>
               </div>
             )
           )}
