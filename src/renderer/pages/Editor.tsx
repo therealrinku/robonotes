@@ -64,13 +64,21 @@ export default function Editor() {
             <div className="flex flex-col items-center gap-3">
               <p className="flex items-center gap-2">
                 <span>Create new note</span>
-                <span className="bg-gray-500 py-1 px-2 rounded">⌘</span>
-                <span className="bg-gray-500 py-1 px-2 rounded">+</span>
+                <span className="bg-gray-500 py-1 w-8 flex justify-center">
+                  ⌘
+                </span>
+                <span className="bg-gray-500 py-1 w-8 flex justify-center">
+                  +
+                </span>
               </p>
               <p className="flex items-center gap-2">
                 <span>Search</span>
-                <span className="bg-gray-500 py-1 px-2 rounded">⌘</span>
-                <span className="bg-gray-500 py-1 px-2 rounded">p</span>
+                <span className="bg-gray-500 py-1 w-8 flex justify-center">
+                  ⌘
+                </span>
+                <span className="bg-gray-500 py-1 w-8 flex justify-center">
+                  p
+                </span>
               </p>
             </div>
           </div>

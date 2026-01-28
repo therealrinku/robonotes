@@ -14,6 +14,10 @@ export default function App() {
       setShowSearchModal(true);
     }
 
+    // if ((e.ctrlKey || e.metaKey) && e.key === '=') {
+    //   window.electron.ipcRenderer.sendMessage('upsert-note', [null, '']);
+    // }
+
     if (e.key === 'Escape') {
       setShowSearchModal(false);
     }
