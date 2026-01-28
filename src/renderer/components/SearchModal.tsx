@@ -119,6 +119,7 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
             className="w-full text-xs bg-gray-200 dark:bg-[#1e1e1e] px-2 pl-8 outline-none dark:text-white h-full"
             placeholder="Search..."
             value={searchQuery}
+            autoFocus={true}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
 

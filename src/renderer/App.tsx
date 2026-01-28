@@ -13,6 +13,10 @@ export default function App() {
     if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
       setShowSearchModal(true);
     }
+
+    if (e.key === 'Escape') {
+      setShowSearchModal(false);
+    }
   }
 
   function toggleTheme() {
