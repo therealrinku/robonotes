@@ -64,22 +64,22 @@ export default class RobonoteActions {
         'UPDATE notes SET content = ?, updated_at = ? WHERE id = ?',
         [...queryParams, id],
       );
-      const updatedNote = await this.runQuery<Note>(
+      const data = await this.runQuery<Note[]>(
         'SELECT * FROM notes WHERE id = ?',
         [id],
       );
-      return updatedNote;
-    } else {
-      const res = await this.runUpdate(
-        'INSERT INTO notes (content, updated_at, created_at) VALUES(?, ?, ?)',
-        [...queryParams, currentTimestamp],
-      );
-      const newNote = await this.runQuery<Note>(
-        'SELECT * FROM notes WHERE id = ?',
-        [res.lastID],
-      );
-      return newNote;
+      return data[0];
     }
+
+    const res = await this.runUpdate(
+      'INSERT INTO notes (content, updated_at, created_at) VALUES(?, ?, ?)',
+      [...queryParams, currentTimestamp],
+    );
+    const data = await this.runQuery<Note[]>(
+      'SELECT * FROM notes WHERE id = ?',
+      [res.lastID],
+    );
+    return data[0];
   }
 
   deleteNote(id: number): Promise<sqlite3.RunResult> {
