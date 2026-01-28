@@ -32,7 +32,7 @@ export default function Toolbar() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-3 w-full">
+    <div className="flex flex-col items-center gap-3 w-full pb-3">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center text-xs">
           <div className="flex items-center bg-gray-100 dark:bg-[#1e1e1e] dark:text-white h-7">

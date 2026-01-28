@@ -104,9 +104,14 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <div className="fixed w-full mt-5">
-      <div className="flex w-[55%] mx-auto">
-        <div className="flex items-center bg-gray-200 dark:bg-[#1e1e1e] h-7 w-full">
+    <div className="fixed w-full">
+      <div
+        className="fixed w-full h-full bg-zinc-500 bg-opacity-50"
+        onClick={onClose}
+      ></div>
+
+      <div className="flex w-[55%] mx-auto z-50 mt-3">
+        <div className="flex items-center bg-gray-200 dark:bg-[#1e1e1e] h-9 w-full z-50">
           <GoSearch className="absolute ml-2 " color="gray" />
 
           <input
@@ -124,7 +129,7 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
           </div>
         </div>
 
-        <div className="absolute mt-7 w-[55%] text-xs dark:text-white z-90 max-h-[500px] overflow-y-auto">
+        <div className="absolute mt-9 w-[55%] text-xs dark:text-white z-90 max-h-[500px] overflow-y-auto">
           {searchQuery.length === 0 && recentNotes.length > 0 && (
             <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col">
               <h4 className="text-gray-500 px-3 pb-1">Recently opened</h4>
@@ -136,7 +141,7 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
                       onClose();
                     }}
                     key={note.id}
-                    className="truncate max-w-full text-left px-3 hover:bg-gray-700 py-1"
+                    className="truncate max-w-full text-left px-3 hover:bg-gray-500 py-2"
                   >
                     {note.content || '(no content)'}
                   </button>
@@ -153,7 +158,7 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
                   <button
                     onClick={() => goToFoundText(match)}
                     key={match.index}
-                    className="truncate max-w-full text-left px-3 hover:bg-gray-700 py-1"
+                    className="truncate max-w-full text-left px-3 hover:bg-gray-500 py-2"
                   >
                     {searchQuery} at {match.lineNumber}:{match.index}
                   </button>
@@ -173,7 +178,7 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
                       onClose();
                     }}
                     key={note.id}
-                    className="truncate max-w-full text-left px-3 hover:bg-gray-700 py-1"
+                    className="truncate max-w-full text-left px-3 hover:bg-gray-500 py-2"
                   >
                     {note.content || '(no content)'}
                   </button>
