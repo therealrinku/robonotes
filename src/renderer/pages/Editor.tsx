@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { GoLog } from 'react-icons/go';
+import { GoLog, GoSearch } from 'react-icons/go';
 import useNotes from '../hooks/useNotes';
 import Toolbar from '../components/Toolbar';
 
@@ -45,7 +45,7 @@ export default function Editor() {
     <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#303030] pt-2 text-sm">
       <Toolbar />
 
-      <div className="flex flex-col h-[100vh] overflow-y-auto border-t dark:border-gray-700 mt-2">
+      <div className="flex flex-col h-[100vh] overflow-y-auto mt-2">
         {openNote ? (
           <textarea
             id="editor"
@@ -57,33 +57,22 @@ export default function Editor() {
             onChange={(e) => setContent(e.target.value)}
           />
         ) : (
-          <div className="flex flex-col h-[90vh] w-full items-center justify-center text-white text-sm gap-3">
-            <GoLog color="white" size={25} />
-            <p>No note opened.</p>
+          <div className="flex flex-col gap-5 h-[90vh] w-full items-center justify-center text-white text-sm">
+            <GoLog color="white" size={50} />
+            <b>No open note.</b>
 
-            <button
-              className="border px-3 py-1 border-slate-600"
-              onClick={handleCreateNewNote}
-            >
-              Create new note
-            </button>
-
-            {recentNotes.length > 0 && (
-              <>
-                <p className="text-gray-400">Recent notes</p>
-                {recentNotes.map((recent) => {
-                  return (
-                    <button
-                      key={recent.id}
-                      className="underline truncate"
-                      onClick={() => handleOpenNote(recent)}
-                    >
-                      {recent.content || '(no content)'}
-                    </button>
-                  );
-                })}
-              </>
-            )}
+            <div className="flex flex-col items-center gap-3">
+              <p className="flex items-center gap-2">
+                <span>Create new note</span>
+                <span className="bg-gray-500 py-1 px-2 rounded">⌘</span>
+                <span className="bg-gray-500 py-1 px-2 rounded">+</span>
+              </p>
+              <p className="flex items-center gap-2">
+                <span>Search</span>
+                <span className="bg-gray-500 py-1 px-2 rounded">⌘</span>
+                <span className="bg-gray-500 py-1 px-2 rounded">p</span>
+              </p>
+            </div>
           </div>
         )}
       </div>

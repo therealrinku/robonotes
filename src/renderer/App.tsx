@@ -3,9 +3,17 @@ import './App.css';
 import { RootContextProvider } from './context/RootContext';
 import Loading from './components/Loading';
 import Editor from './pages/Editor';
+import SearchModal from './components/SearchModal';
 
 export default function App() {
   const [showLoading, setShowLoading] = useState(true);
+  const [showSearchModal, setShowSearchModal] = useState(false);
+
+  function keyboardShortcutsHandler(e: KeyboardEvent) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+      setShowSearchModal(true);
+    }
+  }
 
   function toggleTheme() {
     if (localStorage.getItem('color-theme') === 'dark') {
@@ -23,10 +31,14 @@ export default function App() {
     if (localStorage.getItem('color-theme') === 'dark') {
       document.documentElement.classList.add('dark');
     }
-
     window.electron.ipcRenderer.on('toggle-theme', () => {
       toggleTheme();
     });
+
+    window.addEventListener('keydown', keyboardShortcutsHandler);
+    return () => {
+      window.removeEventListener('keydown', keyboardShortcutsHandler);
+    };
   }, []);
 
   if (showLoading) {
@@ -35,6 +47,10 @@ export default function App() {
 
   return (
     <RootContextProvider>
+      {showSearchModal && (
+        <SearchModal onClose={() => setShowSearchModal(false)} />
+      )}
+
       <Editor />
     </RootContextProvider>
   );
