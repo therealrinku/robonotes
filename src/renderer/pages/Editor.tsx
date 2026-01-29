@@ -52,6 +52,7 @@ export default function Editor() {
             className="w-full outline-none h-[92vh] px-3 pt-1 bg-inherit dark:text-white"
             placeholder="My important note..."
             value={content}
+            autoFocus={true}
             autoCorrect="off"
             spellCheck="false"
             onChange={(e) => setContent(e.target.value)}

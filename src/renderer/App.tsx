@@ -4,19 +4,21 @@ import { RootContextProvider } from './context/RootContext';
 import Loading from './components/Loading';
 import Editor from './pages/Editor';
 import SearchModal from './components/SearchModal';
+import useNotes from './hooks/useNotes';
 
-export default function App() {
+export function App() {
   const [showLoading, setShowLoading] = useState(true);
   const [showSearchModal, setShowSearchModal] = useState(false);
+  const { handleCreateNewNote } = useNotes();
 
   function keyboardShortcutsHandler(e: KeyboardEvent) {
     if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
       setShowSearchModal(true);
     }
 
-    // if ((e.ctrlKey || e.metaKey) && e.key === '=') {
-    //   window.electron.ipcRenderer.sendMessage('upsert-note', [null, '']);
-    // }
+    if ((e.ctrlKey || e.metaKey) && e.key === '=') {
+      handleCreateNewNote();
+    }
 
     if (e.key === 'Escape') {
       setShowSearchModal(false);
@@ -54,12 +56,20 @@ export default function App() {
   }
 
   return (
-    <RootContextProvider>
+    <>
       {showSearchModal && (
         <SearchModal onClose={() => setShowSearchModal(false)} />
       )}
 
       <Editor />
+    </>
+  );
+}
+
+export function Main() {
+  return (
+    <RootContextProvider>
+      <App />
     </RootContextProvider>
   );
 }
