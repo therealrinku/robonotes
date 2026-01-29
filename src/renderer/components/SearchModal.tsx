@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { GoX, GoSearch } from 'react-icons/go';
+import { GoX, GoSearch, GoPlus } from 'react-icons/go';
 import useNotes from '../hooks/useNotes';
 
 export default function SearchModal({ onClose }: { onClose: () => void }) {
@@ -197,9 +197,9 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
                     handleCreateNewNote(searchQuery);
                     onClose();
                   }}
-                  className="truncate max-w-full text-left px-3 hover:bg-gray-500 py-2"
+                  className="truncate max-w-full text-left px-3 hover:bg-gray-500 py-2 flex items-center gap-2"
                 >
-                  Create new note with {searchQuery}
+                  <GoPlus size={14} /> Create new note with {searchQuery}
                 </button>
               </div>
             )
