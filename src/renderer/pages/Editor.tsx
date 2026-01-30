@@ -1,19 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { GoLog, GoSearch } from 'react-icons/go';
+import { GoLog } from 'react-icons/go';
 import useNotes from '../hooks/useNotes';
 import Toolbar from '../components/Toolbar';
 
 export default function Editor() {
-  const {
-    handleOpenNote,
-    handleUpdateNote,
-    handleCreateNewNote,
-    openNote,
-    notes,
-    recentNotesId,
-  } = useNotes();
-
-  const recentNotes = notes.filter((note) => recentNotesId.includes(note.id));
+  const { handleUpdateNote, openNote } = useNotes();
 
   const [content, setContent] = useState('');
   const timeout0 = useRef<NodeJS.Timeout | null>(null);
@@ -62,7 +53,7 @@ export default function Editor() {
             <GoLog color="white" size={50} />
             <b>No open note.</b>
 
-            <div className="flex flex-col items-center gap-3">
+            <div className="flex flex-col items-end gap-3 bg-[#333333] px-32 py-5">
               <p className="flex items-center gap-2">
                 <span>Create new note</span>
                 <span className="bg-gray-500 py-1 w-8 flex justify-center">
@@ -79,6 +70,24 @@ export default function Editor() {
                 </span>
                 <span className="bg-gray-500 py-1 w-8 flex justify-center">
                   p
+                </span>
+              </p>
+              <p className="flex items-center gap-2">
+                <span>Close open note</span>
+                <span className="bg-gray-500 py-1 w-8 flex justify-center">
+                  ⌘
+                </span>
+                <span className="bg-gray-500 py-1 w-8 flex justify-center">
+                  c
+                </span>
+              </p>
+              <p className="flex items-center gap-2">
+                <span>Delete open note</span>
+                <span className="bg-gray-500 py-1 w-8 flex justify-center">
+                  ⌘
+                </span>
+                <span className="bg-gray-500 py-1 w-8 flex justify-center">
+                  f
                 </span>
               </p>
             </div>

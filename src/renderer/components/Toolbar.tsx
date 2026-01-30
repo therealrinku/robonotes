@@ -1,17 +1,9 @@
 import { useMemo } from 'react';
-import {
-  GoBold,
-  GoTag,
-  GoTypography,
-  GoTrash,
-  GoPlus,
-  GoX,
-} from 'react-icons/go';
+import { GoBold, GoTag, GoTypography, GoTrash, GoPlus } from 'react-icons/go';
 import useNotes from '../hooks/useNotes';
 
 export default function Toolbar() {
-  const { handleCreateNewNote, handleDeleteNote, handleCloseNote, openNote } =
-    useNotes();
+  const { handleCreateNewNote, handleDeleteNote, openNote } = useNotes();
 
   const charCount = openNote?.content?.length || 0;
 
@@ -64,14 +56,6 @@ export default function Toolbar() {
               </span>{' '}
               <GoTag />
             </div>
-
-            <button
-              title="Close this note"
-              onClick={handleCloseNote}
-              className="px-3 h-full dark:border-gray-700 border-l"
-            >
-              <GoX size={13} />
-            </button>
           </div>
 
           <div className="flex items-center bg-gray-100 dark:bg-[#1e1e1e] dark:text-white h-7 mx-5">

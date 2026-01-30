@@ -9,7 +9,8 @@ import useNotes from './hooks/useNotes';
 export function App() {
   const [showLoading, setShowLoading] = useState(true);
   const [showSearchModal, setShowSearchModal] = useState(false);
-  const { handleCreateNewNote } = useNotes();
+  const { handleCreateNewNote, handleCloseNote, openNote, handleDeleteNote } =
+    useNotes();
 
   function keyboardShortcutsHandler(e: KeyboardEvent) {
     if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
@@ -18,6 +19,14 @@ export function App() {
 
     if ((e.ctrlKey || e.metaKey) && e.key === '=') {
       handleCreateNewNote();
+    }
+
+    if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+      handleCloseNote();
+    }
+
+    if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+      if (openNote) handleDeleteNote(openNote.id);
     }
 
     if (e.key === 'Escape') {
