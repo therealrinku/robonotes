@@ -1,12 +1,19 @@
 import { useState, useMemo } from 'react';
-import { GoX, GoSearch, GoPlus } from 'react-icons/go';
+import { GoX, GoSearch, GoPlus, GoTrash, GoClock } from 'react-icons/go';
 import useNotes from '../hooks/useNotes';
 
 export default function SearchModal({ onClose }: { onClose: () => void }) {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { notes, recentNotesId, openNote, setOpenNote, handleCreateNewNote } =
-    useNotes();
+  const {
+    notes,
+    recentNotesId,
+    openNote,
+    setOpenNote,
+    handleCloseNote,
+    handleDeleteNote,
+    handleCreateNewNote,
+  } = useNotes();
 
   const recentNotes = notes.filter((note) => recentNotesId.includes(note.id));
 
@@ -111,8 +118,8 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
         onClick={onClose}
       ></div>
 
-      <div className="flex w-[55%] mx-auto z-50 mt-3">
-        <div className="flex items-center bg-gray-200 dark:bg-[#1e1e1e] h-9 w-full z-50">
+      <div className="flex flex-col w-[55%] mx-auto z-50 mt-3">
+        <div className="flex items-center bg-gray-200 dark:bg-[#1e1e1e] h-9 w-full z-50 ">
           <GoSearch className="absolute ml-2 " color="gray" />
 
           <input
@@ -131,9 +138,33 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
           </div>
         </div>
 
-        <div className="absolute mt-9 w-[55%] text-xs dark:text-white z-90 max-h-[500px] overflow-y-auto">
+        <div className="flex items-center justify-between bg-gray-200 dark:bg-[#1e1e1e] h-9 w-full z-50 text-xs text-white p-3 dark:border-gray-700 border-t border-b">
+          <b>Quick actions</b>
+
+          <div className="flex items-center gap-3">
+            <button title="New note" onClick={handleCreateNewNote}>
+              <GoPlus size={15} />
+            </button>
+            {openNote && (
+              <>
+                <button
+                  title="Delete current note"
+                  onClick={() => handleDeleteNote(openNote.id)}
+                >
+                  <GoTrash size={12} />
+                </button>
+
+                <button title="Close current note" onClick={handleCloseNote}>
+                  <GoX size={15} />
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+
+        <div className="absolute mt-16 w-[55%] text-xs dark:text-white z-90 max-h-[500px] overflow-y-auto pt-2">
           {searchQuery.length === 0 && recentNotes.length > 0 && (
-            <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col">
+            <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 flex flex-col">
               <h4 className="text-gray-500 px-3 pb-1">Recently opened</h4>
               {recentNotes.map((note) => {
                 return (
