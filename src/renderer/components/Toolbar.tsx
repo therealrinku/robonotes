@@ -45,12 +45,12 @@ export default function Toolbar() {
   ];
 
   return (
-    <div className="flex items-center bg-gray-100 dark:bg-[#1f1f1f] dark:text-white h-8 m-2">
+    <div className="flex items-cente bg-[#1f1f1f] dark:text-white h-8 m-2 bg-opacity-40">
       {info.map((i) => {
         return (
           <div
             key={i.name}
-            className="flex items-center gap-2 px-3 border-r dark:border-gray-800 h-full"
+            className="flex items-center gap-2 px-5 border-r border-[#3e3e3e] h-full"
             title={`Total number of ${i.name}`}
           >
             <span className="font-bold">{i.count}</span>

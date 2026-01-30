@@ -114,11 +114,11 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed w-full">
       <div
-        className="fixed w-full h-full bg-zinc-500 bg-opacity-50"
+        className="fixed w-full h-full bg-zinc-600 bg-opacity-80"
         onClick={onClose}
       ></div>
 
-      <div className="flex flex-col w-[55%] mx-auto z-50 mt-3">
+      <div className="flex flex-col w-[60%] mx-auto z-50 mt-2">
         <div className="flex items-center bg-gray-200 dark:bg-[#1e1e1e] h-9 w-full z-50 ">
           <GoSearch className="absolute ml-2 " color="gray" />
 
@@ -132,29 +132,29 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
           />
 
           <div className="flex items-center text-white h-full">
-            <button onClick={handleClearSearch} className="px-3 h-full">
-              <GoX />
+            <button
+              title="New note"
+              onClick={handleCreateNewNote}
+              className="hover:bg-gray-500 h-full px-2"
+            >
+              <GoPlus size={17} />
             </button>
-          </div>
-        </div>
 
-        <div className="flex items-center justify-between bg-gray-200 dark:bg-[#1e1e1e] h-9 w-full z-50 text-xs text-white p-3 dark:border-gray-700 border-t border-b">
-          <b>Quick actions</b>
-
-          <div className="flex items-center gap-3">
-            <button title="New note" onClick={handleCreateNewNote}>
-              <GoPlus size={15} />
-            </button>
             {openNote && (
               <>
                 <button
                   title="Delete current note"
                   onClick={() => handleDeleteNote(openNote.id)}
+                  className="hover:bg-red-500 h-full px-2"
                 >
-                  <GoTrash size={12} />
+                  <GoTrash size={13} />
                 </button>
 
-                <button title="Close current note" onClick={handleCloseNote}>
+                <button
+                  title="Close current note"
+                  onClick={handleCloseNote}
+                  className="hover:bg-gray-500 h-full px-2"
+                >
                   <GoX size={15} />
                 </button>
               </>
@@ -162,7 +162,7 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
           </div>
         </div>
 
-        <div className="absolute mt-16 w-[55%] text-xs dark:text-white z-90 max-h-[500px] overflow-y-auto pt-2">
+        <div className="dark:border-gray-700 border-t absolute mt-7 w-[60%] text-xs dark:text-white z-90 max-h-[500px] overflow-y-auto pt-2">
           {searchQuery.length === 0 && recentNotes.length > 0 && (
             <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 flex flex-col">
               <h4 className="text-gray-500 px-3 pb-1">Recently opened</h4>
