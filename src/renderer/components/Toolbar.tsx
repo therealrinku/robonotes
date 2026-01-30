@@ -23,42 +23,41 @@ export default function Toolbar() {
     return null;
   }
 
-  return (
-    <div className="flex flex-col items-center gap-3 w-full pb-3">
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center text-xs">
-          <div className="flex items-center bg-gray-100 dark:bg-[#1e1e1e] dark:text-white h-7">
-            <div
-              className="flex items-center gap-2 px-3 border-r dark:border-gray-700 h-full"
-              title="Total number of characters"
-            >
-              <span className="font-bold">
-                {new Intl.NumberFormat('en-US').format(charCount)}
-              </span>{' '}
-              <GoBold />
-            </div>
-            <div
-              className="flex items-center gap-2 px-3 dark:border-gray-700 h-full"
-              title="Total number of words"
-            >
-              <span className="font-bold">
-                {new Intl.NumberFormat('en-US').format(wordCount)}
-              </span>{' '}
-              <GoTypography />
-            </div>
+  const info = [
+    {
+      name: 'character count',
+      count: charCount,
+      formatted: new Intl.NumberFormat('en-US').format(charCount),
+      icon: <GoBold />,
+    },
+    {
+      name: 'words count',
+      count: wordCount,
+      formatted: new Intl.NumberFormat('en-US').format(wordCount),
+      icon: <GoTypography />,
+    },
+    {
+      name: 'tags count',
+      count: tagsCount,
+      formatted: new Intl.NumberFormat('en-US').format(tagsCount),
+      icon: <GoTag />,
+    },
+  ];
 
-            <div
-              className="flex items-center gap-2 px-3 border-l dark:border-gray-700 h-full"
-              title="Total number of tags"
-            >
-              <span className="font-bold">
-                {new Intl.NumberFormat('en-US').format(tagsCount)}
-              </span>{' '}
-              <GoTag />
-            </div>
+  return (
+    <div className="flex items-center bg-gray-100 dark:bg-[#1f1f1f] dark:text-white h-8 m-2">
+      {info.map((i) => {
+        return (
+          <div
+            key={i.name}
+            className="flex items-center gap-2 px-3 border-r dark:border-gray-800 h-full"
+            title={`Total number of ${i.name}`}
+          >
+            <span className="font-bold">{i.count}</span>
+            {i.icon}
           </div>
-        </div>
-      </div>
+        );
+      })}
     </div>
   );
 }

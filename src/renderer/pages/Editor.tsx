@@ -6,17 +6,13 @@ import Toolbar from '../components/Toolbar';
 export default function Editor() {
   const { handleUpdateNote, openNote } = useNotes();
 
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState(openNote?.content || '');
   const timeout0 = useRef<NodeJS.Timeout | null>(null);
 
   const haveUnsavedChanges = openNote?.content !== content;
 
   useEffect(() => {
-    if (openNote && openNote.id) {
-      setContent(openNote.content);
-    } else {
-      setContent('');
-    }
+    setContent(openNote?.content || '');
   }, [openNote]);
 
   useEffect(() => {
@@ -33,7 +29,7 @@ export default function Editor() {
   }, [content]);
 
   return (
-    <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#303030] pt-2 text-sm">
+    <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#303030] text-sm">
       <Toolbar />
 
       <div className="flex flex-col h-[100vh] overflow-y-auto mt-2">
@@ -43,7 +39,7 @@ export default function Editor() {
             className="w-full outline-none h-[92vh] px-3 pt-1 bg-inherit dark:text-white"
             placeholder="My important note..."
             value={content}
-            autoFocus={true}
+            autoFocus={!content}
             autoCorrect="off"
             spellCheck="false"
             onChange={(e) => setContent(e.target.value)}
