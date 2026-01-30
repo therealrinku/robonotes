@@ -1,5 +1,13 @@
 import { useState, useMemo } from 'react';
-import { GoX, GoSearch, GoPlus, GoTrash, GoClock } from 'react-icons/go';
+import {
+  GoX,
+  GoSearch,
+  GoPlus,
+  GoTrash,
+  GoClock,
+  GoNote,
+  GoHistory,
+} from 'react-icons/go';
 import useNotes from '../hooks/useNotes';
 
 export default function SearchModal({ onClose }: { onClose: () => void }) {
@@ -102,15 +110,6 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
     textarea.scrollTop = selectionBottom - textarea.clientHeight / 2;
   }
 
-  function handleClearSearch() {
-    if (searchQuery) {
-      setSearchQuery('');
-      return;
-    }
-
-    onClose();
-  }
-
   return (
     <div className="fixed w-full">
       <div
@@ -165,7 +164,6 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
         <div className="dark:border-gray-700 border-t absolute mt-7 w-[60%] text-xs dark:text-white z-90 max-h-[500px] overflow-y-auto pt-2">
           {searchQuery.length === 0 && recentNotes.length > 0 && (
             <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 flex flex-col">
-              <h4 className="text-gray-500 px-3 pb-1">Recently opened</h4>
               {recentNotes.map((note) => {
                 return (
                   <button
@@ -174,9 +172,13 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
                       onClose();
                     }}
                     key={note.id}
-                    className="truncate max-w-full text-left px-3 hover:bg-gray-500 py-2"
+                    className="text-left px-3 hover:bg-gray-500 py-2 flex items-center gap-2"
                   >
-                    {note.content || '(no content)'}
+                    <GoHistory size={13} />
+
+                    <p className="max-w-[95%] truncate">
+                      {note.content || '(no content)'}
+                    </p>
                   </button>
                 );
               })}
@@ -185,15 +187,18 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
 
           {foundInNote.length > 0 && (
             <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col">
-              <h4 className="text-gray-500 px-3 pb-1">Found in this note</h4>
               {foundInNote.map((match) => {
                 return (
                   <button
                     onClick={() => goToFoundText(match)}
                     key={match.index}
-                    className="truncate max-w-full text-left px-3 hover:bg-gray-500 py-2"
+                    className="text-left px-3 hover:bg-gray-500 py-2 flex items-center gap-2"
                   >
-                    {searchQuery} at {match.lineNumber}:{match.index}
+                    <GoNote size={13} />
+
+                    <p className="max-w-[95%] truncate">
+                      {searchQuery} at {match.lineNumber}:{match.index}
+                    </p>
                   </button>
                 );
               })}
@@ -202,7 +207,6 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
 
           {searchQuery.length > 0 && filteredNotes.length > 0 ? (
             <div className="bg-gray-200 dark:bg-[#1e1e1e] py-2 border-gray-200 dark:border-gray-700 border-t flex flex-col">
-              <h4 className="text-gray-500 px-3 pb-1">Notes</h4>
               {filteredNotes.map((note) => {
                 return (
                   <button
@@ -211,9 +215,13 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
                       onClose();
                     }}
                     key={note.id}
-                    className="truncate max-w-full text-left px-3 hover:bg-gray-500 py-2"
+                    className="text-left px-3 hover:bg-gray-500 py-2 flex items-center gap-2"
                   >
-                    {note.content || '(no content)'}
+                    <GoSearch size={13} />
+
+                    <p className="max-w-[95%] truncate">
+                      {note.content || '(no content)'}
+                    </p>
                   </button>
                 );
               })}
@@ -228,9 +236,12 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
                     handleCreateNewNote(searchQuery);
                     onClose();
                   }}
-                  className="truncate max-w-full text-left px-3 hover:bg-gray-500 py-2 flex items-center gap-2"
+                  className="text-left px-3 hover:bg-gray-500 py-2 flex items-center gap-2"
                 >
-                  <GoPlus size={14} /> Create new note with {searchQuery}
+                  <GoPlus size={14} />
+                  <p className="max-w-[95%] truncate">
+                    Create new note with {searchQuery}
+                  </p>
                 </button>
               </div>
             )

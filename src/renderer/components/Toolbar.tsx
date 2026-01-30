@@ -45,7 +45,7 @@ export default function Toolbar() {
   ];
 
   return (
-    <div className="flex items-cente bg-[#1f1f1f] dark:text-white h-8 m-2 bg-opacity-40">
+    <div className="flex items-cente bg-[#1f1f1f] dark:text-white h-8 m-2 bg-opacity-40 text-xs">
       {info.map((i) => {
         return (
           <div
