@@ -4,7 +4,6 @@ import {
   GoSearch,
   GoPlus,
   GoTrash,
-  GoClock,
   GoNote,
   GoHistory,
 } from 'react-icons/go';
