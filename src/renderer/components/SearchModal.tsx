@@ -118,7 +118,7 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
           <div className="flex items-center text-white h-full">
             <button
               title="New note"
-              onClick={handleCreateNewNote}
+              onClick={() => handleCreateNewNote('')}
               className="hover:bg-gray-500 h-full px-4"
             >
               <GoPlus size={17} />
