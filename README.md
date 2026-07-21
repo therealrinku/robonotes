@@ -46,6 +46,7 @@ To run this project locally, follow these steps:
    yarn install
    cd ..
    cd ..
+   ```
 
 3. Run the project.
    ```bash
