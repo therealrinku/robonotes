@@ -29,7 +29,7 @@
 
 
 ## Contribute to the Project
-⚠️ First make sure node v20 is installed on your system and it's used during the process below
+⚠️ Prerequisites: Node.js v20 and yarn
 
 To run this project locally, follow these steps:
 
