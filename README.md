@@ -28,7 +28,7 @@
 <img src="https://img.shields.io/badge/typescript-000000?style=for-the-badge&logo=typescript&logoColor=blue"/>
 
 
-## Contribute to the Project
+## Run the project locally
 ⚠️ Prerequisites: Node.js v20 and yarn
 
 To run this project locally, follow these steps:
