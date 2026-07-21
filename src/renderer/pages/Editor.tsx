@@ -32,7 +32,7 @@ export default function Editor() {
     <div className="w-full max-h-[100vh] overflow-hidden bg-white dark:bg-[#303030] text-sm">
       <Toolbar />
 
-      <div className="flex flex-col h-[100vh] overflow-y-auto mt-2">
+      <div className="flex flex-col h-[100vh] overflow-y-auto mt-5">
         {openNote ? (
           <textarea
             id="editor"
