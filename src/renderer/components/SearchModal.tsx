@@ -1,26 +1,12 @@
 import { useState, useMemo } from 'react';
-import {
-  GoX,
-  GoSearch,
-  GoPlus,
-  GoTrash,
-  GoNote,
-  GoHistory,
-} from 'react-icons/go';
+import { GoSearch, GoPlus, GoNote, GoHistory } from 'react-icons/go';
 import useNotes from '../hooks/useNotes';
 
 export default function SearchModal({ onClose }: { onClose: () => void }) {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const {
-    notes,
-    recentNotesId,
-    openNote,
-    setOpenNote,
-    handleCloseNote,
-    handleDeleteNote,
-    handleCreateNewNote,
-  } = useNotes();
+  const { notes, recentNotesId, openNote, setOpenNote, handleCreateNewNote } =
+    useNotes();
 
   const recentNotes = notes.filter((note) => recentNotesId.includes(note.id));
 
@@ -133,30 +119,10 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
             <button
               title="New note"
               onClick={handleCreateNewNote}
-              className="hover:bg-gray-500 h-full px-2"
+              className="hover:bg-gray-500 h-full px-4"
             >
               <GoPlus size={17} />
             </button>
-
-            {openNote && (
-              <>
-                <button
-                  title="Delete current note"
-                  onClick={() => handleDeleteNote(openNote.id)}
-                  className="hover:bg-red-500 h-full px-2"
-                >
-                  <GoTrash size={13} />
-                </button>
-
-                <button
-                  title="Close current note"
-                  onClick={handleCloseNote}
-                  className="hover:bg-gray-500 h-full px-2"
-                >
-                  <GoX size={15} />
-                </button>
-              </>
-            )}
           </div>
         </div>
 
