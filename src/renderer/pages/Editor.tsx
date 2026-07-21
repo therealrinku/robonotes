@@ -52,37 +52,37 @@ export default function Editor() {
             <div className="flex flex-col items-end gap-3 bg-[#333333] px-32 py-5">
               <p className="flex items-center gap-2">
                 <span>Create new note</span>
-                <span className="bg-gray-500 py-1 w-8 flex justify-center">
+                <span className="bg-zinc-700 py-1 w-8 flex justify-center">
                   ⌘
                 </span>
-                <span className="bg-gray-500 py-1 w-8 flex justify-center">
+                <span className="bg-zinc-700 py-1 w-8 flex justify-center">
                   +
                 </span>
               </p>
               <p className="flex items-center gap-2">
                 <span>Search notes</span>
-                <span className="bg-gray-500 py-1 w-8 flex justify-center">
+                <span className="bg-zinc-700 py-1 w-8 flex justify-center">
                   ⌘
                 </span>
-                <span className="bg-gray-500 py-1 w-8 flex justify-center">
+                <span className="bg-zinc-700 py-1 w-8 flex justify-center">
                   p
                 </span>
               </p>
               <p className="flex items-center gap-2">
                 <span>Close open note</span>
-                <span className="bg-gray-500 py-1 w-8 flex justify-center">
+                <span className="bg-zinc-700 py-1 w-8 flex justify-center">
                   ⌘
                 </span>
-                <span className="bg-gray-500 py-1 w-8 flex justify-center">
+                <span className="bg-zinc-700 py-1 w-8 flex justify-center">
                   c
                 </span>
               </p>
               <p className="flex items-center gap-2">
                 <span>Delete open note</span>
-                <span className="bg-gray-500 py-1 w-8 flex justify-center">
+                <span className="bg-zinc-700 py-1 w-8 flex justify-center">
                   ⌘
                 </span>
-                <span className="bg-gray-500 py-1 w-8 flex justify-center">
+                <span className="bg-zinc-700 py-1 w-8 flex justify-center">
                   f
                 </span>
               </p>
