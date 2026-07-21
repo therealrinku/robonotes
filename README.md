@@ -29,7 +29,7 @@
 
 
 ## Run the project locally
-⚠️ Prerequisites: Node.js v20 and yarn
+⚠️ Prerequisites: Node.js v20, yarn and git installed locally
 
 To run this project locally, follow these steps:
 
