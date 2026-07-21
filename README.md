@@ -33,13 +33,19 @@
 
 To run this project locally, follow these steps:
 
-1. Clone the repository.
-   ```bash
+1. Clone the repository and go to the directory.
+   ```
    git clone https://github.com/therealrinku/robonotes.git
+   cd robonotes
+   ```
 
 2. Install the dependencies.
-   ```bash
+   ```
    yarn install
+   cd release/app
+   yarn install
+   cd ..
+   cd ..
 
 3. Run the project.
    ```bash
