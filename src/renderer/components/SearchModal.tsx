@@ -96,13 +96,13 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <div className="fixed w-full">
+    <div className="fixed top-0 left-0 flex flex-col h-full w-screen justify-center items-center">
       <div
-        className="fixed w-full h-full bg-zinc-600 bg-opacity-80"
+        className="fixed w-full h-full bg-zinc-700 bg-opacity-80"
         onClick={onClose}
       ></div>
 
-      <div className="flex flex-col w-[60%] mx-auto z-50 mt-2">
+      <div className="flex flex-col w-[60%] mx-auto z-50 mt-[-140px]">
         <div className="flex items-center bg-gray-200 dark:bg-[#1e1e1e] h-9 w-full z-50 ">
           <GoSearch className="absolute ml-2 " color="gray" />
 
@@ -119,7 +119,7 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
             <button
               title="New note"
               onClick={() => handleCreateNewNote('')}
-              className="hover:bg-gray-500 h-full px-4"
+              className="hover:bg-zinc-700 h-full px-4"
             >
               <GoPlus size={17} />
             </button>
@@ -137,7 +137,7 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
                       onClose();
                     }}
                     key={note.id}
-                    className="text-left px-3 hover:bg-gray-500 py-2 flex items-center gap-2"
+                    className="text-left px-3 hover:bg-zinc-700 py-3 flex items-center gap-2"
                   >
                     <GoHistory size={13} />
 
@@ -157,7 +157,7 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
                   <button
                     onClick={() => goToFoundText(match)}
                     key={match.index}
-                    className="text-left px-3 hover:bg-gray-500 py-2 flex items-center gap-2"
+                    className="text-left px-3 hover:bg-zinc-700 py-3 flex items-center gap-2"
                   >
                     <GoNote size={13} />
 
@@ -180,7 +180,7 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
                       onClose();
                     }}
                     key={note.id}
-                    className="text-left px-3 hover:bg-gray-500 py-2 flex items-center gap-2"
+                    className="text-left px-3 hover:bg-zinc-700 py-3 flex items-center gap-2"
                   >
                     <GoSearch size={13} />
 
@@ -201,7 +201,7 @@ export default function SearchModal({ onClose }: { onClose: () => void }) {
                     handleCreateNewNote(searchQuery);
                     onClose();
                   }}
-                  className="text-left px-3 hover:bg-gray-500 py-2 flex items-center gap-2"
+                  className="text-left px-3 hover:bg-zinc-700 py-2 flex items-center gap-2"
                 >
                   <GoPlus size={14} />
                   <p className="max-w-[95%] truncate">
